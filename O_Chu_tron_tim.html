@@ -15,7 +15,7 @@
   z-index: 1000;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    
+    }
 body {
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -179,6 +179,22 @@ color: white !important;
   background-color: pink !important;
   color: black !important;
 }
+@keyframes blinkColor {
+  0% { background-color: blue; }
+  50% { background-color: red; }
+  100% { background-color: blue; }
+}
+.blinking {
+  font-weight: bold;
+  color: #fff;
+  border: 2px solid #3399ff;
+  border-radius: 6px;
+  transition: background-color 0.5s ease;
+animation: blinkColor 1s infinite;
+}
+
+
+
 
   </style>
 </head>
@@ -231,6 +247,10 @@ color: white !important;
     let interval;
     let gameOver = true;
     let words = [];
+let blinkInterval = null;
+let blinkColors = ["#007bff", "#dc3545"]; // Xanh dương ↔ Đỏ
+let blinkIndex = 0;
+
 
     function randomChar() {
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -301,23 +321,30 @@ function toggleCell(cell) {
 }
 
 function toggleCell(cell) {
-  if (gameOver || cell.classList.contains("found")) return;
+  if (gameOver) return;
 
-  // Kiểm tra nếu ô đã được chọn, thì bỏ chọn
+  // Cho phép chọn/deselect mọi ô, kể cả đã "found"
   if (cell.classList.contains("selected")) {
-    cell.classList.remove("selected");  // Loại bỏ lớp selected để bỏ chọn ô
-    cell.classList.remove("selected-cell");  // Loại bỏ lớp màu sắc
+    cell.classList.remove("selected", "selected-cell");
   } else {
-    cell.classList.add("selected");  // Thêm lớp selected để đánh dấu ô đã chọn
-    cell.classList.add("selected-cell");  // Thêm lớp để thay đổi màu sắc ô
+    cell.classList.add("selected", "selected-cell");
   }
 }
 
 
+
     function getSelectedWord() {
-      const selected = document.querySelectorAll(".cell.selected");
-      return Array.from(selected).map(c => c.textContent).join("").toUpperCase();
-    }
+  const selected = Array.from(document.querySelectorAll(".cell.selected"));
+  const sorted = selected.sort((a, b) => {
+    const r1 = parseInt(a.dataset.row), c1 = parseInt(a.dataset.col);
+    const r2 = parseInt(b.dataset.row), c2 = parseInt(b.dataset.col);
+    if (r1 === r2) return c1 - c2;      // cùng hàng -> so sánh cột
+    if (c1 === c2) return r1 - r2;      // cùng cột -> so sánh hàng
+    return (r1 - r2) || (c1 - c2);      // nếu chéo -> sắp theo dòng trước
+  });
+  return sorted.map(c => c.textContent).join("").toUpperCase();
+}
+
 
     function checkResult() {
       if (gameOver) return;
@@ -337,14 +364,24 @@ function toggleCell(cell) {
           setTimeout(() => c.classList.remove("wrong"), 500);
         });
       }
-      const player = document.getElementById("playerName").value || "Người chơi";
+      const player = document.getElementById("playerName").value || "NGƯỜI CHƠI ẨN DANH";
       document.getElementById("result").innerText =
         `🎉 ${player} đã tìm được ${foundWords.length} từ đúng!`;
+
+stopBlinking(); // dừng nhấp nháy
+
+const checkBtn = document.getElementById("checkButton");
+clearTimeout(checkBtn.blinkTimeout);
+checkBtn.blinkTimeout = setTimeout(() => {
+  startBlinking(); // khởi động lại sau 10s
+}, 10000);
+
     }
 
     function startGame() {
   if (words.length === 0) {
     alert("⚠ Vui lòng mở chủ đề trước khi bắt đầu!");
+startBlinking();
     return;
   }
 
@@ -355,7 +392,10 @@ function toggleCell(cell) {
   document.getElementById("result").innerText = "";
   document.getElementById("checkButton").classList.remove("disabled");
 
-  words.forEach(placeWord);  // place words on the board
+document.getElementById("checkButton").classList.add("blinking");
+  // ✅ KHỞI ĐỘNG NHẤP NHÁY
+ 
+ words.forEach(placeWord);  // place words on the board
   fillBoard();
   renderBoard();
 
@@ -436,6 +476,7 @@ function highlightWord(word) {
     function resetGame() {
       clearInterval(interval);
       startGame();
+
     }
 
     // Kích hoạt ô chọn file khi nhấn vào nút "MỞ CHỦ ĐỀ"
@@ -498,6 +539,22 @@ document.getElementById("helpToggle").onclick = () => {
 
 function openSoanTuKhoa() {
   window.open("Soan_trochoiOchu.html", "_blank");
+}
+
+
+function startBlinking() {
+  const btn = document.getElementById("checkButton");
+  btn.classList.add("blinking");
+  blinkInterval = setInterval(() => {
+    btn.style.backgroundColor = blinkColors[blinkIndex];
+    blinkIndex = (blinkIndex + 1) % blinkColors.length;
+  }, 1000);
+}
+
+function stopBlinking() {
+  const btn = document.getElementById("checkButton");
+  clearInterval(blinkInterval);
+  btn.style.backgroundColor = blinkColors[0]; // về mặc định xanh dương
 }
 
   </script>
