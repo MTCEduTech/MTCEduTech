@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thiết lập trò chơi ô chữ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+    h2 {
+      color: red;
+    }
+    .section {
+  width: 1200px;                /* đồng bộ với nút và ô nhập */
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+    .input-row {
+      margin-bottom: 10px;
+    }
+    .letter-box {
+      width: 30px;
+      height: 30px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-right: 3px;
+    }
+    .button-group button {
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    .hint-input {
+  width:1200px;
+  height: 20px;
+  font-size: 14px;
+  resize: none;
+}
+
+    .guide-text {
+      margin-top: 10px;
+      font-style: italic;
+      color: #333;
+    }
+    .select-index {
+      width: 50px;
+      margin-left: 10px;
+    }
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+.inline-label {
+  display: inline-block; /* Riêng label Số lượng chữ cái: này hiển thị cùng dòng */
+  margin-right: 10px;
+}
+  </style>
+</head>
+<body>
+  <h2>THIẾT LẬP TRÒ CHƠI Ô CHỮ BÍ MẬT - Ô HÀNG DỌC VÀ CÁC Ô HÀNG NGANG CỦA TRÒ CHƠI</h2>
+
+  <div class="section">
+    <label class="inline-label">Ô chữ hàng dọc cần tìm: Số lượng chữ cái:</label>
+<input type="number" id="dọc-số" min="1" max="50">
+    <div id="dọc-ô-chữ" class="input-row"></div>
+    <label>Thông tin gợi ý cho ô hàng dọc:</label>
+    <textarea id="gợi-ý-dọc" class="hint-input"></textarea>
+    <label>Ý nghĩa sau đã khi hiển thị ô hàng dọc:</label>
+    <textarea id="giai-thich-dọc" class="hint-input"></textarea>
+  </div>
+
+  <div id="ngang-container">
+    <!-- Hàng ngang sẽ được sinh ở đây -->
+  </div>
+
+    <script>
+    let sốHàngDọc = 0;
+    let hàngNgangIndex = 1;
+
+    function tạoÔChữ(số, prefix) {
+      const container = document.createElement('div');
+      for (let i = 0; i < số; i++) {
+        const ô = document.createElement('input');
+        ô.type = 'text';
+        ô.maxLength = 1;
+        ô.className = 'letter-box';
+        ô.addEventListener('input', function() {
+          this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '');
+          if (this.value && this.nextElementSibling) {
+            this.nextElementSibling.focus();
+          }
+        });
+        container.appendChild(ô);
+      }
+      return container;
+    }
+
+    document.getElementById('dọc-số').addEventListener('change', function() {
+      const container = document.getElementById('dọc-ô-chữ');
+      container.innerHTML = '';
+      sốHàngDọc = Number(this.value);
+      hàngNgangIndex = 1;
+      document.getElementById('ngang-container').innerHTML = '';
+      container.appendChild(tạoÔChữ(sốHàngDọc, 'doc'));
+    });
+
+    function thêmHàngNgang() {
+      if (hàngNgangIndex > sốHàngDọc) {
+        alert("Số hàng ngang không được lớn hơn số chữ cái hàng dọc.");
+        return;
+      }
+
+      const container = document.getElementById('ngang-container');
+
+      const div = document.createElement('div');
+      div.className = 'section';
+
+      const label = document.createElement('label');
+      label.textContent = `Hàng ngang thứ ${hàngNgangIndex}: Số lượng chữ cái:`;
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = 1;
+      input.max = 50;
+
+      const boxContainer = document.createElement('div');
+      boxContainer.className = 'input-row';
+
+      const hintLabel = document.createElement('label');
+      hintLabel.textContent = 'Thông tin gợi ý:';
+      const hintInput = document.createElement('textarea');
+      hintInput.className = 'hint-input';
+
+      const guide = document.createElement('div');
+      guide.className = 'guide-text';
+      guide.innerHTML = 'Hãy chọn một ô trong hàng ngang này tương ứng thứ tự trong hàng dọc! [Chọn ô thứ ';
+      const selectInput = document.createElement('input');
+      selectInput.type = 'number';
+      selectInput.min = 1;
+      selectInput.className = 'select-index';
+      guide.appendChild(selectInput);
+      guide.appendChild(document.createTextNode(' Từ trái sang]'));
+
+      input.addEventListener('change', function() {
+        const sl = Number(this.value);
+        boxContainer.innerHTML = '';
+        boxContainer.appendChild(tạoÔChữ(sl, `ngang${hàngNgangIndex}`));
+        selectInput.max = sl;
+      });
+
+      div.appendChild(label);
+      div.appendChild(input);
+      div.appendChild(boxContainer);
+      div.appendChild(hintLabel);
+      div.appendChild(document.createElement('br'));
+      div.appendChild(hintInput);
+      div.appendChild(guide);
+
+      container.appendChild(div);
+      hàngNgangIndex++;
+    }
+
+    function xuấtĐề() {
+      const dọcÔs = document.querySelectorAll('#dọc-ô-chữ input');
+      const dọcTừ = Array.from(dọcÔs).map(o => o.value).join('').toUpperCase();
+      const dọcHint = document.getElementById('gợi-ý-dọc').value;
+      const dọcGiaiThich = document.getElementById('giai-thich-dọc').value;
+
+      let nộiDung = `<h2>ĐỀ TRÒ CHƠI Ô CHỮ HÀNG DỌC</h2>`;
+      nộiDung += `<p>- Ô hàng dọc: ${dọcTừ}</p>`;
+      nộiDung += `<p>  + Gợi ý thông tin: ${dọcHint}</p>`;
+      nộiDung += `<p>  + Giải thích từ hàng dọc: ${dọcGiaiThich}</p>`;
+
+      const cácHàngNgang = document.querySelectorAll('#ngang-container .section');
+
+      cácHàngNgang.forEach((div, index) => {
+        const hàngThứ = index + 1;
+        const ôs = div.querySelectorAll('input.letter-box');
+        const từ = Array.from(ôs).map(o => o.value).join('').toUpperCase();
+        const gợiÝ = div.querySelector('textarea').value;
+        const chỉSố = div.querySelector('input.select-index').value;
+        const vịTrí = parseInt(chỉSố) - 1;
+        const kýTự = vịTrí >= 0 && vịTrí < từ.length ? từ[vịTrí] : '';
+
+        nộiDung += `<p>- Ô hàng ngang thứ ${hàngThứ}: ${từ}</p>`;
+        nộiDung += `<p>  + Gợi ý thông tin: ${gợiÝ}</p>`;
+        nộiDung += `<p>  + Chữ cái cần lấy cho ô hàng dọc: Chữ ${kýTự} (Ô thứ ${chỉSố})</p>`;
+      });
+
+      const blob = new Blob([`<html><head><meta charset='UTF-8'><title>Đề Ô Chữ</title></head><body>${nộiDung}</body></html>`], { type: 'text/html' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'De_O_Chu_hang_doc.html';
+      link.click();
+    }
+
+    function lưuTạm() {
+      alert('Dữ liệu đã được lưu tạm');
+    }
+
+    function tạoMới() {
+      location.reload();
+    }
+
+   function thoát() {
+  const xácNhận = confirm(
+    'Bạn có chắc chắn muốn thoát khỏi nhập liệu không?\n' +
+    'Mọi dữ liệu chưa lưu sẽ mất!\n\n' +
+    'Sau khi thoát, hãy vào giao diện chơi, chọn "Mở đề", chọn file vừa xuất để tiến hành trò chơi ô chữ bí mật.\n' +
+    'Chúc bạn trải nghiệm vui vẻ!'
+  );
+  if (xácNhận) {
+       window.close();
+    } 
+}
+  </script>
+<div style="
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+  <button onclick="thêmHàngNgang()" style="
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 220px;
+    ">➕ Thêm hàng ngang</button>
+
+  <button onclick="xuấtĐề()" style="
+      background-color: #28A745;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 220px;
+    ">📤 Xuất đề</button>
+
+  <button onclick="lưuTạm()" style="
+      background-color: #FFC107;
+      color: black;
+      font-weight: bold;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 220px;
+    ">💾 Lưu tạm</button>
+
+  <button onclick="tạoMới()" style="
+      background-color: #17A2B8;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 220px;
+    ">♻️ Tạo mới</button>
+
+  <button onclick="thoát()" style="
+      background-color: #6C757D;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 220px;
+    ">🚪 Thoát nhập liệu</button>
+
+  <button onclick="window.location.href='index.html'" style="
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 220px;
+    ">❌ VỀ TRANG CHỦ</button>
+</div>
+</body>
+</html>

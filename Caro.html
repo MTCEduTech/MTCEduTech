@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>CỜ CARO THƯ GIÃN</title>
+  <style>
+
+html {
+  background: url('Nen2.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+}
+    
+body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('Nen2.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    #main-container {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    #left-column {
+      width: 260px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    #center-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      padding: 10px 20px;
+      background: rgba(51, 51, 51, 0.8);
+      color: white;
+      border-radius: 8px;
+    }
+
+    #homeBtn {
+      background: #ff4d4d;
+      border: none;
+      padding: 8px 12px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .controls {
+      margin: 10px 0;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .controls button {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    #gameBoard {
+      display: grid;
+      grid-template-columns: repeat(20, 25px);
+      grid-template-rows: repeat(20, 25px);
+      gap: 1px;
+      background: #ccc;
+  border: 2px solid #666;
+      padding: 5px;
+      border-radius: 8px;
+    }
+
+    .cell {
+      background: #fff;
+      font-size: 28px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .cell:hover {
+      background: #eef;
+    }
+
+    #message {
+      margin-top: 10px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div id="main-container">
+    <div id="left-column">
+
+<center>
+
+<div id="dongHoHienTai" style="font-size: 18px; color: green; font-weight: bold; margin-top: 5px;"></div>
+<script>
+  function capNhatDongHo() {
+    const dongHo = document.getElementById("dongHoHienTai");
+    const now = new Date();
+    const gio = String(now.getHours()).padStart(2, '0');
+    const phut = String(now.getMinutes()).padStart(2, '0');
+    const giay = String(now.getSeconds()).padStart(2, '0');
+    dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
+  }
+
+  setInterval(capNhatDongHo, 1000);
+  capNhatDongHo(); // gọi ngay khi trang load
+</script>
+
+        <script type="text/javascript">
+          var mydate=new Date();
+          var year=mydate.getYear();
+          if (year < 1000) year+=1900;
+          var day=mydate.getDay();
+          var month=mydate.getMonth();
+          var daym=mydate.getDate();
+          if (daym<10) daym="0"+daym;
+          var dayarray=new Array("CHỦ NHẬT","THỨ HAI","THỨ BA","THỨ TƯ","THỨ NĂM","THỨ SÁU","THỨ BẢY");
+          var montharray=new Array("01","02","03","04","05","06","07","08","09","10","11","12");
+          document.write("<font color='red' face='Arial' size='2'><b>"+dayarray[day]+",  "+daym+"/"+montharray[month]+"/"+year+"</b></font>");
+        </script>
+        <script>
+          var d = new Date();
+          var hourValue = d.getHours();
+          var greeting = "", greeting1 = "";
+          if (hourValue < 6) { greeting = "Chào ngày mới!"; greeting1 = "Chúc các bạn một ngày mới an lành!"; }
+          else if (hourValue < 9) { greeting = "Chào buổi sáng!"; greeting1 = "Chúc các bạn một buổi sáng tốt lành!"; }
+          else if (hourValue < 11) { greeting = "Sắp trưa rồi!"; greeting1 = "Chúc các bạn có một ngày thành công và hạnh phúc!"; }
+          else if (hourValue < 13) { greeting = "Đã buổi trưa rồi đó!"; greeting1 = "Chúc các bạn có bữa trưa thật ngon miệng!"; }
+          else if (hourValue < 17) { greeting = "Đã buổi chiều!"; greeting1 = "Hãy cố gắng hoàn thành công việc trong ngày!"; }
+          else if (hourValue < 18) { greeting = "Sắp tối rồi!"; greeting1 = "Chúc các bạn có bữa tối thật ngon miệng bên người thân!"; }
+          else if (hourValue <= 21) { greeting = "Chào buổi tối!"; greeting1 = "Chúc các bạn có bữa tối thật vui vẻ và hạnh phúc bên người thân!"; }
+          else { greeting = "Khuya rồi đấy!"; greeting1 = "Hãy đi ngủ thôi! Chúc các bạn có một giấc ngủ thật ngon!"; }
+          document.write("<h3 style='color:#2a2a2a;'>" + greeting + "</h3><p style='font-size:16px; color:blue;'>" + greeting1 + "</p>");
+        </script>
+
+      </center>
+<center>    <h3 style="color: #0056b3;">🎵 NGHE NHẠC</h3> </center>
+      <select id="playlist" style="width: 100%;">
+        <option>Vui lòng chọn bài nhạc</option>
+        <option value="You're My Heart, You're My Soul.mp3">1. You're My Heart, You're My Soul</option>
+        <option value="Tuesday Night.mp3">2. Tuesday Night</option>
+        <option value="Khong loi_Phat thuong1.mp3">3. Không lời - Phát thưởng 01</option>
+        <option value="Khong loi_Phat thuong2.mp3">4. Không lời - Phát thưởng 02</option>
+        <option value="Rhapsody - A Future In The Void.mp3">5. Rhapsody - A Future In The Void</option>
+        <option value="Maxim Novak - Shy Girl.mp3">6. Maxim Novak - Shy Girl</option>
+        <option value="GANGNAM.mp3">7. Gangnam Style</option>
+        <option value="conduongdentruong.mp3">8. Con đường đến trường</option>
+        <option value="ToQuocGoiTenMinh.mp3">9. Tổ quốc gọi tên mình</option>
+        <option value="4 Bon phuong troi.mp3">10. Bốn Phương trời</option>
+        <option value="Hoatau_guitar_dien.mp3">11. Hòa tấu Guitar điện (45 phút)</option>
+      </select>
+      <div style="margin-top: 5px;">
+<center>
+        <button onclick="playSelected()" style="background-color: #4CAF50; color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;">▶️ PLAY</button>
+
+<button onclick="playAll(true)" style="background-color: #2196F3; color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;">🔀 PHÁT XÁO TRỘN</button>
+</center>
+
+      </div>
+      <div style="margin-top: 10px;">
+        Âm lượng:
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+      </div>
+      <audio id="audioPlayer" controls style="width: 100%; margin-top: 10px;">
+        Trình duyệt của bạn không hỗ trợ audio.
+      </audio>
+
+<!-- LỜI DẠY CỦA BÁC HỒ -->
+<div style="text-align: center; margin-bottom: 5px;">
+ <h3 style="color: #b30000;">💬 LỜI DẠY CỦA BÁC HỒ</h3> 
+ <img src="Bac_Ho.jpg" alt="Chủ tịch Hồ Chí Minh" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+
+<div id="quote-box" style="margin-top: 5px; background-color: rgba(255,255,255,0.8); padding: 10px; border-radius: 8px;">
+ 
+  <p id="quoteText" style="font-style: italic; color: blue;">"Không có gì quý hơn độc lập, tự do."</p>
+</div>
+
+</div>
+<script>
+  const quotes = [
+    "Không có gì quý hơn độc lập, tự do.",
+    "Cần, kiệm, liêm, chính, chí công vô tư là nền tảng của người cách mạng.",
+    "Đạo đức cách mạng không phải trên trời sa xuống. Nó do đấu tranh, rèn luyện bền bỉ hàng ngày mà phát triển và củng cố.",
+    "Muốn cứu nước và giải phóng dân tộc không có con đường nào khác ngoài con đường cách mạng vô sản.",
+    "Nói đi đôi với làm. Nêu gương trong mọi việc.",
+    "Một dân tộc dốt là một dân tộc yếu.",
+    "Có tài mà không có đức là người vô dụng. Có đức mà không có tài thì làm việc gì cũng khó.",
+    "Phải lấy dân làm gốc.",
+    "Dễ trăm lần không dân cũng chịu, khó vạn lần dân liệu cũng xong.",
+    "Thanh niên là rường cột của nước nhà.",
+    "Vì lợi ích mười năm trồng cây, vì lợi ích trăm năm trồng người.",
+    "Người thầy giáo tốt là người anh hùng vô danh.",
+    "Trẻ em như búp trên cành, biết ăn ngủ biết học hành là ngoan.",
+    "Học ở trường, học ở sách vở, học lẫn nhau và học ở nhân dân.",
+    "Muốn tiến bộ thì phải học, học suốt đời.",
+    "Học phải đi đôi với hành, lý luận phải liên hệ với thực tế.",
+    "Thầy giáo phải là người mẫu mực, là tấm gương sáng cho học sinh noi theo.",
+    "Cách mạng là sự nghiệp của quần chúng.",
+    "Phải nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân.",
+    "Chủ nghĩa cá nhân là kẻ địch hung ác của đạo đức cách mạng.",
+    "Yêu tổ quốc, yêu đồng bào.",
+    "Cần phải làm cho dân có ăn, có mặc, được học hành.",
+    "Người cách mạng phải có tinh thần tự phê bình và phê bình.",
+    "Đấu tranh chống thói ba hoa, nói nhiều làm ít.",
+    "Người cán bộ phải gần dân, sát dân, hiểu dân, học dân và có trách nhiệm với dân.",
+    "Việc gì có lợi cho dân, ta phải hết sức làm. Việc gì có hại cho dân, ta phải hết sức tránh.",
+    "Tôi chỉ có một ham muốn, ham muốn tột bậc, là làm sao cho nước ta được hoàn toàn độc lập, dân ta được hoàn toàn tự do.",
+    "Lấy gương người tốt, việc tốt để giáo dục lẫn nhau.",
+    "Tất cả vì lợi ích của nhân dân!",
+    "Nhiệm vụ của thầy giáo rất vẻ vang.",
+    "Giữ gìn đoàn kết như giữ gìn con ngươi của mắt mình.",
+    "Đảng ta là một Đảng cầm quyền, mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng.",
+    "Tự do cho đồng bào tôi, độc lập cho Tổ quốc tôi, đó là tất cả những gì tôi muốn.",
+    "Hòa bình phải được xây dựng trên cơ sở công bằng và tôn trọng độc lập dân tộc.",
+    "Không sợ thiếu, chỉ sợ không công bằng.",
+    "Phải kiên quyết chống tham ô, lãng phí và quan liêu.",
+    "Nhân dân là người chủ thực sự của đất nước.",
+    "Đạo đức là gốc của người cách mạng.",
+    "Phải có chí khí, nghị lực, vượt mọi gian khổ, khó khăn để vươn lên.",
+    "Cán bộ là cái gốc của mọi công việc.",
+    "Muốn lãnh đạo tốt thì trước hết phải học hỏi nhân dân.",
+    "Cán bộ, đảng viên phải là người đầy tớ trung thành của nhân dân.",
+    "Phải yêu thương đồng bào, yêu nước, yêu chủ nghĩa xã hội.",
+    "Lấy dân làm gốc, không được xa rời quần chúng.",
+    "Giữ vững lập trường giai cấp công nhân.",
+    "Chăm lo bồi dưỡng thế hệ cách mạng cho đời sau.",
+    "Hạnh phúc là đấu tranh.",
+    "Đường lối chính trị đúng đắn là cái cốt lõi của thành công.",
+    "Một ngày không học là một ngày lùi lại phía sau.",
+    "Người nào không học là người ấy già, dù tuổi còn trẻ.",
+    "Tuổi nhỏ làm việc nhỏ, tùy theo sức của mình.",
+    "Người phụ nữ Việt Nam có đức tính hy sinh và đảm đang tuyệt vời.",
+    "Không có phụ nữ thì không có cách mạng thành công.",
+    "Phụ nữ là một lực lượng cách mạng to lớn.",
+    "Chăm sóc trẻ em là chăm sóc tương lai dân tộc.",
+    "Phải tiết kiệm, chống lãng phí.",
+    "Phải dựa vào dân, tin ở dân.",
+    "Phải sống có tình nghĩa, có đạo lý.",
+    "Trung với nước, hiếu với dân.",
+    "Người tốt, việc tốt là bông hoa đẹp trong rừng hoa của đất nước.",
+    "Đời sống mới là đời sống có văn hóa.",
+    "Phải thực hành dân chủ rộng rãi, nghiêm chỉnh.",
+    "Kính già, yêu trẻ.",
+    "Học để làm việc, làm người, làm cán bộ.",
+    "Tất cả vì Tổ quốc, vì nhân dân!",
+    "Tự do không phải là vô tổ chức.",
+    "Đoàn kết, đoàn kết, đại đoàn kết. Thành công, thành công, đại thành công.",
+    "Đừng sợ sai lầm, nhưng phải biết sửa chữa sai lầm.",
+    "Phải biết hy sinh lợi ích cá nhân vì lợi ích chung.",
+    "Học tập và làm theo tấm gương đạo đức Hồ Chí Minh.",
+    "Sống là để phục vụ Tổ quốc, phục vụ nhân dân.",
+    "Lao động là vinh quang.",
+    "Không có công lao động, không có kết quả.",
+    "Mỗi người tốt, mỗi việc tốt là một bông hoa đẹp.",
+    "Giữ gìn vệ sinh là bảo vệ sức khỏe.",
+    "Thương binh tàn nhưng không phế.",
+    "Uống nước nhớ nguồn.",
+    "Ăn quả nhớ kẻ trồng cây.",
+    "Thành công là do dân, thất bại cũng tại dân.",
+    "Phải biết ơn người đi trước, có trách nhiệm với người đi sau.",
+    "Bác ái là truyền thống quý báu của dân tộc ta.",
+    "Thắng không kiêu, bại không nản.",
+    "Người có chí thì nên.",
+    "Tôn trọng sự thật, nói đúng sự thật.",
+    "Phê bình và tự phê bình là vũ khí sắc bén.",
+    "Giặc đói, giặc dốt, giặc ngoại xâm là ba kẻ thù lớn.",
+    "Khiêm tốn, thật thà, dũng cảm.",
+    "Phải học thật, thi thật, làm thật.",
+    "Cần có sự kết hợp giữa lý luận và thực tiễn.",
+    "Giữ gìn bản sắc văn hóa dân tộc.",
+    "Phải chống chủ nghĩa cá nhân đến cùng.",
+    "Phải nâng cao cảnh giác cách mạng.",
+    "Chống chủ nghĩa đế quốc là nhiệm vụ thiêng liêng.",
+    "Làm cách mạng là hy sinh, là phấn đấu không ngừng.",
+    "Phải sống giản dị, trong sạch.",
+    "Nói ít, làm nhiều.",
+    "Gần dân, hiểu dân, học dân.",
+    "Biết lắng nghe ý kiến nhân dân.",
+    "Lấy lòng dân để trị nước.",
+    "Phải có niềm tin vào tương lai tươi sáng.",
+    "Đừng để dân đói, dân rét, dân dốt.",
+    "Muốn tiến bộ thì không được tự mãn.",
+    "Không có đường nào dễ mà tới đích.",
+    "Giữ vững độc lập dân tộc và chủ nghĩa xã hội.",
+"Dù khó khăn đến đâu cũng phải tiếp tục thi đua dạy tốt và học tốt.",
+  "Giáo dục là sự nghiệp của toàn Đảng, toàn dân.",
+  "Cô giáo, thầy giáo là những người chiến sĩ trên mặt trận văn hóa.",
+  "Phải nâng cao chất lượng giáo dục, làm cho giáo dục thực sự trở thành quốc sách hàng đầu.",
+  "Trình độ học vấn của dân tộc là một thước đo trình độ phát triển của đất nước.",
+  "Phải đào tạo những con người vừa hồng, vừa chuyên.",
+  "Giáo viên phải luôn gương mẫu, học suốt đời để nâng cao trình độ.",
+  "Thanh niên muốn trở thành người cách mạng, trước hết phải học.",
+  "Thầy cô là người truyền lửa cho lớp trẻ – lớp người sẽ tiếp bước sự nghiệp cách mạng."
+  ];
+
+  function hienCauNoi() {
+    const quoteBox = document.getElementById("quoteText");
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    quoteBox.textContent = `"${randomQuote}"`;
+  }
+
+  // Hiển thị câu nói ngẫu nhiên khi tải trang
+  hienCauNoi();
+
+  // Tự động đổi câu nói mỗi 10 giây
+  setInterval(hienCauNoi, 10000);
+</script>
+
+
+
+    </div>
+
+    <div id="center-column">
+      <header style="position: relative; overflow: hidden; height: 50px;">
+  <marquee behavior="alternate" scrollamount="6" style="font-size: 24px; color: white; font-weight: bold;">
+    CHƠI CỜ CARO THƯ GIÃN
+  </marquee>
+  </header>
+
+
+      <div class="controls">
+  <button onclick="startGame('player')">2 Người chơi</button>
+  <button onclick="startGame('computer')">Chơi với máy</button>
+
+  </div>
+
+
+      <div id="gameBoard"></div>
+      <div id="message"></div>
+    </div>
+  </div>
+
+  <!-- Nút toàn màn hình -->
+  <div style="position: fixed; bottom: 20px; left: 20px; z-index: 9999;">
+  <div>
+    <button onclick="openFullscreen()" style="padding: 10px 16px; font-size: 14px; background: #00BFFF; border: none; border-radius: 6px; color: white; cursor: pointer;">🔍 Xem Full màn hình</button>
+  </div>
+  <div style="margin-top: 10px;">
+    <button onclick="exitFullscreen()" style="padding: 10px 16px; font-size: 14px; background: #FF6347; border: none; border-radius: 6px; color: white; cursor: pointer;">❌ Thoát Full màn hình</button>
+  </div>
+</div>
+
+
+
+  <script>
+    // Âm nhạc
+    const audioPlayer = document.getElementById("audioPlayer");
+    const playlist = document.getElementById("playlist");
+    const volumeSlider = document.getElementById("volume");
+
+    function playSelected() {
+      const selected = playlist.value;
+      if (selected.endsWith(".mp3")) {
+        audioPlayer.src = "music/" + selected;
+        audioPlayer.play();
+      }
+    }
+
+    function playAll(shuffle = false) {
+      const options = Array.from(playlist.options).slice(1);
+      let list = options.map(o => o.value).filter(v => v.endsWith(".mp3"));
+      if (shuffle) list.sort(() => Math.random() - 0.5);
+      let index = 0;
+      function playNext() {
+        if (index >= list.length) return;
+        audioPlayer.src = "music/" + list[index++];
+        audioPlayer.play();
+      }
+      audioPlayer.onended = playNext;
+      playNext();
+    }
+
+    volumeSlider.addEventListener("input", () => {
+      audioPlayer.volume = volumeSlider.value;
+    });
+</script>
+
+    <script>
+const size = 20;
+const winLength = 5;
+let board = [], cells = [], currentPlayer = 'X', vsComputer = false, gameOver = false;
+
+function startGame(mode) {
+  const boardDiv = document.getElementById("gameBoard");
+  boardDiv.innerHTML = '';
+  board = Array(size).fill(null).map(() => Array(size).fill(''));
+  cells = [];
+  gameOver = false;
+  currentPlayer = 'X';
+  vsComputer = mode === 'computer';
+  document.getElementById("message").textContent = '';
+  
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.x = x;
+      cell.dataset.y = y;
+      cell.addEventListener("click", handleCellClick);
+      boardDiv.appendChild(cell);
+      cells.push(cell);
+    }
+  }
+}
+
+function handleCellClick(e) {
+  if (gameOver) return;
+
+  const x = parseInt(e.target.dataset.x);
+  const y = parseInt(e.target.dataset.y);
+
+  if (board[y][x] !== '') return;
+
+  makeMove(x, y, currentPlayer);
+
+  if (checkWin(x, y, currentPlayer)) {
+    endGame(`Người chơi ${currentPlayer} thắng!`);
+    return;
+  }
+
+  if (isDraw()) {
+    endGame("Hòa!");
+    return;
+  }
+
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
+  if (vsComputer && currentPlayer === 'O') {
+    setTimeout(() => {
+      const [aiX, aiY] = getBestMove('O');
+      makeMove(aiX, aiY, 'O');
+
+      if (checkWin(aiX, aiY, 'O')) {
+        endGame("Máy thắng!");
+        return;
+      }
+
+      if (isDraw()) {
+        endGame("Hòa!");
+        return;
+      }
+
+      currentPlayer = 'X';
+    }, 300);
+  }
+}
+
+function makeMove(x, y, player) {
+  board[y][x] = player;
+  const cell = cells[y * size + x];
+  cell.textContent = player;
+  cell.style.pointerEvents = 'none';
+  cell.style.color = player === 'X' ? 'red' : 'blue';
+}
+
+function checkWin(x, y, player) {
+  const directions = [[1, 0], [0, 1], [1, 1], [1, -1]];
+  for (const [dx, dy] of directions) {
+    let count = 1;
+    count += countDir(x, y, dx, dy, player);
+    count += countDir(x, y, -dx, -dy, player);
+    if (count >= winLength) return true;
+  }
+  return false;
+}
+
+function countDir(x, y, dx, dy, player) {
+  let count = 0;
+  let nx = x + dx, ny = y + dy;
+  while (nx >= 0 && ny >= 0 && nx < size && ny < size && board[ny][nx] === player) {
+    count++;
+    nx += dx;
+    ny += dy;
+  }
+  return count;
+}
+
+function isDraw() {
+  return board.every(row => row.every(cell => cell !== ''));
+}
+
+function endGame(msg) {
+  document.getElementById("message").textContent = msg;
+  gameOver = true;
+}
+
+function getBestMove(aiPlayer) {
+  let bestScore = -Infinity, move = null;
+  const human = aiPlayer === 'X' ? 'O' : 'X';
+  
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      if (board[y][x] === '') {
+        let score = evaluateCell(x, y, aiPlayer, human);
+        if (score > bestScore) {
+          bestScore = score;
+          move = [x, y];
+        }
+      }
+    }
+  }
+  return move || [Math.floor(Math.random() * size), Math.floor(Math.random() * size)];
+}
+
+function evaluateCell(x, y, ai, human) {
+  return evaluateDirection(x, y, ai) * 2 + evaluateDirection(x, y, human);
+}
+
+function evaluateDirection(x, y, player) {
+  const directions = [[1,0], [0,1], [1,1], [1,-1]];
+  let total = 0;
+
+  for (let [dx, dy] of directions) {
+    let count = 1, block = 0;
+
+    for (let i = 1; i < winLength; i++) {
+      let nx = x + dx * i, ny = y + dy * i;
+      if (nx < 0 || ny < 0 || nx >= size || ny >= size) break;
+      if (board[ny][nx] === player) count++;
+      else if (board[ny][nx] !== '') { block++; break; }
+      else break;
+    }
+
+    for (let i = 1; i < winLength; i++) {
+      let nx = x - dx * i, ny = y - dy * i;
+      if (nx < 0 || ny < 0 || nx >= size || ny >= size) break;
+      if (board[ny][nx] === player) count++;
+      else if (board[ny][nx] !== '') { block++; break; }
+      else break;
+    }
+
+    if (count >= 5) total += 100000;
+    else if (count === 4) total += block === 0 ? 10000 : 1000;
+    else if (count === 3) total += block === 0 ? 500 : 200;
+    else if (count === 2) total += 50;
+    else if (count === 1) total += 10;
+  }
+
+  return total;
+}
+
+// Khởi động mặc định chế độ 2 người
+document.addEventListener("DOMContentLoaded", () => startGame('player'));
+</script>
+
+
+
+<button id="homeBtnFixed" onclick="goHome()" style="position: absolute; top: 8px; right: 10px;">VỀ TRANG CHỦ</button>
+<style>
+  #homeBtnFixed {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #ff4d4d;
+    border: none;
+    padding: 10px 14px;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+</style>
+
+<script>
+function goHome() {
+  window.location.href = "index.html";
+}
+
+function openFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) elem.requestFullscreen();
+  else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+  else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) document.exitFullscreen();
+  else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  else if (document.msExitFullscreen) document.msExitFullscreen();
+}
+</script>
+
+
+</body>
+</html>

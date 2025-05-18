@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Soạn Câu Hỏi</title>
+  <style>
+    .sticky-marquee {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      z-index: 1000;
+      padding: 5px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      padding: 50px 20px 0 20px; /* đẩy nội dung xuống dưới chữ chạy */
+      background-color: white;
+      color: black;
+    }
+
+.main-area {
+  flex: 1;
+  padding: 30px 40px 30px 40px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+
+    .question-block { border-bottom: 1px solid #ccc; margin-bottom: 30px; padding-bottom: 20px; }
+    input[type="text"] { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px; }
+    .title-input {
+  text-align: center;
+  font-weight: bold;
+  color: red;
+  font-size: 20px;
+  margin: 0 auto;
+  display: block;
+}
+
+   
+.question-row,
+.answer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+ 
+  padding-right: 10px;
+  margin-bottom: 15px;
+}
+.question-text,
+.answer-text {
+  flex: 1; /* dãn hết chiều ngang còn lại */
+  padding: 10px;
+  font-size: 16px;
+}
+    .hint { font-size: 12px; color: black; }
+    .preview-img { max-width: 100%; max-height: 200px; display: block; margin-top: 5px; }
+    .hidden-input { display: none; }
+
+    button {
+  padding: 10px 15px;
+  font-size: 16px;
+  margin-right: 10px;
+  margin-top: 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+body {
+  display: flex;
+  flex-direction: row;
+gap: 0px; /* đảm bảo không có khoảng hở */
+}
+
+.sidebar-buttons {
+  width: 250px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh; /* ← Chiếm toàn bộ chiều cao cửa sổ trình duyệt */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #007BFF; /* Đường kẻ màu */
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto; /* Cho phép cuộn nếu nhiều nút */
+}
+
+.answer-container {
+  width: 100%;
+}
+.answer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.answer-text {
+  flex: 1;
+}
+.main-content {
+  flex: 0.75;
+  padding: 20px;
+}
+
+  </style>
+</head>
+<body>
+
+<div class="sticky-marquee">
+  <marquee behavior="scroll" direction="left" style="color: blue; font-weight: bold;">
+    CHÀO MỪNG BẠN ĐẾN VỚI TRÌNH SOẠN - XUẤT + ĐẢO ĐỀ TRẮC NGHIỆM LỰA CHỌN - ỨNG DỤNG NÀY LÀ SẢN PHẨM VIẾT CODE CỦA THẦY MAI THIỆN CHÁNH (GV TRƯỜNG THCS ĐỨC PHÚ) NHỜ SỰ HỖ TRỢ CỦA AI - CHÚC QUÝ THẦY CÔ TRẢI NGHIỆM VUI VÀ GÓP Ý ĐỂ HOÀN THIỆN SẢN PHẨM
+  </marquee>
+
+</div>
+
+<div class="main-content">
+<div id="container">
+  	<div class="question-block">
+    <input type="text" class="title-input" placeholder="Nhập tiêu đề bài kiểm tra - Môn">
+	</div>
+  </div>
+</div>
+
+
+<script src="script.js"></script>
+<script>
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.classList.contains('insert-question-img')) {
+      const container = e.target.closest('.question-block');
+      const input = container.querySelector('.question-img-input');
+      input.click();
+    }
+  });
+
+  function handleQuestionImage(event, input) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = input.nextElementSibling;
+      img.src = e.target.result;
+      img.style.display = 'block';
+      img.dataset.base64 = e.target.result;
+    };
+    if (file) reader.readAsDataURL(file);
+  }
+</script>
+
+
+
+
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: -1px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+
+
+<script>
+function openFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+</script>
+<div class="sidebar-buttons">
+<center><h2 style="position: absolute; top: 20px; right: 20px; z-index: 1001; color: #FF5722;">  CÁC NÚT CHỨC NĂNG </h2></center>
+  <div id="container">
+<div style="position: absolute; top: 60px; right: 20px; z-index: 1001;">
+<button onclick="addQuestion()">➕Thêm câu hỏi khác</button><br>
+<button onclick="exportToHTML()">💾 Xuất đề trắc nghiệm</button><br>
+<button onclick="saveDraft()">📋 Lưu tạm thời dữ liệu</button>
+<button onclick="resetForm()">📝Tạo mới hoàn toàn</button>
+<input type="file" id="upload-html-file" accept=".html" style="display: none;" onchange="importFromHTML(event)">
+<button onclick="document.getElementById('upload-html-file').click()">📂 Tải vào lại đề đã xuất</button>
+</div>
+<div style="position: fixed; bottom: 10px; right: 20px; z-index: 1001;">
+  <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+    THOÁT - VỀ TRANG CHỦ </button></div>
+</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trò Chơi Ô Chữ Bí Mật</title>
+  <style>
+  :root {
+    --dich-phai: 600px;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: url("Nen.jpg") no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    padding-top: 80px;
+    color: #fff;
+    text-align: center;
+  }
+
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff8dc;
+    border-bottom: 2px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    z-index: 1000;
+  }
+
+  .main-title {
+    color: red;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1.2;
+    margin: 1px 0;
+    padding: 1px 0;
+  }
+
+  .container {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .left-panel {
+    width: 25%;
+  }
+
+  .right-panel {
+    width: 25%;
+    border-left: 1px solid #999;
+    padding-left: 10px;
+  }
+
+  .main-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;   /* Thêm dòng này để nút cao thấp sẽ canh theo giữa */
+  gap: 40px;
+  padding: 10px 20px;
+  margin-top: 120px;     /* Có thể tăng để tránh header cao 80px */
+}
+
+
+  input[type="file"] {
+    display: none;
+  }
+
+  
+  #customFileLabel:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgb(0 86 179 / 0.5);
+  }
+
+  .row-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+
+  .stt-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .row-inputs {
+    display: grid;
+    grid-template-columns: repeat(20, 40px);
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 18px;
+    background: white;
+    box-sizing: border-box;
+  }
+
+  .cell input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    background: transparent;
+  }
+
+  .vertical-cell {
+    background-color: purple;
+    color: white;
+    font-weight: bold;
+  }
+
+  .vertical-highlight {
+    background-color: #007BFF !important;
+    color: white !important;
+    font-weight: bold;
+  }
+
+  .row-controls {
+    display: flex;
+    gap: 5px;
+  }
+
+  .row-controls button {
+    padding: 6px 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  .hint {
+    background: #2196F3;
+  }
+
+  .check {
+    background: #4CAF50;
+  }
+
+  .reveal {
+    background: #f44336;
+  }
+
+  #hint-box {
+display: none; /* Ẩn ban đầu */
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: white;
+    min-height: 70px;
+    font-size: 16px;
+    font-family: 'Times New Roman', serif;
+    color: #003366;
+    line-height: 1.6;
+max-width: 800px;
+  width: 100%;
+  }
+#customFileLabel,
+  #verticalAnswerBtn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 0 18px;
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 8px rgb(0 123 255 / 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  #verticalAnswerBtn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgb(0 86 179 / 0.5);
+  }
+
+  #verticalAnswerBtn::before {
+    content: "\1F9E9";
+    font-size: 18px;
+  }
+
+  .left-button label,
+  .right-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    height: 45px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 8px;
+    margin-left: var(--dich-phai, 0px);
+  }
+.top-right-controls {
+ position: absolute;
+  top: 100px; /* Sát ngay dưới header cao 80px */
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+header {
+  background-color: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  z-index: 1000;
+  color: black;
+}
+
+.marquee-text {
+  color: white;
+  font-size: 14px; /* size nhỏ hơn */
+  font-weight: normal;
+  width: 100%;
+  white-space: nowrap;
+  margin-bottom: 5px;
+}
+
+.title-text {
+    font-weight: bold;       /* chữ đậm */
+    font-size: 36px;         /* cỡ chữ lớn, bạn có thể điều chỉnh số px */
+    color: red;              /* màu đỏ */
+    text-align: center;      /* căn giữa */
+  }
+
+
+.vertical-highlight-glow {
+  animation: glow 1s ease-in-out infinite alternate;
+  box-shadow: 0 0 10px 3px gold;
+  border-color: gold !important;
+  background-color: #fffae6 !important;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px 1px gold;
+  }
+  to {
+    box-shadow: 0 0 20px 6px gold;
+  }
+}
+
+/* Hiệu ứng viền nhấp nháy */
+@keyframes borderBlink {
+  0%, 100% {
+    box-shadow: 0 0 5px 2px rgba(255, 0, 0, 0.7);
+    border-color: red;
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(255, 0, 0, 1);
+    border-color: yellow;
+  }
+}
+.border-blink {
+  animation: borderBlink 1.5s infinite;
+}
+
+/* Hiệu ứng phát sáng */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 8px 2px rgba(0, 123, 255, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 20px 8px rgba(0, 123, 255, 1);
+  }
+}
+.glow-effect {
+  animation: glow 1s infinite alternate;
+}
+
+/* Hiệu ứng nhấp nháy nền */
+@keyframes backgroundBlink {
+  0%, 100% {
+    background-color: #007BFF;
+  }
+  50% {
+    background-color: #00aaff;
+  }
+}
+.bg-blink {
+  animation: backgroundBlink 1s infinite;
+}
+@keyframes glow-border {
+  0% {
+    box-shadow: 0 0 5px 2px #ff0000;
+  }
+  50% {
+    box-shadow: 0 0 15px 4px #ffff00;
+  }
+  100% {
+    box-shadow: 0 0 5px 2px #ff0000;
+  }
+}
+
+.special-cell {
+  animation: glow-border 1.5s infinite;
+  border: 2px solid gold !important;
+  font-weight: bold;
+  color: darkred;
+}
+
+#clock-container {
+  position: fixed;
+  top: 30px; /* điều chỉnh tùy thuộc chiều cao phần cố định phía trên */
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 16px;
+  z-index: 9999;
+}
+
+ .title-text {
+      font-weight: bold;
+      font-size: 36px;
+      color: yellow;
+      text-align: center;
+    }
+    .top-right-controls {
+      position: absolute;
+      top: 100px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* căn giữa theo chiều ngang của cột */
+      gap: 10px;
+      z-index: 1000;
+    }
+    .fixed-clock-box {
+      background: #fffacd;
+      border: 2px solid #000;
+      padding: 10px;
+      width: 200px; /* cùng chiều rộng với nút đáp án */
+      text-align: center;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    }
+    .fixed-clock-box .title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+	color: blue;
+    }
+    .fixed-clock-box .time-input input {
+      width: 40px;
+      font-size: 16px;
+      text-align: center;
+    }
+    .fixed-clock-box .label {
+      font-size: 16px;
+      margin-left: 3px;
+	color: blue;
+	font-weight: bold;
+    }
+    .fixed-clock-box .countdown {
+      background: red;
+      color: white;
+      font-size: 26px;
+      padding: 5px 0;
+      border-radius: 10px;
+      border: 2px solid #333;
+      margin: 6px 0;
+    }
+    .fixed-clock-box .btn {
+      padding: 4px 8px;
+      font-size: 13px;
+      font-weight: bold;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+ @font-face {
+      font-family: 'MyDigitalFont';
+      src: url('Donghodemnguoc.ttf') format('truetype');
+    }
+
+    .countdown {
+      font-family: 'MyDigitalFont', monospace;
+      font-size: 48px;
+      color: #0F0;
+      background: #222;
+      padding: 10px 0;
+      border-radius: 10px;
+      border: 2px solid #0F0;
+      text-shadow:
+        0 0 5px #0F0,
+        0 0 20px #0F0,
+        0 0 30px #0F0;
+      letter-spacing: 5px;
+    }
+
+
+
+#bottom-marquee {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #000000cc; /* nền đen mờ */
+  color: yellow;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 8px 0;
+  z-index: 9999;
+}
+
+  </style>
+<style id="waveDelays"></style>
+</head>
+<body>
+
+<div id="clock-container">
+  <span id="clock"></span>
+</div>
+
+
+  <header>
+  <marquee direction="left" scrollamount="8" class="marquee-text">
+    HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CODE CỦA AI
+  </marquee>
+
+ <div class="title-text">
+    TRÒ CHƠI "ĐI TÌM Ô CHỮ BÍ MẬT"
+  </div>
+
+<script>
+  const text = 'TRÒ CHƠI "ĐI TÌM Ô CHỮ BÍ MẬT"';
+  const container = document.getElementById('waveText');
+  container.innerHTML = text.split('').map((char) => <span>${char}</span>).join('');
+</script>
+</header>
+
+<div class="top-right-controls" style="
+  position: absolute;
+  top: 100px; /* đẩy xuống tránh che nội dung */
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  z-index: 1000;
+">
+ <label id="customFileLabel" for="fileInput" class="glow-effect">📂 MỞ ĐỀ TÌM Ô CHỮ</label><br>
+
+  <input type="file" id="fileInput" accept=".html" />
+  <button id="verticalAnswerBtn" class="glow-effect" onclick="showVerticalAnswer()">ĐÁP ÁN HÀNG DỌC</button> <br>
+
+<!-- Chèn khối đồng hồ ngay bên dưới -->
+    <div class="fixed-clock-box">
+      <div class="title">TIMES SUY NGHĨ & TRẢ LỜI</div>
+      <div class="time-input">
+        <input type="number" id="timeInput" min="5" max="600" step="5" value="30">
+        <span class="label">GIÂY</span>
+      </div>
+      <div class="countdown" id="countdownDisplay">00 : 00</div>
+      
+<button class="btn" onclick="startCountdown(() => {
+  if (pendingRowToLock) {
+    // Chỉ khóa nếu dòng này CHƯA được trả lời đúng
+    if (!answeredCorrectly[pendingRowToLock.rowIndex]) {
+      lockRow(pendingRowToLock.rowInputs);
+    }
+    pendingRowToLock = null;
+  }
+})">BẮT ĐẦU</button>
+
+
+
+      <audio id="alarmSound" src="chuong.mp3" preload="auto"></audio>
+    </div>
+  </div>
+
+
+    <div class="container">
+    <div class="left-panel">
+      <div id="grid"></div>
+    </div>
+  </div>
+
+  <!-- Phần gợi ý được tách ra bên ngoài container, căn giữa -->
+  <!-- Phần gợi ý được căn giữa dưới lưới -->
+<div style="display: flex; justify-content: center; margin-top: 10px;">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; max-width: 800px; width: 100%;">
+    
+    <div id="vertical-hint" style="display: none; padding: 10px; background: white; color: #000000; font-size: 18px; border: 2px solid white; border-radius: 12px; font-family: 'Times New Roman', serif; width: 100%; max-height: none; overflow: auto; word-wrap: break-word;">
+
+
+    </div>
+
+    <div id="hint-box" style="padding: 15px; background: white; border: 1px solid #ccc; border-radius: 12px; font-size: 16px; font-family: 'Times New Roman', serif; color: #003366; line-height: 1.6; max-width: 800px; width: 100%; display: none;">
+
+      <strong>GỢI Ý CÂU HỎI: </strong><br>LƯỚI CHƠI ĐÃ MỞ, nhấn ? ở mỗi hàng ngang bất kỳ để xem gợi ý.
+    </div>
+
+  </div>
+</div>
+
+
+
+  <audio id="correctSound" src="correct.mp3" preload="auto"></audio>
+  <audio id="wrongSound" src="wrong.mp3" preload="auto"></audio>
+
+  <script>
+let data = [];
+let answeredCorrectly = []; // mảng lưu trạng thái đúng/sai của từng hàng ngang
+
+let verticalExplanation = "";
+let verticalDetailedExplanation = "";
+const centralColumnIndex = 10;
+
+document.getElementById("fileInput").addEventListener("change", handleFile);
+
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(e.target.result, "text/html");
+    const paragraphs = Array.from(doc.body.querySelectorAll("p")).map(p => p.textContent.trim());
+
+    data = [];
+    verticalExplanation = "";
+    verticalDetailedExplanation = "";
+    let currentAnswer = "", currentHint = "", currentVerticalIndex = -1;
+
+let verticalExtraHint = "";
+let isVerticalBlock = false;
+
+
+    paragraphs.forEach(line => {
+  if (line.startsWith("- Ô hàng dọc:")) {
+    verticalExplanation = line.split(":")[1].trim();
+    isVerticalBlock = true; // đánh dấu bắt đầu vùng hàng dọc
+  } else if (line.startsWith("+ Gợi ý thông tin:") && isVerticalBlock) {
+    verticalExtraHint = line.split(":")[1].trim();
+  } else if (line.startsWith("+ Giải thích từ hàng dọc:")) {
+    verticalDetailedExplanation = line.split(":")[1].trim();
+  } else if (line.startsWith("- Ô hàng ngang thứ")) {
+    isVerticalBlock = false; // đánh dấu kết thúc vùng hàng dọc
+    if (currentAnswer) {
+      data.push({ answer: currentAnswer, hint: currentHint, verticalLetterIndex: currentVerticalIndex });
+    }
+    currentAnswer = line.split(":")[1].trim().toUpperCase();
+    currentHint = "";
+    currentVerticalIndex = -1;
+  } else if (line.startsWith("+ Gợi ý thông tin:")) {
+    currentHint = line.split(":")[1].trim();
+  } else if (line.startsWith("+ Chữ cái cần lấy cho ô hàng dọc:")) {
+    const match = line.match(/Ô thứ (\d+)/i);
+    if (match) currentVerticalIndex = parseInt(match[1]) - 1;
+  }
+});
+
+
+    if (currentAnswer) {
+  data.push({ answer: currentAnswer, hint: currentHint, verticalLetterIndex: currentVerticalIndex });
+}
+
+// ✅ sau khi load xong toàn bộ:
+answeredCorrectly = data.map(() => false);
+
+    createGrid();
+
+// Hiển thị gợi ý của từ hàng dọc nếu có
+if (verticalExtraHint) {
+  const verticalHintBox = document.getElementById("vertical-hint");
+  verticalHintBox.innerHTML = `<strong>📌 Gợi ý cho từ hàng dọc:</strong><br>${verticalExtraHint}`;
+  verticalHintBox.style.display = "block";
+}
+
+
+// Hiển thị hộp gợi ý chính
+const hintBox = document.getElementById("hint-box");
+  hintBox.style.display = "block"; // hiện ra
+hintBox.style.fontSize = "20px"; // tăng kích thước chữ lớn hơn
+  hintBox.innerHTML = `<strong>VUI MỪNG THÔNG BÁO: </strong><br>LƯỚI CHƠI TÌM Ô CHỮ BÍ MẬT đã mở, Hãy nhấn ⍰  ở mỗi hàng ngang bất kỳ để xem gợi ý.`;
+};
+
+  reader.readAsText(file);
+}
+
+function createGrid() {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  data.forEach((item, rowIndex) => {
+    const rowContainer = document.createElement("div");
+    rowContainer.className = "row-container";
+
+    // Thêm số thứ tự STT vào bên trái
+    const sttCircle = document.createElement("div");
+    sttCircle.className = "stt-circle border-blink";
+    sttCircle.textContent = rowIndex + 1;
+    rowContainer.appendChild(sttCircle);
+
+    const rowInputs = document.createElement("div");
+    rowInputs.className = "row-inputs";
+
+    const startCol = centralColumnIndex - item.verticalLetterIndex + 1;
+
+    for (let c = 0; c < item.answer.length; c++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      if (c === item.verticalLetterIndex) cell.classList.add("vertical-cell", "special-cell");
+      if (c === 0) cell.style.gridColumnStart = startCol;
+
+      const input = document.createElement("input");
+      input.maxLength = 1;
+
+      input.addEventListener("input", function () {
+        this.value = this.value.toUpperCase();
+        if (this.value.length === 1) {
+          const inputs = rowInputs.querySelectorAll("input");
+          const index = Array.from(inputs).indexOf(this);
+          if (index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        }
+      });
+
+      cell.appendChild(input);
+      rowInputs.appendChild(cell);
+    }
+
+    rowContainer.appendChild(rowInputs);
+
+    const rowControls = document.createElement("div");
+    rowControls.className = "row-controls";
+
+    const hintBtn = document.createElement("button");
+    hintBtn.className = "hint";
+    hintBtn.textContent = "?";
+    hintBtn.onclick = () => {
+      const hintBox = document.getElementById("hint-box");
+      hintBox.innerHTML =
+        `<div style="font-size: 24px; font-weight: nomal; color: #003366;">
+          <strong>Độ dài:</strong> ${item.answer.length} chữ cái<br>
+          <strong>Gợi ý:</strong> ${item.hint}
+        </div>`;
+      hintBox.scrollIntoView({ behavior: 'smooth' });
+
+ // Ghi lại dòng đang chọn và chỉ số dòng đó
+  pendingRowToLock = { rowInputs, rowIndex };
+};
+
+    const checkBtn = document.createElement("button");
+    checkBtn.className = "check";
+    checkBtn.textContent = "KIỂM TRA";
+
+
+
+    checkBtn.onclick = () => {
+  const cells = rowInputs.querySelectorAll("input");
+  let allCorrect = true;
+  cells.forEach((input, i) => {
+    input.value = input.value.toUpperCase();
+    if (input.value === item.answer[i]) {
+      input.parentElement.style.background = "#add8e6";
+    } else {
+      input.parentElement.style.background = "red";
+      input.style.color = "white";
+      setTimeout(() => {
+        input.value = "";
+        input.parentElement.style.background = "";
+        input.style.color = "";
+      }, 5000);
+      allCorrect = false;
+    }
+  });
+
+  const hintBox = document.getElementById("hint-box");
+  const originalHintHTML = 
+    `<div style="font-size: 24px; font-weight: normal; color: #003366;">
+      <strong>Độ dài:</strong> ${item.answer.length} chữ cái<br>
+      <strong>Gợi ý:</strong> ${item.hint}
+    </div>`;
+
+  if (allCorrect) {
+  document.getElementById("correctSound").play();
+  answeredCorrectly[rowIndex] = true;
+
+  const allAnswered = answeredCorrectly.every(status => status);
+  const hintBox = document.getElementById("hint-box");
+
+  if (allAnswered) {
+    hintBox.innerHTML = `<div style="font-size: 32px; color: darkgreen; font-weight: bold;">🎯 Tuyệt vời! Từ hàng dọc đã được tìm thấy.</div>`;
+  } else {
+    hintBox.innerHTML = `<div style="font-size: 32px; color: blue; font-weight: bold;">✅ Chính xác! 👉 Chúng ta chọn hàng ngang khác nhé!</div>`;
+  }
+  hintBox.style.display = "block";
+
+  // hiệu ứng glow cho ô hàng dọc
+  const verticalIndex = item.verticalLetterIndex;
+  if (verticalIndex >= 0 && verticalIndex < cells.length) {
+    const targetCell = cells[verticalIndex].parentElement;
+    targetCell.classList.add("vertical-highlight-glow");
+  }
+} else {
+  document.getElementById("wrongSound").play();
+  showHintMessage("Chưa đúng rồi, thử lại nhé!", false, originalHintHTML);
+}
+
+};
+
+
+    const revealBtn = document.createElement("button");
+    revealBtn.className = "reveal";
+    revealBtn.textContent = "ĐÁP ÁN";
+    revealBtn.onclick = () => {
+      const cells = rowInputs.querySelectorAll("input");
+      cells.forEach((input, i) => { input.value = item.answer[i]; });
+    };
+
+    rowControls.appendChild(hintBtn);
+    rowControls.appendChild(checkBtn);
+    rowControls.appendChild(revealBtn);
+    rowContainer.appendChild(rowControls);
+
+    grid.appendChild(rowContainer);
+  });
+}
+
+function lockRow(rowInputs) {
+  const cells = rowInputs.querySelectorAll("input");
+  cells.forEach(input => {
+    input.value = "X";
+    input.disabled = true;
+    input.parentElement.style.background = "#ccc";
+    input.style.color = "black";
+    input.style.fontWeight = "bold";
+  });
+}
+
+
+
+function showHintMessage(message, isCorrect, originalHintHTML) {
+  const hintBox = document.getElementById("hint-box");
+  hintBox.innerHTML = 
+    `<div style="font-size: 32px; font-weight: bold; text-align: center; color: ${isCorrect ? 'green' : 'red'};">
+      ${message}
+    </div>
+  `;
+  hintBox.scrollIntoView({ behavior: 'smooth' });
+
+  const resultColor = isCorrect ? "#4CAF50" : "#f44336";
+  const resultIcon = isCorrect ? "✅" : "❌";
+
+  hintBox.innerHTML = 
+    `<div style="
+      font-size: 28px;
+      font-weight: bold;
+      color: ${resultColor};
+      margin-bottom: 10px;
+    ">${resultIcon} ${message}</div>
+    ${originalHintHTML}
+  `;
+
+  hintBox.style.display = "block";
+
+  // Tự ẩn sau 5 giây
+  setTimeout(() => {
+  const hintBox = document.getElementById("hint-box");
+  // Nếu đã đúng hết thì giữ lại thông báo hàng dọc
+  const allAnswered = answeredCorrectly.every(status => status);
+  if (!allAnswered) {
+    hintBox.innerHTML = originalHintHTML;
+    hintBox.style.display = "block";
+  }
+}, 5000);
+
+}
+
+function showVerticalAnswer() {
+  const answers = data.map(item => item.answer[item.verticalLetterIndex] || " ").join("");
+  const rows = document.querySelectorAll(".row-inputs");
+  rows.forEach((row, i) => {
+    const cell = row.children[data[i].verticalLetterIndex];
+    if (cell) {
+      const input = cell.querySelector("input");
+      if (input) input.value = data[i].answer[data[i].verticalLetterIndex];
+      cell.classList.remove("vertical-cell");
+      cell.classList.add("vertical-highlight");
+    }
+  });
+  document.getElementById("hint-box").innerHTML =
+  `<strong>Từ hàng dọc:</strong><br>${verticalExplanation}<br><strong>Giải thích:</strong><br>${verticalDetailedExplanation}`;
+}
+</script>
+
+<div style="display: flex; justify-content: center; margin-top: 30px;">
+
+</div>
+<div style="
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+  <!-- Thêm nút SOẠN CÂU HỎI lên trên 3 nút khác -->
+  <button onclick="window.location.href='Soan_o_chu_bi_mat.html'" style="
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+font-weight: bold;
+  ">
+    ✍️ SOẠN Ô CHỮ BÍ MẬT
+  </button>
+
+  <button class="reset-btn" onclick="window.location.reload()" style="
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+font-weight: bold;
+  ">🔄 RESET</button>
+
+  <button onclick="window.location.href='index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+  ">
+    ❌ VỀ TRANG CHỦ
+  </button>
+</div>
+
+
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 50px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+">
+<button onclick="openmarquee()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: yellow;
+    border: none;
+    border-radius: 6px;
+    color: blue;
+    cursor: pointer;
+  ">📘Hướng dẫn sử dụng</button><br>
+
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button><br>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+<script>
+function openFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+
+
+</script>
+
+</script>
+<script>
+  document.querySelectorAll('input.input-cell').forEach(input => {
+    const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "Enter"];
+
+    input.addEventListener('keydown', function(e) {
+      // Cho phép phím điều hướng và xóa
+      if (allowedKeys.includes(e.key)) return;
+
+      // Chặn ký tự không phải A-Z hoặc a-z
+      if (!/^[a-zA-Z]$/.test(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+    input.addEventListener('input', function() {
+      this.value = this.value.toUpperCase(); // chuyển thành chữ hoa
+    });
+  });
+</script>
+
+<script>
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+</script>
+
+<script>
+    function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  const mm = m < 10 ? '0' + m : m;
+  const ss = s < 10 ? '0' + s : s;
+  return `${mm} : ${ss}`;
+}
+    let countdownInterval;
+let pendingRowToLock = null;
+    function startCountdown(callback) {
+  let time = parseInt(document.getElementById("timeInput").value);
+  const display = document.getElementById("countdownDisplay");
+  const alarm = document.getElementById("alarmSound");
+
+  clearInterval(countdownInterval);
+  display.textContent = formatTime(time);
+
+  countdownInterval = setInterval(() => {
+    time--;
+    if (time <= 0) {
+      clearInterval(countdownInterval);
+      display.textContent = "0 : 00";
+      alarm.play();
+      if (typeof callback === "function") callback(); // GỌI CALLBACK NẾU CÓ
+      return;
+    }
+    display.textContent = formatTime(time);
+  }, 1000);
+}
+
+
+function openmarquee() {
+  const marquee = document.getElementById("bottom-marquee");
+  marquee.innerHTML = "📘 HƯỚNG DẪN SỬ DỤNG GIAO DIỆN: Click MỞ ĐỀ TÌM Ô CHỮ để lấy đề từ file đề đã soạn - xuất - lưu của bạn từ trước. Nhấn vào dấu hỏi (?) để xem gợi ý từng hàng, sau đó nhập từ trả lời. Nhấn 'KIỂM TRA' để xác nhận. Nếu trả lời đúng hết, bạn sẽ mở được từ hàng dọc bí mật! 🚀. Có thể áp dụng thêm nút BẮT ĐẦU ở Đồng hồ đếm ngược thời gian cho phép người chơi vừa suy nghĩ, vừa nhập ký tự và ấn nút KIỂM TRA trong khoảng thời gian đó. Hết thời gian, ô hàng ngang đang tương tác sẽ bị khóa lại X. Chúc bạn có những trải nghiệm bổ ích! (Tác giả: Mai Thiện Chánh)";
+}
+
+  </script>
+
+<marquee id="bottom-marquee" behavior="scroll" direction="left" scrollamount="6">
+  🚀 CÙNG CHINH PHỤC TRÒ CHƠI "ĐI TÌM Ô CHỮ BÍ MẬT" – CÙNG PHÁT HUY TƯ DUY VÀ KHẢ NĂNG SUY LUẬN! 🎯 
+</marquee>
+
+</body>
+</html>

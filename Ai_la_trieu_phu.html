@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ai là triệu phú - Giáo dục</title>
+  <style>
+    .rotating-border {
+    width: 180px;  /* Vòng quay to hơn */
+    height: 180px;
+    border-radius: 50%;
+    margin: 0 auto 20px auto;
+    position: relative;
+  }
+
+    .rotating-border::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        red, orange, yellow, green, cyan, blue, violet, red
+      );
+      animation: spin 4s linear infinite; /* Viền màu quay */
+      z-index: 1;
+    }
+
+    .rotating-border > img {
+    width: 170px;  /* Logo nhỏ hơn vòng quay */
+    height: 170px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Căn giữa logo */
+    z-index: 2;
+  }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    body { font-family: sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
+    .question-box { background: #111; border-radius: 10px; padding: 20px; max-width: 600px; margin: auto; }
+    .answers button, .help button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    .correct { background: green; }
+    .wrong { background: red; }
+
+    .control button, .control input {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+
+    .control {
+      margin-bottom: 20px;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: url("Nen.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    button.reset-btn    { background-color: #ff9800; color: white; }
+    button.import-btn   { background-color: #2196f3; color: white; }
+    button.add-btn      { background-color: #4caf50; color: white; }
+    button.export-btn   { background-color: #9c27b0; color: white; }
+    button.help-btn     { background-color: #00bcd4; color: white; }
+    .correct            { background-color: green !important; }
+    .wrong              { background-color: red !important; }
+
+
+
+.help {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.help button {
+  font-size: 28px;
+  padding: 15px 25px;
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  background-color: #00bcd4;
+  color: white;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.help button:hover {
+  background-color: #0097a7;
+  transform: scale(1.05);
+}
+
+
+#question {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;  /* Căn giữa câu hỏi */
+  width: 100%;  /* Chiếm toàn bộ chiều rộng */
+  box-sizing: border-box;
+}
+
+#answers {
+  display: flex;  /* Dùng flexbox để dãn rộng */
+  justify-content: space-between;  /* Dãn đều các đáp án */
+  gap: 15px;  /* Khoảng cách giữa các đáp án */
+  flex-wrap: wrap;  /* Cho phép các đáp án xuống dòng khi không đủ chỗ */
+  max-width: 900px;  /* Tối đa chiều rộng của phần đáp án */
+  margin: 0 auto;  /* Căn giữa phần đáp án */
+}
+
+#answers button {
+  font-size: 20px;
+  padding: 20px;
+  width: 45%;  /* Đáp án sẽ chiếm 45% chiều rộng */
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #answers button {
+    width: 100%;  /* Trên màn hình nhỏ, mỗi đáp án sẽ chiếm 100% chiều rộng */
+  }
+}
+
+
+#question-list {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: #007bff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;  /* Xếp dọc */
+  gap: 5px;
+  max-width: 300px;
+color: white;
+  font-weight: bold;
+  opacity: 1; /* Đảm bảo không bị mờ */
+}
+
+#question-list span {
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #eee;
+  cursor: default;
+}
+#question-list span.active {
+  background-color: orange;
+  color: white;
+}
+#question-list span.correct {
+  background-color: #28a745;
+  color: white;
+}
+#question-list span.incorrect {
+  background-color: red;
+  color: white;
+}
+
+
+  </style>
+</head>
+<body>
+<h1 style="margin-bottom: 5px;">🎓 TRÒ CHƠI KIẾN THỨC - Đi tìm AI LÀ TRIỆU PHÚ TRI THỨC</h1>
+<div class="rotating-border">
+  <img src="ALTP.png" alt="logo" />
+</div>
+  
+<div style="display: flex; justify-content: center; gap: 30px;">
+  <div id="question-list" style="width: 200px; text-align: left;">
+    <!-- Danh sách câu hỏi sẽ được render ở đây -->
+  </div>
+
+
+  <div class="question-box">
+    <div id="question">Câu hỏi sẽ hiển thị tại đây</div>
+    <div id="answers"></div>
+    <div class="help">
+  <button class="help-btn" onclick="use5050()">50:50</button>
+  <button class="help-btn" onclick="useHint()">Gợi ý</button>
+  <button class="help-btn" onclick="skipQuestion()">Bỏ qua</button>
+</div>
+
+    <div id="hint"></div>
+    <div id="status"></div>
+  </div>
+
+  <audio id="sound-correct" src="correct.mp3"></audio>
+  <audio id="sound-wrong" src="wrong.mp3"></audio>
+  <audio id="sound-win" src="win.mp3"></audio>
+
+<script>
+let questions = [];
+let importedQuestions = [];
+let current = 0;
+let used5050 = false, usedHint = false, usedSkip = false;
+let questionStatus = []; // Mảng lưu trạng thái của từng câu hỏi: 'unanswered', 'correct', 'incorrect'
+
+function loadQuestion() {
+renderQuestionList();  
+document.getElementById("hint").textContent = "";
+  const q = questions[current];
+  document.getElementById("question").textContent = q.question;
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+  q.answers.forEach((ans, idx) => {
+    const btn = document.createElement("button");
+    btn.textContent = String.fromCharCode(65 + idx) + ". " + ans;
+    btn.onclick = () => checkAnswer(idx, btn);
+    answersDiv.appendChild(btn);
+  });
+  document.getElementById("status").textContent = "";
+}
+
+function checkAnswer(index, button) {
+  const correct = questions[current].correct;
+  const buttons = document.querySelectorAll("#answers button");
+
+  if (index === correct) {
+  button.classList.add("correct");
+  document.querySelector("#q-item-" + current).classList.remove("active");
+  document.querySelector("#q-item-" + current).classList.add("correct");
+questionStatus[current] = "correct";
+
+    const bgm = document.getElementById("background-music");
+const correctSound = document.getElementById("sound-correct");
+
+// Tạm dừng nhạc nền
+bgm.pause();
+
+// Phát âm thanh đúng
+correctSound.play();
+
+// Khi âm thanh kết thúc thì phát lại nhạc nền
+correctSound.onended = function () {
+  bgm.play();
+};
+
+    document.getElementById("status").textContent = "✅ Đúng rồi!";
+    setTimeout(() => {
+      current++;
+      if (current < questions.length) {
+        
+      loadQuestion();
+      } else {
+        document.getElementById("sound-win").play();
+        document.getElementById("question").textContent = "🎉 Chúc mừng! Bạn đã thắng!";
+        document.getElementById("answers").innerHTML = "";
+      }
+    }, 1000);
+  } else {
+    button.classList.add("wrong");
+    document.querySelectorAll("#answers button")[correct].classList.add("correct");
+
+document.querySelector("#q-item-" + current).classList.remove("active");
+  document.querySelector("#q-item-" + current).classList.add("incorrect");
+questionStatus[current] = "incorrect";
+
+const bgm = document.getElementById("background-music");
+const wrongSound = document.getElementById("sound-wrong");
+
+bgm.pause();
+wrongSound.play();
+wrongSound.onended = function () {
+  bgm.play();
+};
+
+    document.getElementById("status").textContent = "❌ Sai rồi! Kết thúc trò chơi.";
+    buttons.forEach(b => b.disabled = true);
+  }
+}
+
+function use5050() {
+  if (used5050) return;
+  used5050 = true;
+  const correct = questions[current].correct;
+  let removed = 0;
+  const buttons = document.querySelectorAll("#answers button");
+  for (let i = 0; i < buttons.length; i++) {
+    if (i !== correct && removed < 2) {
+      buttons[i].style.visibility = "hidden";
+      removed++;
+    }
+  }
+}
+
+function useHint() {
+  if (usedHint) return;
+  usedHint = true;
+  const hint = questions[current].hint;
+  if (hint) {
+    document.getElementById("hint").textContent = "💡 Gợi ý: " + hint;
+  }
+else {
+  document.getElementById("hint").textContent = "💡 Không có gợi ý cho câu hỏi này.";
+}
+}
+
+function skipQuestion() {
+  if (usedSkip) return;
+  usedSkip = true;
+  current++;
+  if (current < questions.length) 
+  loadQuestion();
+  else {
+    document.getElementById("question").textContent = "🎉 Bạn đã kết thúc trò chơi!";
+    document.getElementById("answers").innerHTML = "";
+  }
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+window.onload = function () {
+  document.getElementById('fileInput').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const content = e.target.result;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(content, 'text/html');
+      const paragraphs = doc.querySelectorAll("p");
+const blocks = Array.from(paragraphs).map(p => p.innerText.trim()).filter(t => t.startsWith("Câu hỏi:"));
+
+
+      importedQuestions = blocks.map(block => {
+        const lines = block.trim().split(/\n/).map(line => line.trim()).filter(l => l);
+        const q = lines[0].replace("Câu hỏi:", "").trim();
+        const answers = [];
+        let correctIndex = -1;
+        let hint = "";
+
+        lines.slice(1).forEach(line => {
+          if (line.startsWith("Đáp án đúng:")) {
+            correctIndex = answers.length;
+            answers.push(line.replace("Đáp án đúng:", "").trim());
+          } else if (line.startsWith("Đáp án sai:")) {
+            answers.push(line.replace("Đáp án sai:", "").trim());
+          } else if (line.startsWith("Gợi ý:")) {
+            hint = line.replace("Gợi ý:", "").trim();
+          }
+        });
+
+        return { question: q, answers, correct: correctIndex, hint };
+      });
+
+      console.log("Imported Questions:", importedQuestions);
+
+      importedQuestions.forEach(q => {
+        const correctAnswer = q.answers[q.correct];
+        const shuffledAnswers = [...q.answers];
+        shuffleArray(shuffledAnswers);
+        q.correct = shuffledAnswers.indexOf(correctAnswer);
+        q.answers = shuffledAnswers;
+      });
+
+      shuffleArray(importedQuestions);
+      questions = importedQuestions;
+renderQuestionList();
+
+      current = 0;
+      used5050 = false;
+      usedHint = false;
+      usedSkip = false;
+      loadQuestion();
+    };
+
+    reader.readAsText(file);
+  });
+};
+</script>
+
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button><br>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+
+
+<script>
+function openFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+
+window.addEventListener("click", function () {
+  const bgm = document.getElementById("background-music");
+  if (bgm.paused) {
+    bgm.play().catch((e) => {
+      console.log("Không thể tự động phát nhạc:", e);
+    });
+  }
+}, { once: true });
+
+
+
+function renderQuestionList() {
+  const listDiv = document.getElementById("question-list");
+  listDiv.innerHTML = "";
+
+  questions.forEach((q, idx) => {
+    const item = document.createElement("span");
+    item.id = "q-item-" + idx;
+    item.textContent = "Câu " + (idx + 1);
+
+    // Giữ lại trạng thái đúng/sai nếu đã được đánh dấu trước đó
+    const oldItem = document.getElementById("q-item-" + idx);
+   if (questionStatus[idx] === "correct") {
+  item.classList.add("correct");
+} else if (questionStatus[idx] === "incorrect") {
+  item.classList.add("incorrect");
+}
+
+
+    // Gán class active cho câu hiện tại
+    if (idx === current) {
+      item.classList.add("active");
+    }
+
+    listDiv.appendChild(item);
+  });
+}
+
+
+</script>
+
+<div style="
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+  <!-- Thêm nút SOẠN CÂU HỎI lên trên 3 nút khác -->
+  <button onclick="window.location.href='Soan_De_ALTP.html'" style="
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+font-weight: bold;
+  ">
+    ✍️ SOẠN CÂU HỎI
+  </button>
+
+  <input type="file" id="fileInput" style="display: none;" />
+  <label for="fileInput" style="
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 190px;
+    text-align: center;
+font-weight: bold;
+  ">📥 MỞ ĐỀ ALTP</label>
+
+  <button class="reset-btn" onclick="window.location.reload()" style="
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+font-weight: bold;
+  ">🔄 RESET</button>
+
+  <button onclick="window.location.href='index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+  ">
+    ❌ VỀ TRANG CHỦ
+  </button>
+</div>
+
+
+
+<audio id="background-music" src="NhacnenALTP.mp3" autoplay loop></audio>
+
+
+
+
+</body>
+</html>

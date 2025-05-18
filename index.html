@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trang chủ - Bộ công cụ giáo dục dành cho giáo viên - offline</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('nen.jpg') no-repeat center center fixed;
+	background-size: cover;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 40px;
+      min-height: 100vh;
+    }
+
+    .clock {
+  width: 320px;
+  height: 320px;
+  border: 10px solid #fff;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  background-color: #222;
+  background-image: url('bg_clock.jpg'); /* ← thêm dòng này */
+  background-size: cover;
+  background-position: center;
+}
+
+
+    .center-dot {
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      transform: rotate(0deg);
+      border-radius: 5px;
+    }
+
+    .hour {
+      width: 6px;
+      height: 60px;
+      background: #FFD700;
+      z-index: 1;
+    }
+
+    .minute {
+      width: 4px;
+      height: 90px;
+      background: #00BFFF;
+      z-index: 2;
+    }
+
+    .second {
+      width: 2px;
+      height: 110px;
+      background: #FF4500;
+      z-index: 3;
+    }
+
+    .numbers, .ticks {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .number {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%);
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    }
+
+    .tick {
+      position: absolute;
+      width: 2px;
+      height: 8px;
+      background: #aaa;
+      top: 0;
+      left: 50%;
+      transform-origin: bottom center;
+    }
+
+    .tick.hour {
+      height: 15px;
+      background: #FFD700;
+    }
+
+    .custom-button {
+      background-color: #00BFFF;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+      margin: 5px 0;
+      display: inline-block;
+	text-decoration: none; /* ← Thêm dòng này để bỏ gạch chân chữ của nút*/
+    }
+
+    .custom-button:hover {
+      background-color: #008ccc;
+    }
+
+
+/* Hiệu ứng mờ – sáng khi hover vào icon */
+img:hover {
+  filter: brightness(1.4) drop-shadow(0 0 5px #00ffff);
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
+
+    .background-picker {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .reset-button {
+      background-color: #FF6347;
+    }
+
+    .reset-button:hover {
+      background-color: #cc3c1c;
+    }
+
+
+#fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: no;
+  z-index: 1000;
+  padding: 10px 0;
+  text-align: center;
+}
+#fixed-header marquee {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0;
+}
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+
+.author-container {
+  display: flex;
+   flex-direction: column; /* xếp dọc: ảnh trên, chữ dưới */
+  align-items: center;    /* căn giữa ngang */
+  margin-top: 4px;
+margin-bottom: 4px;
+}
+
+.author-img {
+  width: 140px;                 /* Kích thước ảnh */
+  height: 140px;
+  border-radius: 50%;           /* Bo tròn thành hình tròn */
+  object-fit: cover;            /* Cắt ảnh vừa khít mà không méo */
+  border: 6px solid #fff;       /* Viền trắng đẹp */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Đổ bóng nhẹ */
+  margin: 6px 0;
+margin-bottom: 1px; /* sát chữ nhất có thể */
+}
+.popup {
+  display: flex;
+  justify-content: center;  /* Canh giữa ngang */
+  align-items: center;      /* Canh giữa dọc nếu popup có chiều cao xác định */
+  flex-direction: column;
+  padding: 10px;
+margin-top: 1px;   /* hoặc 0 nếu muốn sát */
+  margin-bottom: 1px;
+}
+
+
+.wave-text {
+  display: inline-block;
+  font-size: 2em;
+  animation: wave 30s ease-in-out infinite;
+  transform-origin: center;
+  white-space: nowrap;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-wave span {
+  display: inline-block;
+  animation: wave 1s ease-in-out;
+}
+
+
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 0;
+  color: yellow;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 9999;
+font-family: Times New roman, sans-serif; /* Hạn chế lỗi tiếng Việt */
+box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+  </style>
+</head>
+<body>
+
+<div id="fixed-header">
+  <marquee direction="left" scrollamount="8">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CODE CỦA AI</marquee>
+
+  <div style="text-align: center;">
+    <h1 id="wave-text" style="font-size: 32px; font-weight: bold; color: #e91e63; font-family: 'Times New Roman', Times, serif;">BỘ CÔNG CỤ GIÁO DỤC DÀNH CHO GIÁO VIÊN - OFFLINE</h1>
+      </div>
+</div>
+<div style="height: 120px;"></div> <!-- Khoảng đệm để tránh bị che -->
+
+
+
+  <!-- Bố cục 3 cột -->
+  <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 60px;">
+    
+    <!-- Cột trái -->
+    <div style="text-align: center;">
+      <a href="vong_quay_so.html">
+  <img src="icon_quay_so.png" alt="Vòng quay số" width="60">
+</a><br>
+<a href="vong_quay_so.html" class="custom-button">VÒNG QUAY SỐ NGẪU NHIÊN</a>
+<br><br>
+
+
+      <a href="vong_quay_ten.html">
+  <img src="icon_quay_ten.png" alt="Vòng quay tên" width="60">
+</a><br>
+<a href="vong_quay_ten.html" class="custom-button">VÒNG QUAY TÊN NGẪU NHIÊN</a>
+<br><br>
+
+<a href="Ai_la_trieu_phu.html">
+  <img src="ALTP.png" alt="Ai là triệu phú" width="80">
+</a><br>
+<a href="Ai_la_trieu_phu.html" class="custom-button">AI LÀ TRIỆU PHÚ - GIÁO DỤC</a>
+<br><br>
+<a href="O_Chu_bi_mat.html">
+  <img src="icon_o_chu_bi_mat.png" alt="Ô chữ bí mật" width="80">
+</a><br>
+<a href="O_Chu_bi_mat.html" class="custom-button">TRÒ CHƠI TÌM Ô CHỮ BÍ MẬT</a>
+    </div>
+
+    <!-- Cột giữa: Đồng hồ và nút ảnh nền -->
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <div class="clock" id="clock">
+        <div class="ticks" id="ticks"></div>
+        <div class="numbers" id="numbers"></div>
+        <div class="hand hour" id="hour-hand"></div>
+        <div class="hand minute" id="minute-hand"></div>
+        <div class="hand second" id="second-hand"></div>
+        <div class="center-dot"></div>
+      </div>
+
+      <div class="background-picker">
+        <label for="bgInput" class="custom-button">ĐỔI ẢNH NỀN ĐỒNG HỒ</label>
+        <input type="file" id="bgInput" class="file-input" accept="image/*"/>
+        <button id="resetBg" class="custom-button reset-button">XÓA ẢNH NỀN</button>
+      </div>
+<div id="dongHoHienTai" style="font-size: 18px; color: green; font-weight: bold; margin-top: 5px;"></div>
+<script>
+  function capNhatDongHo() {
+    const dongHo = document.getElementById("dongHoHienTai");
+    const now = new Date();
+    const gio = String(now.getHours()).padStart(2, '0');
+    const phut = String(now.getMinutes()).padStart(2, '0');
+    const giay = String(now.getSeconds()).padStart(2, '0');
+    dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
+  }
+
+  setInterval(capNhatDongHo, 1000);
+  capNhatDongHo();
+</script>
+
+<script type="text/javascript">
+  var mydate = new Date();
+  var year = mydate.getFullYear();
+  var day = mydate.getDay();
+  var month = mydate.getMonth();
+  var daym = mydate.getDate();
+  if (daym < 10) daym = "0" + daym;
+  var dayarray = ["CHỦ NHẬT", "THỨ HAI", "THỨ BA", "THỨ TƯ", "THỨ NĂM", "THỨ SÁU", "THỨ BẢY"];
+  var montharray = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+  document.write("<div style='color: red; font-weight: bold;'>" + dayarray[day] + ", " + daym + "/" + montharray[month] + "/" + year + "</div>");
+</script>
+
+<div style="width: 400px; padding: 5px; background-color: rgba(0, 0, 0, 0.3); border-radius: 10px; text-align: center; margin: 20px auto;">
+  <script>
+    var d = new Date();
+    var hourValue = d.getHours();
+    var greeting = "", greeting1 = "";
+    if (hourValue < 6) { greeting = "Chào ngày mới!"; greeting1 = "Chúc các bạn một ngày mới an lành!"; }
+    else if (hourValue < 9) { greeting = "Chào buổi sáng!"; greeting1 = "Chúc các bạn một buổi sáng tốt lành!"; }
+    else if (hourValue < 11) { greeting = "Sắp trưa rồi!"; greeting1 = "Chúc các bạn có một ngày thành công và hạnh phúc!"; }
+    else if (hourValue < 13) { greeting = "Đã buổi trưa rồi đó!"; greeting1 = "Chúc các bạn có bữa trưa thật ngon miệng!"; }
+    else if (hourValue < 17) { greeting = "Đã buổi chiều!"; greeting1 = "Hãy cố gắng hoàn thành công việc trong ngày!"; }
+    else if (hourValue < 18) { greeting = "Sắp tối rồi!"; greeting1 = "Chúc các bạn có bữa tối thật ngon miệng bên người thân!"; }
+    else if (hourValue <= 21) { greeting = "Chào buổi tối!"; greeting1 = "Chúc các bạn có bữa tối thật vui vẻ và hạnh phúc bên người thân!"; }
+    else { greeting = "Khuya rồi đấy!"; greeting1 = "Hãy đi ngủ thôi! Chúc các bạn có một giấc ngủ thật ngon!"; }
+    document.write("<h3 style='color:yellow; font-weight:bold;'>" + greeting + "</h3><p style='font-size:16px; color:#FFFFFF; font-weight:bold;'>" + greeting1 + "</p>");
+  </script>
+</div>
+    </div>
+
+    <!-- Cột phải -->
+    <div style="text-align: center;">
+      <a href="soan_cau_hoi.html">
+  <img src="icon_soan_cau_hoi.png" alt="Soạn đề" width="70">
+</a><br>
+<a href="soan_cau_hoi.html" class="custom-button">SOẠN - ĐẢO ĐỀ TƯƠNG TÁC TRỰC TIẾP</a>
+<br><br>
+
+<a href="O_Chu_tron_tim.html">
+  <img src="icon_O_Chu_tron_tim.png" alt="Ô chữ trốn tìm" width="60">
+</a><br>
+<a href="O_Chu_tron_tim.html" class="custom-button">AI TINH MẮT HƠN - Ô CHỮ TRỐN TÌM</a>
+<br><br>
+<a href="fx-570VN Plus.html">
+  <img src="fx570.png" alt="Máy tính Fx570VN Plus" width="60">
+</a><br>
+<a href="fx-570VN Plus.html" class="custom-button">Fx-570VN Plus + Bảng tuần hoàn</a>
+<br><br>
+      <a href="Caro.html">
+  <img src="icon_caro.png" alt="Cờ caro" width="70">
+</a><br>
+<a href="Caro.html" class="custom-button">MUSIC + GAME CỜ CARO THƯ GIÃN</a>
+
+    </div>
+
+    <script>
+    const hourHand = document.getElementById('hour-hand');
+    const minuteHand = document.getElementById('minute-hand');
+    const secondHand = document.getElementById('second-hand');
+    const clock = document.getElementById('clock');
+
+    function updateClock() {
+      const now = new Date();
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      const vietnamTime = new Date(utc + 7 * 3600000);
+
+      const seconds = vietnamTime.getSeconds();
+      const minutes = vietnamTime.getMinutes();
+      const hours = vietnamTime.getHours();
+
+      const secondDeg = seconds * 6;
+      const minuteDeg = minutes * 6 + seconds * 0.1;
+      const hourDeg = ((hours % 12) / 12) * 360 + (minutes / 60) * 30;
+
+      secondHand.style.transform = `translate(-50%, 0) rotate(${secondDeg}deg)`;
+      minuteHand.style.transform = `translate(-50%, 0) rotate(${minuteDeg}deg)`;
+      hourHand.style.transform = `translate(-50%, 0) rotate(${hourDeg}deg)`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Vẽ số giờ
+    const numberContainer = document.getElementById('numbers');
+    for (let i = 1; i <= 12; i++) {
+      const angle = (i / 12) * 2 * Math.PI;
+      const radius = 130;
+      const x = 160 + Math.sin(angle) * radius;
+      const y = 160 - Math.cos(angle) * radius;
+
+      const num = document.createElement('div');
+      num.className = 'number';
+      num.textContent = i;
+      num.style.left = `${x}px`;
+      num.style.top = `${y}px`;
+      numberContainer.appendChild(num);
+    }
+
+    // Vạch chia phút và giờ
+    const tickContainer = document.getElementById('ticks');
+    for (let i = 0; i < 60; i++) {
+      const tick = document.createElement('div');
+      tick.className = 'tick';
+      if (i % 5 === 0) tick.classList.add('hour');
+      tick.style.transform = `rotate(${i * 6}deg) translateX(-50%)`;
+      tickContainer.appendChild(tick);
+    }
+
+    // Đổi nền
+    const bgInput = document.getElementById('bgInput');
+    const resetBtn = document.getElementById('resetBg');
+    const defaultBgColor = "#222";
+
+    bgInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          clock.style.backgroundImage = `url('${evt.target.result}')`;
+          clock.style.backgroundColor = "transparent";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      clock.style.backgroundImage = "none";
+      clock.style.backgroundColor = defaultBgColor;
+    });
+
+  </script>
+
+
+<!-- Nút Thoát Hoàn Toàn -->
+<button id="exitApp" style="
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+">
+  THOÁT HOÀN TOÀN
+
+<script>
+document.getElementById('exitApp').addEventListener('click', () => {
+  if (confirm("Cảm ơn bạn đã sử dụng ứng dụng của tác giả Mai Thiện Chánh\n\nBạn muốn thoát hoàn toàn?")) {
+    window.open('', '_self')?.close(); // Cố gắng đóng tab hiện tại
+    location.href = "about:blank"; // Nếu không được, chuyển hướng sang trang trắng
+  }
+});
+</script>
+</button>
+
+
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 40px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+
+
+<script>
+function openFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+</script>
+
+<script>
+  const fullTitle = "* * * Trang chủ - Bộ công cụ giáo dục dành cho giáo viên - offline";
+  let i = 0;
+  setInterval(() => {
+    document.title = fullTitle.slice(i) + fullTitle.slice(0, i);
+    i = (i + 1) % fullTitle.length;
+  }, 300);
+</script>
+
+
+
+
+
+<!-- Popup giới thiệu bộ công cụ -->
+<div id="introPopup" style="
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+">
+  <div style="
+    background: linear-gradient(135deg, #ffffff, #f0f8ff);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 520px;
+width: 90%;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    position: relative;
+    animation: popIn 0.6s ease;
+font-size: 15px;
+  ">
+    <h2 style="color: #e91e63;">BỘ CÔNG CỤ GD DÀNH CHO GV - OFFLINE</h2>
+    <p style="font-size: 16px; color: #333; line-height: 1.5;">
+  Đây là một <strong>siêu phẩm hỗ trợ giảng dạy</strong> được thiết kế dành riêng cho giáo viên thời đại số, bộ công cụ này sẽ giúp bạn:
+</p>
+
+<ul style="text-align: left; font-size: 15px; margin: 10px auto; max-width: 500px; color: #444; padding-left: 20px;">
+  <li>🎯 Quay số hoặc quay tên học sinh ngẫu nhiên</li>
+  <li>🧠 Chơi “Ai là triệu phú – Giáo dục” ngay trên lớp</li>
+  <li>📝 Soạn – trộn – đảo đề Test nhanh một cách trực quan</li>
+  <li>🔠 Ô chữ trốn tìm – Tăng cường quan sát và phản xạ</li>
+<li> 🔒 Ô chữ bí mật - Phát huy tư duy và khả năng suy luận</li>
+  <li>🎮 Game cờ caro thư giãn tích hợp nhạc nền</li>
+  <li>⏰ Đồng hồ trực quan, đổi nền sáng tạo – tạo điểm nhấn thú vị cho lớp học</li>
+</ul>
+
+<p style="font-size: 16px; color: #333; line-height: 1.5; margin-bottom: 4px;">
+  Không cần internet, không cài đặt phức tạp – <strong>Chỉ cần mở lên là dùng!</strong>
+</p>
+
+
+<div class="popup">
+<div class="author-container">
+  <img src="MTC.jpg" class="author-img" />
+      <strong style="color: blue;">Tác giả:</strong> Mai Thiện Chánh <br>(GV trường THCS Đức Phú, xã Nghị Đức, tỉnh Lâm Đồng)
+</div></div>
+
+    
+    <button onclick="closeIntroPopup()" style="
+  background: linear-gradient(135deg, #00BFFF, #007ACC);
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 14px 26px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 20px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+">
+  🚀 Bắt đầu khám phá ngay
+</button>
+
+  </div>
+</div>
+
+<!-- CSS Animation -->
+<style>
+@keyframes popIn {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+</style>
+
+<!-- JS để đóng popup -->
+<script>
+  function closeIntroPopup() {
+    document.getElementById('introPopup').style.display = 'none';
+    // Ghi nhận popup đã được xem trong phiên này
+    sessionStorage.setItem("popupShown", "true");
+  }
+
+  // Kiểm tra khi trang vừa tải: nếu đã xem popup trong phiên, thì ẩn nó
+  window.addEventListener("DOMContentLoaded", function() {
+    if (sessionStorage.getItem("popupShown") === "true") {
+      document.getElementById('introPopup').style.display = 'none';
+    }
+  });
+</script>
+
+
+<div class="footer-fixed">
+<span style="font-size: 16px; color: yellow;">
+      <em><strong>Tác giả:</strong></em> Mai Thiện Chánh –
+      <em>Đơn vị công tác:</em> Trường THCS Đức Phú, xã Nghị Đức, tỉnh Lâm Đồng
+    </span>
+</div>
+
+<script>
+  const textElement = document.getElementById("wave-text");
+  const originalText = textElement.innerText; // giữ nguyên cả khoảng trắng
+
+  function triggerWaveAnimation() {
+    const chars = originalText.split("");
+    textElement.innerHTML = chars
+      .map((c, i) => {
+        const char = c === ' ' ? '&nbsp;' : c;
+        return `<span style="
+          display:inline-block;
+          animation: wave 1s ease-in-out;
+          animation-delay: ${i * 0.1}s
+        ">${char}</span>`;
+      })
+      .join("");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    triggerWaveAnimation(); // lần đầu
+    setInterval(() => {
+      triggerWaveAnimation(); // mỗi 10 giây
+    }, 10000);
+  });
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRÒ CHƠI Ô CHỮ</title>
+  <style>
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #f4f4f4;
+  padding: 20px 0;
+  z-index: 1000;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+      text-align: center;
+padding-top: 120px;
+    }
+    h1 {
+      color: blue;
+margin: 0;
+    }
+
+    input, button {
+  margin: 3px;
+  padding: 5px 8px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+input[type="number"] {
+  width: 70px;
+}
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(15, 30px);
+      justify-content: center;
+      margin-top: 0px;
+    }
+    .cell {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #aaa;
+      text-transform: uppercase;
+      font-weight: bold;
+      text-align: center;
+      line-height: 30px;
+      background: white;
+      cursor: pointer;
+      user-select: none;
+    }
+    .found { 
+background-color: blue !important; 
+color: white !important;
+  font-weight: bold;}
+    .wrong { background-color: #f5a2a2 !important; }
+    .disabled { pointer-events: none; opacity: 0.6; }
+    #questionPromptDisplay {
+      color: #0056b3;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    #instructions {
+  margin-top: 10px;
+  font-size: 20px;
+  max-width: 900px;  /* Đặt độ rộng tối đa để phù hợp với bố cục */
+  width: 100%; /* Chiều rộng của phần tử sẽ bằng 100% chiều rộng của bố cục chứa */
+  text-align: left; /* Căn chỉnh chữ trái */
+  margin: 0 auto; /* Canh giữa */
+  word-wrap: break-word; /* Đảm bảo chữ không bị tràn ra ngoài */
+}
+
+#instructions span {
+  font-style: italic;
+  display: block;
+}
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    #result {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+#gridWrapper {
+  max-height: 500px; /* Chiều cao tối đa cho khung cuộn */
+  overflow-y: auto;
+  margin-top: 20px;
+  border: 2px solid #ccc;
+  padding: 10px;
+  background: #fff;
+}
+
+#helpToggle {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1100;
+  padding: 5px 10px;
+  font-size: 14px;
+  background: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#helpBox {
+  position: fixed;
+  top: 200px;
+  left: 10px;
+  width: 250px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: #fff;
+  border: 2px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1001;
+  font-size: 14px;
+  text-align: left;
+}
+
+#helpBox h3 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.hidden {
+  display: none;
+}
+
+
+#editToggle {
+  position: fixed;
+  top: 50px; /* Dưới nút HƯỚNG DẪN (top: 10px) */
+  left: 10px;
+  z-index: 1100;
+  padding: 5px 10px;
+  font-size: 14px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+/* Thêm một lớp để thay đổi màu sắc khi ô được chọn */
+.selected-cell {
+  background-color: black;
+  color: white;
+}
+
+/* Thêm lớp để tô màu ô chưa tìm được */
+.highlighted {
+  background-color: blue;
+  color: white;
+}
+
+
+.missed {
+  background-color: pink !important;
+  color: black !important;
+}
+
+.unfound {
+  background-color: pink !important;
+  color: black !important;
+}
+
+  </style>
+</head>
+<body>
+<div id="header">
+<button id="helpToggle">❓ XEM HƯỚNG DẪN</button>
+<button id="editToggle" onclick="openSoanTuKhoa()">📝  SOẠN TỪ KHÓA</button>
+
+<div id="helpBox" class="hidden">
+  <h3>Hướng dẫn</h3>
+  <ul>
+    <li>Nhập tên người chơi.</li>
+    <li>Chọn khoảng thời gian chơi.</li>
+    <li>Nhấn 📂 MỞ CHỦ ĐỀ để tải bảng ô chữ.</li>
+    <li>Nhấn ▶ BẮT ĐẦU CHƠI để chơi.</li>
+    <li>Nhấp vào các ô để chọn từ, rồi nhấn ✔ KIỂM TRA TỪ để xác nhận.</li>
+    <li>Chúc bạn đạt kết quả cao!</li>
+  </ul>
+</div>
+
+  <h1>TRÒ CHƠI "AI TINH MẮT" - Ô CHỮ TRỐN TÌM</h1>
+  <div class="control-row">
+    <input type="text" id="playerName" placeholder="Tên người chơi" /> 
+<label style="display: flex; align-items: center;">Thời gian chơi (s):
+  <input type="number" id="countdownInput" value="180" min="10" max="3600" title="Thời gian đếm ngược (giây)" /></label>
+    <!-- Nút MỞ CHỦ ĐỀ -->
+<button onclick="triggerFileInput()">📂 MỞ CHỦ ĐỀ</button>
+<input type="file" id="fileInput" accept=".html" style="display: none;" onchange="loadChuDeFromFile()" />
+
+<button onclick="loadChuDeFromFile()"> ▶ BẮT ĐẦU CHƠI</button>
+  
+        <button onclick="checkResult()" id="checkButton">✔ KIỂM TRA TỪ</button>
+    <button onclick="resetGame()">🔁 CHƠI LẠI</button>
+  
+</div>
+  <div id="questionPromptDisplay"></div>
+
+  
+  <div id="timer">⏳ Thời gian: 0 giây</div>
+  <div id="gridWrapper"> <div id="grid"></div></div>
+  <div id="result"></div>
+
+  <audio id="correctSound" src="correct.mp3"></audio>
+
+  <script>
+    const SIZE = 15;
+    let board = Array.from({ length: SIZE }, () => Array(SIZE).fill(""));
+    let foundWords = [];
+    let countdown = 0;
+    let interval;
+    let gameOver = true;
+    let words = [];
+
+    function randomChar() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      return chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    function placeWord(word) {
+      word = word.toUpperCase();
+      const directions = [[0, 1], [1, 0], [1, 1], [-1, 1]];
+      let placed = false;
+      for (let attempt = 0; attempt < 100 && !placed; attempt++) {
+        const dir = directions[Math.floor(Math.random() * directions.length)];
+        const row = Math.floor(Math.random() * SIZE);
+        const col = Math.floor(Math.random() * SIZE);
+        let r = row, c = col, fits = true;
+        for (let ch of word) {
+          if (r < 0 || r >= SIZE || c < 0 || c >= SIZE || (board[r][c] && board[r][c] !== ch)) {
+            fits = false; break;
+          }
+          r += dir[0]; c += dir[1];
+        }
+        if (fits) {
+          r = row; c = col;
+          for (let ch of word) {
+            board[r][c] = ch;
+            r += dir[0]; c += dir[1];
+          }
+          placed = true;
+        }
+      }
+    }
+
+    function fillBoard() {
+      for (let r = 0; r < SIZE; r++) {
+        for (let c = 0; c < SIZE; c++) {
+          if (!board[r][c]) board[r][c] = randomChar();
+        }
+      }
+    }
+
+    function renderBoard() {
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+      for (let r = 0; r < SIZE; r++) {
+        for (let c = 0; c < SIZE; c++) {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.textContent = board[r][c];
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          cell.onclick = () => toggleCell(cell);
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    // Hàm để chuyển đổi trạng thái ô khi người chơi nhấp vào ô
+function toggleCell(cell) {
+  if (gameOver || cell.classList.contains("found")) return;
+
+  // Kiểm tra nếu ô đã được chọn, thì bỏ chọn
+  if (cell.classList.contains("selected-cell")) {
+    cell.classList.remove("selected-cell");
+  } else {
+    // Nếu chưa chọn, thêm lớp "selected-cell" để thay đổi màu sắc
+    cell.classList.add("selected-cell");
+  }
+}
+
+function toggleCell(cell) {
+  if (gameOver || cell.classList.contains("found")) return;
+
+  // Kiểm tra nếu ô đã được chọn, thì bỏ chọn
+  if (cell.classList.contains("selected")) {
+    cell.classList.remove("selected");  // Loại bỏ lớp selected để bỏ chọn ô
+    cell.classList.remove("selected-cell");  // Loại bỏ lớp màu sắc
+  } else {
+    cell.classList.add("selected");  // Thêm lớp selected để đánh dấu ô đã chọn
+    cell.classList.add("selected-cell");  // Thêm lớp để thay đổi màu sắc ô
+  }
+}
+
+
+    function getSelectedWord() {
+      const selected = document.querySelectorAll(".cell.selected");
+      return Array.from(selected).map(c => c.textContent).join("").toUpperCase();
+    }
+
+    function checkResult() {
+      if (gameOver) return;
+      const selected = document.querySelectorAll(".cell.selected");
+      const word = getSelectedWord();
+      if (words.includes(word) && !foundWords.includes(word)) {
+        selected.forEach(c => {
+          c.classList.remove("selected");
+          c.classList.add("found");
+        });
+        document.getElementById("correctSound").play();
+        foundWords.push(word);
+      } else {
+        selected.forEach(c => {
+          c.classList.remove("selected");
+          c.classList.add("wrong");
+          setTimeout(() => c.classList.remove("wrong"), 500);
+        });
+      }
+      const player = document.getElementById("playerName").value || "Người chơi";
+      document.getElementById("result").innerText =
+        `🎉 ${player} đã tìm được ${foundWords.length} từ đúng!`;
+    }
+
+    function startGame() {
+  if (words.length === 0) {
+    alert("⚠ Vui lòng mở chủ đề trước khi bắt đầu!");
+    return;
+  }
+
+  clearInterval(interval);  // clear any previous interval
+  gameOver = false;
+  board = Array.from({ length: SIZE }, () => Array(SIZE).fill("")); // reset board
+  foundWords = [];
+  document.getElementById("result").innerText = "";
+  document.getElementById("checkButton").classList.remove("disabled");
+
+  words.forEach(placeWord);  // place words on the board
+  fillBoard();
+  renderBoard();
+
+  // Get the countdown time from the input
+  countdown = parseInt(document.getElementById("countdownInput").value) || 180;
+  document.getElementById("timer").innerText = `⏳ Thời gian còn lại: ${countdown} giây`;
+
+  // Start the countdown when "Bắt đầu" is clicked
+  interval = setInterval(() => {
+    countdown--;
+    document.getElementById("timer").innerText = `⏳ Thời gian còn lại: ${countdown} giây`;
+    if (countdown <= 0) {
+      clearInterval(interval);
+      endGame();
+    }
+  }, 1000);
+}
+
+
+    function endGame() {
+      gameOver = true;
+      document.querySelectorAll(".cell").forEach(c => c.classList.add("disabled"));
+      document.getElementById("checkButton").classList.add("disabled");
+      document.getElementById("timer").innerText = "⏰ Hết giờ!";
+    
+// Hiển thị các từ chưa được tìm thấy và tô màu các ô tương ứng
+  words.forEach(word => {
+    if (!foundWords.includes(word)) {
+      highlightWord(word);
+    }
+  });
+ }
+
+function highlightWord(word) {
+  word = word.toUpperCase();
+  const directions = [
+    [0, 1], [1, 0], [1, 1], [-1, 1],
+    [0, -1], [-1, 0], [-1, -1], [1, -1] // Thêm đủ 8 hướng
+  ];
+
+  for (let r = 0; r < SIZE; r++) {
+    for (let c = 0; c < SIZE; c++) {
+      for (let dir of directions) {
+        let rTemp = r, cTemp = c;
+        let matched = true;
+        for (let i = 0; i < word.length; i++) {
+          if (
+            rTemp < 0 || rTemp >= SIZE ||
+            cTemp < 0 || cTemp >= SIZE ||
+            board[rTemp][cTemp] !== word[i]
+          ) {
+            matched = false;
+            break;
+          }
+          rTemp += dir[0];
+          cTemp += dir[1];
+        }
+        if (matched) {
+          // Nếu khớp, tô màu các ô đó
+          rTemp = r; cTemp = c;
+          for (let i = 0; i < word.length; i++) {
+            const cell = document.querySelector(`[data-row='${rTemp}'][data-col='${cTemp}']`);
+            if (cell && !cell.classList.contains("found")) {
+              cell.classList.add("unfound");
+            }
+            rTemp += dir[0];
+            cTemp += dir[1];
+          }
+          return; // dừng sau khi tìm thấy 1 vị trí
+        }
+      }
+    }
+  }
+}
+
+
+
+    function resetGame() {
+      clearInterval(interval);
+      startGame();
+    }
+
+    // Kích hoạt ô chọn file khi nhấn vào nút "MỞ CHỦ ĐỀ"
+function triggerFileInput() {
+  document.getElementById('fileInput').click();
+}
+
+// Đọc và xử lý file sau khi người dùng chọn
+function loadChuDeFromFile() {
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("⚠ Vui lòng chọn một file chủ đề.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const html = e.target.result;
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+
+    const tieuDe = temp.querySelector('#tieude');
+    const tuKhoa = temp.querySelector('#tukhoa');
+
+    if (tieuDe && tuKhoa) {
+      document.getElementById('questionPromptDisplay').innerText = tieuDe.innerText.trim();
+
+      const danhSach = tuKhoa.innerText
+        .split(',')
+        .map(w => w.trim().toUpperCase())
+        .filter(w => w.length > 0);
+
+      if (danhSach.length > 0) {
+        words = danhSach;
+        startGame(); // tự động bắt đầu game
+      } else {
+        alert("⚠ Không tìm thấy từ khóa trong file.");
+      }
+    } else {
+      alert("⚠ File không đúng định dạng (cần có #tieude và #tukhoa).");
+    }
+  };
+
+  reader.onerror = function(err) {
+    console.error(err);
+    alert("⚠ Không thể đọc file chủ đề.");
+  };
+
+  reader.readAsText(file, "UTF-8");
+}
+
+
+
+document.getElementById("helpToggle").onclick = () => {
+  const box = document.getElementById("helpBox");
+  box.classList.toggle("hidden");
+};
+
+
+function openSoanTuKhoa() {
+  window.open("Soan_trochoiOchu.html", "_blank");
+}
+
+  </script>
+
+
+
+
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+
+
+<script>
+function openFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+</script>
+
+
+<div style="position: fixed; top: 20px; right: 20px; z-index: 1001;">
+  <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+    THOÁT - VỀ TRANG CHỦ
+  </button>
+</body>
+</html>

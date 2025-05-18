@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nhập Dữ Liệu Trò Chơi Ô Chữ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+      text-align: center;
+    }
+    input, textarea {
+      margin: 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    textarea {
+      height: auto;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    #keywordList {
+      margin-top: 20px;
+    }
+
+    .keyword-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 5px;
+    }
+
+    .keyword-item input[type="text"] {
+      width: 40ch; /* ~50 ký tự chữ */
+      padding: 8px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .keyword-item button {
+      padding: 6px 10px;
+      font-size: 14px;
+    }
+
+    #contentForm input, #contentForm textarea {
+      width: 80%;
+    }
+
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* Vị trí cố định cho cụm nút bên phải */
+    .fixed-buttons {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .fixed-buttons button {
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>NHẬP DỮ LIỆU TRÒ CHƠI TÌM Ô CHỮ</h1>
+  <div id="contentForm">
+    <div>
+      <label for="questionPrompt">Nội dung đề bài:</label><br />
+      <textarea id="questionPrompt" rows="1" placeholder="Ví dụ: Hãy tìm các ô chữ trong bảng sau liên quan đến..."></textarea>
+    </div>
+    <div class="keyword-item">
+      <input type="text" id="keyword1" placeholder="Từ khóa thứ nhất" />
+    </div>
+    <div id="keywordList"></div>
+  </div>
+
+  <!-- Cụm nút cố định -->
+  <div class="fixed-buttons">
+    <button onclick="addKeyword()">➕ Thêm từ khóa</button>
+    <button onclick="saveData()" id="saveButton" class="disabled">💾 Lưu file đề</button>
+    <button onclick="saveTempData()">📥 Lưu tạm</button>
+    <button onclick="resetForm()">♻️ Tạo mới</button>
+  </div>
+
+  <script>
+    let keywords = [];
+    const maxKeywords = 15;
+
+    function addKeyword() {
+      if (keywords.length < maxKeywords) {
+        const keywordInput = document.createElement("input");
+        keywordInput.type = "text";
+        keywordInput.placeholder = `Từ khóa thứ ${keywords.length + 2}`;
+        keywordInput.id = `keyword${keywords.length + 2}`;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Xóa";
+        deleteButton.onclick = () => deleteKeyword(keywordInput.id);
+
+        const keywordItem = document.createElement("div");
+        keywordItem.classList.add("keyword-item");
+        keywordItem.appendChild(keywordInput);
+        keywordItem.appendChild(deleteButton);
+
+        document.getElementById("keywordList").appendChild(keywordItem);
+        keywords.push(keywordInput);
+        checkKeywords();
+      } else {
+        alert("Không thể thêm quá 15 từ khóa!");
+      }
+    }
+
+    function deleteKeyword(id) {
+      const inputToRemove = document.getElementById(id);
+      const index = keywords.findIndex(k => k.id === id);
+      if (index !== -1) {
+        keywords.splice(index, 1);
+      }
+      inputToRemove.parentElement.remove();
+      checkKeywords();
+    }
+
+    function checkKeywords() {
+      if (keywords.length > 0) {
+        document.getElementById("saveButton").classList.remove("disabled");
+      } else {
+        document.getElementById("saveButton").classList.add("disabled");
+      }
+    }
+
+    function saveData() {
+      const questionPrompt = document.getElementById("questionPrompt").value.trim();
+      if (!questionPrompt || keywords.length === 0) {
+        alert("Vui lòng nhập đầy đủ nội dung đề bài và từ khóa.");
+        return;
+      }
+
+      let keywordsList = [];
+      keywords.forEach(keyword => {
+        const keywordValue = keyword.value.trim();
+        if (keywordValue) {
+          keywordsList.push(keywordValue);
+        }
+      });
+
+      // Chuyển đổi danh sách từ khóa thành chuỗi
+      const keywordsString = keywordsList.join(", ");
+
+      // Tạo nội dung file HTML theo mẫu yêu cầu
+      const fileContent = `
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chủ đề: ${questionPrompt}</title>
+</head>
+<body>
+  <div id="tieude">Chủ đề: ${questionPrompt}</div>
+  <div id="tukhoa">${keywordsString}</div>
+</body>
+</html>
+      `;
+
+      const blob = new Blob([fileContent], { type: "text/html" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Tu_Khoa_O_Chu_Tron_Tim.html";
+      link.click();
+    }
+
+    function saveTempData() {
+      const questionPrompt = document.getElementById("questionPrompt").value.trim();
+      if (!questionPrompt || keywords.length === 0) {
+        alert("Vui lòng nhập đầy đủ nội dung đề bài và từ khóa.");
+        return;
+      }
+
+      let keywordsList = [];
+      keywords.forEach(keyword => {
+        const keywordValue = keyword.value.trim();
+        if (keywordValue) {
+          keywordsList.push(keywordValue);
+        }
+      });
+
+      alert(`Lưu tạm thành công!\n\nNội dung đề bài: ${questionPrompt}\nTừ khóa: ${keywordsList.join(", ")}`);
+    }
+
+    function resetForm() {
+      document.getElementById("questionPrompt").value = "";
+      document.getElementById("keywordList").innerHTML = "";
+      keywords = [];
+      document.getElementById("saveButton").classList.add("disabled");
+      checkKeywords();
+    }
+  </script>
+<!-- Nút Thoát Hoàn Toàn -->
+<button id="exitApp" style="
+  position: fixed;
+  Top: 20px;
+  right: 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+">
+  THOÁT RA
+
+<script>
+document.getElementById('exitApp').addEventListener('click', () => {
+  if (confirm("Cảm ơn bạn đã sử dụng ứng dụng của tác giả Mai Thiện Chánh\n\nBạn muốn thoát hoàn toàn?")) {
+    window.open('', '_self')?.close(); // Cố gắng đóng tab hiện tại
+    location.href = "about:blank"; // Nếu không được, chuyển hướng sang trang trắng
+  }
+});
+</script>
+</button>
+
+</body>
+</html>

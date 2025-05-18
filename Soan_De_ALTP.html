@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bộ Soạn Đề Trắc Nghiệm</title>
+  <style>
+    body { font-family: sans-serif; padding: 10px; }
+    textarea { width: 80%; height: 50px; margin-bottom: 10px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    .question-block { border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; border-radius: 10px; }
+
+    /* Cố định các nút ở góc dưới bên phải */
+    .fixed-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    /* Điều chỉnh style cho các nút */
+    .fixed-buttons button {
+      width: 220px;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .fixed-buttons .add-question-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .fixed-buttons .export-btn {
+      background-color: #2196f3;
+      color: white;
+    }
+
+    .fixed-buttons .home-btn {
+      background-color: red;
+      color: white;
+      font-weight: bold;
+    }
+
+.title {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: pink;
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+  padding: 15px 0;
+  margin: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+  </style>
+</head>
+<body>
+
+<h2 class="title">Bộ Soạn đề trắc nghiệm cho trò chơi "Ai là triệu phú"</h2>
+<div style="height: 70px;"></div>
+
+<div id="questions-container">
+  <!-- Các khối câu hỏi sẽ được thêm vào đây -->
+</div>
+
+<div class="fixed-buttons">
+  <!-- Nút Thêm câu hỏi -->
+  <button class="add-question-btn" onclick="addQuestion()">➕ Thêm câu hỏi</button>
+  
+  <!-- Nút Xuất HTML -->
+  <button class="export-btn" onclick="exportHTML()">💾 Xuất HTML</button>
+  <button onclick="saveDraft()">📋 Lưu tạm thời dữ liệu</button>
+<button onclick="resetForm()">📝Tạo mới hoàn toàn</button>
+<input type="file" id="upload-html-file" accept=".html" style="display: none;" onchange="importFromHTML(event)">
+<button onclick="document.getElementById('upload-html-file').click()">📂 Tải vào lại đề đã xuất</button>
+  <!-- Nút Về trang chủ -->
+  <button class="home-btn" onclick="window.location.href='index.html'">❌ VỀ TRANG CHỦ</button>
+</div>
+
+<script>
+let questionCount = 0;
+
+function addQuestion() {
+  questionCount++;
+  const container = document.getElementById("questions-container");
+  const block = document.createElement("div");
+  block.className = "question-block";
+  block.innerHTML = `
+    <h3>Câu hỏi ${questionCount}</h3>
+    <textarea placeholder="Câu hỏi"></textarea><br>
+    <textarea placeholder="Đáp án đúng"></textarea><br>
+    <textarea placeholder="Đáp án sai 1"></textarea><br>
+    <textarea placeholder="Đáp án sai 2"></textarea><br>
+    <textarea placeholder="Đáp án sai 3"></textarea><br>
+    <textarea placeholder="Gợi ý"></textarea><br>
+  `;
+  container.appendChild(block);
+}
+
+function exportHTML() {
+  const blocks = document.querySelectorAll(".question-block");
+  let content = '';
+  content += '<!DOCTYPE html>\n';
+  content += '<html lang="vi">\n';
+  content += '<head>\n';
+  content += '  <meta charset="UTF-8">\n';
+  content += '  <title>Đề Ai là triệu phú</title>\n';
+  content += '</head>\n';
+  content += '<body>\n';
+  content += '<h2>Ngân hàng câu hỏi</h2>\n';
+
+  blocks.forEach(block => {
+    const fields = block.querySelectorAll("textarea");
+    const question = fields[0].value.trim();
+    const correct = fields[1].value.trim();
+    const wrong1 = fields[2].value.trim();
+    const wrong2 = fields[3].value.trim();
+    const wrong3 = fields[4].value.trim();
+    const hint = fields[5].value.trim();
+
+    if (question && correct && wrong1 && wrong2 && wrong3) {
+      content += '<p>\n';
+      content += 'Câu hỏi: ' + question + '<br>\n';
+      content += 'Đáp án đúng: ' + correct + '<br>\n';
+      content += 'Đáp án sai: ' + wrong1 + '<br>\n';
+      content += 'Đáp án sai: ' + wrong2 + '<br>\n';
+      content += 'Đáp án sai: ' + wrong3 + '<br>\n';
+      content += 'Gợi ý: ' + hint + '\n';
+      content += '</p>\n';
+    }
+  });
+
+  content += '</body>\n</html>';
+
+  const blob = new Blob([content], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "de_Ai_la_trieu_phu.html";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function saveDraft() {
+  const blocks = document.querySelectorAll(".question-block");
+  const draft = [];
+
+  blocks.forEach(block => {
+    const fields = block.querySelectorAll("textarea");
+    draft.push({
+      question: fields[0].value,
+      correct: fields[1].value,
+      wrong1: fields[2].value,
+      wrong2: fields[3].value,
+      wrong3: fields[4].value,
+      hint: fields[5].value
+    });
+  });
+
+  localStorage.setItem("draft_questions", JSON.stringify(draft));
+  alert("✅ Bạn đang tạm nghỉ khi soạn câu hỏi cho trò chơi Ai Là Triệu Phú. Hệ thống đã lưu tạm thời dữ liệu!");
+}
+
+
+function resetForm() {
+  if (confirm("Bạn có chắc chắn muốn xóa toàn bộ dữ liệu và bắt đầu lại?")) {
+    localStorage.removeItem("draft_questions"); // Xoá bản lưu tạm
+    location.reload(); // Tải lại trang
+  }
+}
+
+
+function importFromHTML(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const content = e.target.result;
+
+    // Tạo một DOM tạm để phân tích nội dung
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    const paragraphs = doc.querySelectorAll("p");
+
+    // Xoá toàn bộ câu hỏi hiện tại
+    document.getElementById("questions-container").innerHTML = "";
+    questionCount = 0;
+
+    paragraphs.forEach(p => {
+      const text = p.innerHTML;
+
+      // Trích xuất từng phần
+      const question = (text.match(/Câu hỏi: (.*?)<br>/) || [])[1] || "";
+      const correct = (text.match(/Đáp án đúng: (.*?)<br>/) || [])[1] || "";
+      const wrongs = [...text.matchAll(/Đáp án sai: (.*?)<br>/g)].map(m => m[1]);
+      const hintMatch = text.match(/Gợi ý: (.*)/);
+      const hint = hintMatch ? hintMatch[1] : "";
+
+      if (question && correct && wrongs.length === 3) {
+        addQuestion();
+        const block = document.querySelectorAll(".question-block");
+        const fields = block[block.length - 1].querySelectorAll("textarea");
+        fields[0].value = question;
+        fields[1].value = correct;
+        fields[2].value = wrongs[0];
+        fields[3].value = wrongs[1];
+        fields[4].value = wrongs[2];
+        fields[5].value = hint;
+      }
+    });
+
+    alert("✅ Đã tải vào nội dung từ file HTML!");
+  };
+
+  reader.readAsText(file);
+}
+
+</script>
+
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: -1px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+
+<script>
+function openFullscreen() {
+  const elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+
+
+window.onload = function() {
+  const savedDraft = localStorage.getItem("draft_questions");
+  if (savedDraft) {
+    const draft = JSON.parse(savedDraft);
+    draft.forEach(data => {
+      addQuestion();
+      const block = document.querySelectorAll(".question-block");
+      const fields = block[block.length - 1].querySelectorAll("textarea");
+      fields[0].value = data.question || "";
+      fields[1].value = data.correct || "";
+      fields[2].value = data.wrong1 || "";
+      fields[3].value = data.wrong2 || "";
+      fields[4].value = data.wrong3 || "";
+      fields[5].value = data.hint || "";
+    });
+  }
+};
+
+</script>
+
+</body>
+</html>

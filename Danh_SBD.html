@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>ỨNG DỤNG ĐÁNH SỐ BÁO DANH</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0; padding: 0;
+      background: #f4f9ff;
+      color: #333;
+    }
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: linear-gradient(to right, #4facfe, #00f2fe); border-bottom: 2px solid #0a3d62; color: white;
+      z-index: 999; padding: 10px;
+height: 140px;
+    }
+    h1 { text-align: center; margin: 10px 0; }
+    .form-row {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 15px; margin-bottom: 10px;
+    }
+    .form-row label {
+      display: flex; flex-direction: column;
+      font-weight: bold;
+    }
+    .form-row input, .form-row select {
+      padding: 4px; width: 150px;
+    }
+    .center-button { text-align: center; margin: 10px 0; }
+    .sticky-space { height: 220px; }
+
+    .diagram {
+  margin: 0 auto;
+  width: fit-content;
+  position: relative;
+  padding-top: 10px;
+}
+    .board-label {
+      background: #2ecc71;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      padding: 8px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .row {
+      display: flex;
+      margin: 10px 0;
+    }
+    .desk {
+      border-top: 4px solid #333;
+      margin: 0 8px;
+      padding-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .seat {
+      width: 35px; height: 35px;
+      border-radius: 50%;
+      background: #3498db; color: white;
+      display: flex; justify-content: center; align-items: center;
+      font-weight: bold;
+    }
+    .seat.empty { background: #ecf0f1; color: #ecf0f1; }
+
+    .export-button, .preview {
+      text-align: center;
+      margin: 30px;
+    }
+
+    iframe {
+      width: 80%;
+      height: 500px;
+      border: 1px solid #ccc;
+      margin: 0 auto;
+    }
+  
+    .diagram-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 160px; /* vừa đủ để không bị che bởi header cố định */
+    }
+    </style>
+    
+  <script src="html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>ỨNG DỤNG ĐÁNH SỐ BÁO DANH</h1>
+  <div class="form-row">
+    <label>Môn thi:
+      <input type="text" id="subject">
+    </label>
+    <label>Ngày thi:
+      <input type="date" id="date">
+    </label>
+    <label>Số thí sinh:
+      <input type="number" id="studentCount" min="1">
+    </label>
+    <label>Số chỗ ngồi/bàn:
+      <input type="number" id="seatsPerDesk" min="1">
+    </label>
+    <label>Số dãy bàn:
+      <input type="number" id="colCount" min="1">
+    </label>
+  </div>
+  <div class="center-button">
+    <button onclick="assignSBD()">ĐÁNH SBD NGẪU NHIÊN</button>
+  </div>
+</header>
+
+
+
+
+<div class="diagram-container">
+  <div style="flex: 1;" id="leftColumn"></div>
+  <div style="flex: 2;">
+    <div class="diagram" id="diagramArea"></div>
+  </div>
+  <div style="flex: 1;" id="rightColumn"></div>
+</div>
+
+
+
+
+
+
+<script>
+function generateSBD(count, method) {
+  let list = Array.from({ length: count }, (_, i) => i + 1);
+  switch (method % 10) {
+    case 0: return list; // tăng dần
+    case 1: return list.reverse(); // giảm dần
+    case 2: return [...list].sort(() => Math.random() - 0.5); // ngẫu nhiên
+    case 3: return [...list].sort((a, b) => (a % 10) - (b % 10)); // theo hàng đơn vị
+    case 4:
+      // Zigzag: row-wise alternating forward and reverse
+      const zigzag = [];
+      let forward = true;
+      for (let i = 0; i < list.length; i += 10) {
+        const segment = list.slice(i, i + 10);
+        zigzag.push(...(forward ? segment : segment.reverse()));
+        forward = !forward;
+      }
+      return zigzag;
+    case 5:
+      // Chẵn lẻ: chẵn trước, lẻ sau
+      return [...list.filter(x => x % 2 === 0), ...list.filter(x => x % 2 !== 0)];
+    case 6:
+      // Lẻ trước, chẵn sau
+      return [...list.filter(x => x % 2 !== 0), ...list.filter(x => x % 2 === 0)];
+    case 7:
+      // Xen kẽ chẵn lẻ
+      const even = list.filter(x => x % 2 === 0);
+      const odd = list.filter(x => x % 2 !== 0);
+      const mixed = [];
+      for (let i = 0; i < Math.max(even.length, odd.length); i++) {
+        if (i < even.length) mixed.push(even[i]);
+        if (i < odd.length) mixed.push(odd[i]);
+      }
+      return mixed;
+    case 8:
+      // Nhảy cóc: lấy cách 2 số
+      return list.filter((_, i) => i % 2 === 0).concat(list.filter((_, i) => i % 2 !== 0));
+    case 9:
+      // Chia nhóm 5 rồi đảo từng nhóm
+      const grouped = [];
+      for (let i = 0; i < list.length; i += 5) {
+        grouped.push(...list.slice(i, i + 5).reverse());
+      }
+      return grouped;
+
+    default: return list;
+  }
+}
+
+
+function assignSBD() {
+  const studentCount = parseInt(document.getElementById("studentCount").value);
+  const seatsPerDesk = parseInt(document.getElementById("seatsPerDesk").value);
+  const colCount = parseInt(document.getElementById("colCount").value);
+  const diagramArea = document.getElementById("diagramArea");
+
+  if (!studentCount || !seatsPerDesk || !colCount) {
+    alert("Vui lòng nhập đủ thông tin.");
+    return;
+  }
+
+  const deskPerCol = Math.ceil(studentCount / (seatsPerDesk * colCount));
+  diagramArea.innerHTML = "";
+
+  const boardLabel = document.createElement("div");
+  boardLabel.className = "board-label";
+  boardLabel.textContent = "BẢNG TỪ";
+  diagramArea.appendChild(boardLabel);
+
+  const method = Math.floor(Math.random() * 10);
+const sbdList = generateSBD(studentCount, method);
+document.getElementById("rightColumn").innerHTML = `
+  <div style="padding: 10px; background: #fef9e7; border: 1px solid #f1c40f; border-radius: 8px; font-size: 14px;">
+    <h3 style="margin-top: 0; color: #b7950b;">📘 Giải thích cách đánh số:</h3>
+    <p>${getExplanation(method)}</p>
+    <p><em>Phương án này giúp dễ áp dụng cho các phòng có sĩ số linh hoạt.</em></p>
+  </div>
+`;
+
+  let index = 0;
+
+  const seatElements = [];
+
+  for (let row = 0; row < deskPerCol; row++) {
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "row";
+    for (let col = 0; col < colCount; col++) {
+      const deskDiv = document.createElement("div");
+      deskDiv.className = "desk";
+      for (let s = 0; s < seatsPerDesk; s++) {
+        const seatDiv = document.createElement("div");
+        seatDiv.className = "seat";
+        if (index < sbdList.length) {
+          seatDiv.textContent = Math.floor(Math.random() * 100);
+          seatElements.push({ element: seatDiv, finalValue: sbdList[index++] });
+        } else {
+          seatDiv.classList.add("empty");
+          seatDiv.textContent = "";
+        }
+        deskDiv.appendChild(seatDiv);
+      }
+      rowDiv.appendChild(deskDiv);
+    }
+    diagramArea.appendChild(rowDiv);
+  }
+
+  const startTime = Date.now();
+  const duration = 3000;
+
+  const interval = setInterval(() => {
+    const elapsed = Date.now() - startTime;
+    if (elapsed >= duration) {
+      clearInterval(interval);
+      seatElements.forEach(item => item.element.textContent = item.finalValue);
+    } else {
+      seatElements.forEach(item => item.element.textContent = Math.floor(Math.random() * 100));
+    }
+  }, 50);
+}
+
+
+function exportPDF() {
+  const subject = document.getElementById("subject").value;
+  const date = document.getElementById("date").value;
+  const diagramHTML = document.getElementById("diagramArea").innerHTML;
+
+  const content = document.createElement("div");
+  content.innerHTML = `
+    <h2 style="text-align: center;">SƠ ĐỒ ĐÁNH SỐ BÁO DANH</h2>
+    <p>MÔN: ${subject} - NGÀY KIỂM TRA: ${date}</p>
+    <div>${diagramHTML}</div>
+    <br><br>
+    <table style="width:100%; margin-top:20px;">
+      <tr>
+        <td><strong>CHỦ TỊCH HỘI ĐỒNG THI</strong><br>(Ký tên, đóng dấu, & ghi rõ họ tên)</td>
+        <td style="text-align:right;"><strong>THƯ KÝ HỘI ĐỒNG THI</strong><br>(Ký & ghi rõ họ tên)</td>
+      </tr>
+    </table>
+    <p>NHỮNG THAY ĐỔI (Nếu có):</p>
+    <p>..................................................................................</p>
+    <p>..................................................................................</p>
+  `;
+
+  html2pdf().set({
+    margin: 0.5,
+    filename: 'so_do_danh_SBD.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  }).from(content).save();
+
+  html2pdf().from(content).outputPdf('bloburl').then(pdfUrl => {
+    document.getElementById("previewFrame").src = pdfUrl;
+  });
+}
+
+
+function getExplanation(method) {
+  const explanations = {
+    0: "Đánh số tăng dần từ 1 đến hết.",
+    1: "Đánh số giảm dần từ lớn đến 1.",
+    2: "Đánh số hoàn toàn ngẫu nhiên.",
+    3: "Sắp xếp theo hàng đơn vị (số tận cùng).",
+    4: "Zigzag: luân phiên trái–phải mỗi hàng.",
+    5: "Chẵn trước, sau đó lẻ.",
+    6: "Lẻ trước, sau đó chẵn.",
+    7: "Xen kẽ chẵn – lẻ liên tục.",
+    8: "Nhảy cóc: chia theo vị trí cách đều.",
+    9: "Chia nhóm 5 số rồi đảo ngược từng nhóm."
+  };
+  return explanations[method % 10] || "Không xác định.";
+}
+
+</script>
+
+</body>
+</html>
