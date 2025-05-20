@@ -3,8 +3,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<script>
+    if (localStorage.getItem("authenticated") !== "true") {
+      window.location.href = "index.html";  // ← đúng cách
+    }
+  </script>
 <title>Vòng Quay May Mắn - Nhập Tên</title>
 <style>
+body { display: none; }
 
 body {
     max-width: 100vw;
