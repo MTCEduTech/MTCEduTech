@@ -2,8 +2,14 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
+ <script>
+    if (localStorage.getItem("authenticated") !== "true") {
+      window.location.href = "index.html";  // ← đúng cách
+    }
+  </script>
   <title>Vòng Quay May Mắn kết hợp Thời Gian Đếm Ngược</title>
   <style>
+body { display: none; }
     body {
       font-family: 'Times New Roman', sans-serif;
      background-image: url('Nen.jpg');
