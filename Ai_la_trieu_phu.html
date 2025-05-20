@@ -2,6 +2,11 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    if (localStorage.getItem("authenticated") !== "true") {
+      document.write("<meta http-equiv='refresh' content='0;url=index.html'>");
+    }
+  </script>
   <title>Ai là triệu phú - Giáo dục</title>
   <style>
     .rotating-border {
@@ -180,14 +185,7 @@ color: white;
   </style>
 </head>
 <body>
-  <script>
-  if (localStorage.getItem("authenticated") !== "true") {
-    alert("Bạn cần đăng nhập tài khoản để sử dụng");
-    window.location.href = "index.html";
-  }
-</script>
-
-<h1 style="margin-bottom: 5px;">🎓 TRÒ CHƠI KIẾN THỨC - Đi tìm AI LÀ TRIỆU PHÚ TRI THỨC</h1>
+  <h1 style="margin-bottom: 5px;">🎓 TRÒ CHƠI KIẾN THỨC - Đi tìm AI LÀ TRIỆU PHÚ TRI THỨC</h1>
 <div class="rotating-border">
   <img src="ALTP.png" alt="logo" />
 </div>
