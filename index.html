@@ -543,7 +543,7 @@ function exitFullscreen() {
 </script>
 
 <script>
-  const fullTitle = "* * * Trang chủ - Bộ công cụ giáo dục dành cho giáo viên - offline";
+  const fullTitle = "* * * Trang chủ - Bộ công cụ hỗ trợ GD dành cho giáo viên";
   let i = 0;
   setInterval(() => {
     document.title = fullTitle.slice(i) + fullTitle.slice(0, i);
@@ -689,25 +689,20 @@ async function handleLogin() {
     const found = accountData.find(acc => acc.username === nickname && acc.password === password);
 
     if (found) {
-      // Cho phép đăng nhập thành công
+      alert("✅ Đăng nhập thành công!");
       localStorage.setItem("authenticated", "true");
-
-      const startBtn = document.getElementById("startButton");
-      startBtn.disabled = false;
-      startBtn.textContent = "🚀 Bắt đầu khám phá ngay";
-      startBtn.style.background = "linear-gradient(135deg, #00BFFF, #007ACC)";
-      startBtn.style.cursor = "pointer";
-      startBtn.style.opacity = "1";
-      startBtn.onclick = closeIntroPopup;
+      closeIntroPopup(); // ← Đóng popup luôn
     } else {
       alert("Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
- } catch (err) {
+
+  } catch (err) {
     console.error("Lỗi khi tải danh sách tài khoản:", err);
     alert("⚠️ Không thể kiểm tra tài khoản. Vui lòng thử lại sau.");
   }
 }
 </script>
+
 
 </body>
 </html>
