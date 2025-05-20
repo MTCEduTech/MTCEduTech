@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Trang chủ - Bộ công cụ giáo dục dành cho giáo viên - Tác giả: Mai Thiện Chánh</title>
+  <title>Trang chủ - Bộ công cụ giáo dục dành cho giáo viên - offline</title>
   <style>
     body {
       margin: 0;
@@ -255,12 +255,11 @@ box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
   </style>
 </head>
 <body>
-
 <div id="fixed-header">
   <marquee direction="left" scrollamount="8">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CODE CỦA AI</marquee>
 
   <div style="text-align: center;">
-    <h1 id="wave-text" style="font-size: 32px; font-weight: bold; color: #e91e63; font-family: 'Times New Roman', Times, serif;">BỘ CÔNG CỤ ỨNG DỤNG VÀO GIÁO DỤC DÀNH CHO GIÁO VIÊN </h1>
+    <h1 id="wave-text" style="font-size: 32px; font-weight: bold; color: #e91e63; font-family: 'Times New Roman', Times, serif;">BỘ CÔNG CỤ GIÁO DỤC DÀNH CHO GIÁO VIÊN - OFFLINE</h1>
       </div>
 </div>
 <div style="height: 120px;"></div> <!-- Khoảng đệm để tránh bị che -->
@@ -544,7 +543,7 @@ function exitFullscreen() {
 </script>
 
 <script>
-  const fullTitle = "* * * Trang chủ - Bộ công cụ giáo dục dành cho giáo viên - Tác giả: Mai Thiện Chánh";
+  const fullTitle = "* * * Trang chủ - Bộ công cụ giáo dục dành cho giáo viên - offline";
   let i = 0;
   setInterval(() => {
     document.title = fullTitle.slice(i) + fullTitle.slice(0, i);
@@ -567,101 +566,86 @@ function exitFullscreen() {
   justify-content: center;
 ">
   <div style="
-    background: linear-gradient(135deg, #ffffff, #f0f8ff);
+    background: #fff;
     border-radius: 16px;
-    padding: 24px;
-    max-width: 520px;
-width: 90%;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-    position: relative;
-    animation: popIn 0.6s ease;
-font-size: 15px;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
   ">
-    <h2 style="color: #e91e63;">BỘ CÔNG CỤ HỖ TRỢ GD DÀNH CHO GV</h2>
-    <p style="font-size: 16px; color: #333; line-height: 1.5;">
-  Đây là một <strong>siêu phẩm hỗ trợ giảng dạy</strong> được thiết kế dành riêng cho giáo viên thời đại số, bộ công cụ này sẽ giúp bạn:
-</p>
-
-<ul style="text-align: left; font-size: 15px; margin: 10px auto; max-width: 500px; color: #444; padding-left: 20px;">
-  <li>🎯 Quay số hoặc quay tên học sinh ngẫu nhiên</li>
-  <li>🧠 Chơi “Ai là triệu phú – Giáo dục” ngay trên lớp</li>
-  <li>📝 Soạn – trộn – đảo đề Test nhanh một cách trực quan</li>
-  <li>🔠 Ô chữ trốn tìm – Tăng cường quan sát và phản xạ</li>
-<li> 🔒 Ô chữ bí mật - Phát huy tư duy và khả năng suy luận</li>
-  <li>🎮 Game cờ caro thư giãn tích hợp nhạc nền</li>
-  <li>⏰ Đồng hồ trực quan, đổi nền sáng tạo – tạo điểm nhấn thú vị cho lớp học</li>
-</ul>
-
-<p style="font-size: 16px; color: #333; line-height: 1.5; margin-bottom: 4px;">
-  Không cần cài đặt phức tạp – <strong>Chỉ cần mở lên là dùng!</strong>
-</p>
-
-
-<div class="popup">
-<div class="author-container">
-  <img src="MTC.jpg" class="author-img" />
-      <strong style="color: blue;">Tác giả:</strong> Mai Thiện Chánh <br>(GV trường THCS Đức Phú, xã Nghị Đức, tỉnh Lâm Đồng)
-</div></div>
-
-    
-    <button onclick="closeIntroPopup()" style="
-  background: linear-gradient(135deg, #00BFFF, #007ACC);
+    <!-- Cột trái: giới thiệu -->
+    <div style="flex: 1; min-width: 250px;">
+      <h2 style="color: #e91e63; text-align: center;">BỘ CÔNG CỤ HỖ TRỢ GD DÀNH CHO GV</h2>
+      <p><strong>Siêu phẩm hỗ trợ giảng dạy</strong> dành riêng cho giáo viên thời đại số:</p>
+      <ul style="font-size: 14px; padding-left: 20px; color: #333;">
+        <li>🎯 Quay số hoặc quay tên học sinh</li>
+        <li>🧠 Chơi “Ai là triệu phú – Giáo dục”</li>
+        <li>📝 Soạn – trộn – đảo đề Test nhanh</li>
+        <li>🔠 Ô chữ trốn tìm – tăng phản xạ</li>
+        <li>🔒 Ô chữ bí mật – phát huy tư duy</li>
+        <li>🎮 Game cờ caro thư giãn + nhạc</li>
+        <li>⏰ Đồng hồ đổi nền sáng tạo</li>
+      </ul>
+      <div style="text-align: center; margin-top: 10px;">
+        <img src="MTC.jpg" class="author-img" />
+        <p style="margin-top: 5px;"><strong style="color: blue;">Tác giả:</strong><br>Mai Thiện Chánh<br>(THCS Đức Phú – Lâm Đồng)</p>
+        <button disabled style="
+  background: gray;
   color: white;
   font-weight: bold;
-  font-size: 18px;
-  padding: 14px 26px;
+  font-size: 16px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  margin-top: 20px;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
+  border-radius: 10px;
+  cursor: not-allowed;
+  margin-top: 10px;
+  opacity: 0.6;
 ">
-  🚀 Bắt đầu khám phá ngay
+  🚫 Vui lòng đăng nhập trước
 </button>
 
+      </div>
+    </div>
+
+    <!-- Cột phải: Đăng nhập -->
+    <div style="flex: 1; min-width: 250px; background: #f0f8ff; padding: 20px; border-radius: 12px;">
+      <h3 style="text-align: center; color: #e91e63;">🔐 ĐĂNG NHẬP</h3>
+      <label for="nickname">Nickname:</label><br>
+      <input type="text" id="nickname" style="width: 100%; padding: 6px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;"><br>
+
+      <label for="password">Mật khẩu:</label><br>
+      <input type="password" id="password" style="width: 100%; padding: 6px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc;"><br>
+
+      <button onclick="handleLogin()" style="
+        width: 100%;
+        padding: 8px;
+        background: #00BFFF;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+      ">ĐĂNG NHẬP</button>
+    </div>
   </div>
 </div>
 
-<!-- CSS Animation -->
-<style>
-@keyframes popIn {
-  from {
-    transform: scale(0.7);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-</style>
-
-<!-- JS để đóng popup -->
+<!-- JS để ẩn popup -->
 <script>
   function closeIntroPopup() {
     document.getElementById('introPopup').style.display = 'none';
-    // Ghi nhận popup đã được xem trong phiên này
     sessionStorage.setItem("popupShown", "true");
   }
 
-  // Kiểm tra khi trang vừa tải: nếu đã xem popup trong phiên, thì ẩn nó
   window.addEventListener("DOMContentLoaded", function() {
     if (sessionStorage.getItem("popupShown") === "true") {
       document.getElementById('introPopup').style.display = 'none';
     }
   });
 </script>
-
-
-<div class="footer-fixed">
-<span style="font-size: 16px; color: yellow;">
-      <em><strong>Tác giả:</strong></em> Mai Thiện Chánh –
-      <em>Đơn vị công tác:</em> Trường THCS Đức Phú, xã Nghị Đức, tỉnh Lâm Đồng
-    </span>
-</div>
 
 <script>
   const textElement = document.getElementById("wave-text");
@@ -688,10 +672,57 @@ font-size: 15px;
     }, 10000);
   });
 </script>
+<script>
+async function handleLogin() {
+  const nickname = document.getElementById("nickname").value.trim();
+  const password = document.getElementById("password").value.trim();
 
+  if (!nickname || !password) {
+    alert("Vui lòng nhập đầy đủ nickname và mật khẩu.");
+    return;
+  }
 
+  try {
+    const response = await fetch("ds.html"); // tải file HTML danh sách
+    const text = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
+    const rows = doc.querySelectorAll("#accountList tr");
 
+    let found = false;
 
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
+      if (cells.length >= 2) {
+        const user = cells[0].textContent.trim();
+        const pass = cells[1].textContent.trim();
+        if (user === nickname && pass === password) {
+          found = true;
+        }
+      }
+    });
+
+    if (found) {
+      // Cho phép đăng nhập thành công
+      localStorage.setItem("authenticated", "true");
+
+      const startBtn = document.getElementById("startButton");
+      startBtn.disabled = false;
+      startBtn.textContent = "🚀 Bắt đầu khám phá ngay";
+      startBtn.style.background = "linear-gradient(135deg, #00BFFF, #007ACC)";
+      startBtn.style.cursor = "pointer";
+      startBtn.style.opacity = "1";
+      startBtn.onclick = closeIntroPopup;
+    } else {
+      alert("Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
+    }
+
+  } catch (error) {
+    console.error("Lỗi khi đọc ds.html:", error);
+    alert("Không thể kiểm tra tài khoản. Đảm bảo file ds.html có cùng thư mục.");
+  }
+}
+</script>
 
 </body>
 </html>
