@@ -702,10 +702,9 @@ async function handleLogin() {
     } else {
       alert("Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
-
-  } catch (error) {
-    console.error("Lỗi khi đọc ds.html:", error);
-    alert("Không thể kiểm tra tài khoản. Đảm bảo file ds.html có cùng thư mục.");
+ } catch (err) {
+    console.error("Lỗi khi tải danh sách tài khoản:", err);
+    alert("⚠️ Không thể kiểm tra tài khoản. Vui lòng thử lại sau.");
   }
 }
 </script>
