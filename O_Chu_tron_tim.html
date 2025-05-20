@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    if (localStorage.getItem("authenticated") !== "true") {
+      window.location.href = "index.html";  // ← đúng cách
+    }
+  </script>
   <title>TRÒ CHƠI Ô CHỮ</title>
   <style>
+body { display: none; }
 #header {
   position: fixed;
   top: 0;
