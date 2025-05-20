@@ -672,6 +672,7 @@ function exitFullscreen() {
     }, 10000);
   });
 </script>
+
 <script>
 async function handleLogin() {
   const nickname = document.getElementById("nickname").value.trim();
@@ -683,43 +684,20 @@ async function handleLogin() {
   }
 
   try {
-    const response = await fetch("ds.html"); // tải file HTML danh sách
-    const text = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-    const rows = doc.querySelectorAll("#accountList tr");
+    const response = await fetch('accounts.json');
+    const accountData = await response.json();
 
-    let found = false;
-
-    rows.forEach((row) => {
-      const cells = row.querySelectorAll("td");
-      if (cells.length >= 2) {
-        const user = cells[0].textContent.trim();
-        const pass = cells[1].textContent.trim();
-        if (user === nickname && pass === password) {
-          found = true;
-        }
-      }
-    });
+    const found = accountData.find(acc => acc.username === nickname && acc.password === password);
 
     if (found) {
-      // Cho phép đăng nhập thành công
-      localStorage.setItem("authenticated", "true");
-
-      const startBtn = document.getElementById("startButton");
-      startBtn.disabled = false;
-      startBtn.textContent = "🚀 Bắt đầu khám phá ngay";
-      startBtn.style.background = "linear-gradient(135deg, #00BFFF, #007ACC)";
-      startBtn.style.cursor = "pointer";
-      startBtn.style.opacity = "1";
-      startBtn.onclick = closeIntroPopup;
+      alert("✅ Đăng nhập thành công!");
+      closeIntroPopup();
     } else {
-      alert("Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
+      alert("❌ Sai nickname hoặc mật khẩu!");
     }
-
-  } catch (error) {
-    console.error("Lỗi khi đọc ds.html:", error);
-    alert("Không thể kiểm tra tài khoản. Đảm bảo file ds.html có cùng thư mục.");
+  } catch (err) {
+    console.error("Lỗi khi tải danh sách tài khoản:", err);
+    alert("⚠️ Không thể kiểm tra tài khoản. Vui lòng thử lại sau.");
   }
 }
 </script>
