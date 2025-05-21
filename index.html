@@ -289,6 +289,13 @@ box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
       line-height: 1.2;
     ">🚪 Thoát</button>
   </div>
+	<!-- ✅ NÚT QUẢN LÝ NGƯỜI DÙNG - BÊN NGOÀI greeting-box -->
+<a href="quanly_nguoidung.html" 
+   id="admin-btn" 
+   class="custom-button" 
+   style="display: none; margin-top: 10px;">
+   👥 QUẢN LÝ NGƯỜI DÙNG
+</a>
 </div>
 
 	
@@ -789,5 +796,15 @@ setTimeout(() => {
   }
     }
 </script>
+
+<script>
+  const loggedInNickname = localStorage.getItem("nickname");
+  const adminBtn = document.getElementById("admin-btn");
+
+  if (loggedInNickname === "admin") {
+    adminBtn.style.display = "inline-block";
+  }
+</script>
+
 </body>
 </html>
