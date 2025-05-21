@@ -690,10 +690,11 @@ async function handleLogin() {
 
     if (found) {
       alert("✅ Đăng nhập thành công!");
-      localStorage.setItem("authenticated", "true");
-      closeIntroPopup(); // ← Đóng popup luôn
+      localStorage.setItem("authenticated", "true");           // ✅ Ghi trạng thái đăng nhập
+      localStorage.setItem("nickname", nickname);              // ✅ (tuỳ chọn) lưu tên người dùng
+      closeIntroPopup();                                       // ✅ Đóng popup hoặc hiển thị giao diện tiếp theo
     } else {
-      alert("Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
+      alert("❌ Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
 
   } catch (err) {
@@ -702,7 +703,6 @@ async function handleLogin() {
   }
 }
 </script>
-
 
 </body>
 </html>
