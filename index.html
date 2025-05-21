@@ -733,9 +733,9 @@ async function handleLogin() {
     if (found) {
   alert("✅ Đăng nhập thành công!");
   localStorage.setItem("authenticated", "true");
+localStorage.setItem("nickname", found.username);
 localStorage.setItem("username", found.username);
-  localStorage.setItem("name", found.username);
-  localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
+localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
   closeIntroPopup();
 
   // 👉 Hiển thị lời chào ngay
