@@ -749,6 +749,7 @@ async function handleLogin() {
 localStorage.setItem("nickname", found.username);
 localStorage.setItem("username", found.username);
 localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
+	    updateAdminButton();  // Gọi lại để hiển thị nút admin ngay
   closeIntroPopup();
 
   // 👉 Hiển thị lời chào ngay
@@ -801,13 +802,18 @@ setTimeout(() => {
 </script>
 
 <script>
-  const loggedInNickname = localStorage.getItem("nickname");
-  const adminBtn = document.getElementById("admin-btn");
-
-  if (loggedInNickname === "admin") {
-    adminBtn.style.display = "inline-block";
+  function updateAdminButton() {
+    const loggedInNickname = localStorage.getItem("nickname");
+    const adminBtn = document.getElementById("admin-btn");
+    if (loggedInNickname === "admin" && adminBtn) {
+      adminBtn.style.display = "inline-block";
+    }
   }
+
+  // Gọi hàm lúc tải trang (trường hợp user đã đăng nhập từ trước)
+  document.addEventListener("DOMContentLoaded", updateAdminButton);
 </script>
+
 
 </body>
 </html>
