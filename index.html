@@ -675,10 +675,17 @@ function exitFullscreen() {
   }
 
   window.addEventListener("DOMContentLoaded", function() {
-    if (sessionStorage.getItem("popupShown") === "true") {
-      document.getElementById('introPopup').style.display = 'none';
-    }
-  });
+  const isAuthenticated = localStorage.getItem("authenticated");
+  if (isAuthenticated === "true") {
+    // Đã đăng nhập: ẩn popup
+    document.getElementById('introPopup').style.display = 'none';
+  } else {
+    // Chưa đăng nhập: xóa sessionStorage để hiển thị lại popup
+    sessionStorage.removeItem("popupShown");
+    document.getElementById('introPopup').style.display = 'flex';
+  }
+});
+
 </script>
 
 <script>
