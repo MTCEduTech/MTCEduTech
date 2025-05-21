@@ -697,11 +697,13 @@ async function handleLogin() {
     const found = accountData.find(acc => acc.username === nickname && acc.password === password);
 
     if (found) {
-      alert("✅ Đăng nhập thành công!");
-      localStorage.setItem("authenticated", "true");           // ✅ Ghi trạng thái đăng nhập
-      localStorage.setItem("nickname", nickname);              // ✅ (tuỳ chọn) lưu tên người dùng
-      closeIntroPopup();                                       // ✅ Đóng popup hoặc hiển thị giao diện tiếp theo
-    } else {
+  alert("✅ Đăng nhập thành công!");
+  localStorage.setItem("authenticated", "true");
+  localStorage.setItem("nickname", nickname);
+  localStorage.setItem("loggedInUser", JSON.stringify({ name: nickname })); // ✅ thêm dòng này
+  closeIntroPopup();
+}
+ else {
       alert("❌ Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
 
