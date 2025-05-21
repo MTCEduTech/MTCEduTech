@@ -2,11 +2,13 @@
 
 (function() {
   // Kiểm tra trạng thái đăng nhập
-  const username = localStorage.getItem("username");
-  if (!username) {
-    window.location.href = "index.html";
-    return;
-  }
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+const username = loggedInUser?.name;
+if (!username) {
+  window.location.href = "index.html";
+  return;
+}
+
 
   // Tạo greeting box HTML
   const greetingBox = document.createElement("div");
