@@ -181,16 +181,36 @@
     }
 
     function downloadJSON() {
-      updateDataFromInputs();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "accounts.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+  updateDataFromInputs();
 
+  // ✅ Lưu vào localStorage
+  localStorage.setItem("savedAccounts", JSON.stringify(data));
+
+  // ✅ Xuất ra file JSON
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "accounts.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+    // Nếu có dữ liệu đã lưu trong localStorage, thì nạp lại
+const saved = localStorage.getItem("savedAccounts");
+if (saved) {
+  try {
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed)) {
+      data.length = 0;
+      data.push(...parsed);
+    }
+  } catch (e) {
+    console.error("Lỗi khi đọc dữ liệu localStorage:", e);
+  }
+}
+
+// Gọi hiển thị bảng sau khi đã khôi phục dữ liệu (nếu có)
     renderTable();
   </script>
   <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1001;">
