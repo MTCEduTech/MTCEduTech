@@ -629,6 +629,7 @@ function exitFullscreen() {
         border-radius: 8px;
         font-weight: bold;
       ">ĐĂNG NHẬP</button>
+	    <button onclick="logout()">🚪 Đăng xuất</button>
     </div>
   </div>
 </div>
@@ -702,6 +703,13 @@ async function handleLogin() {
     alert("⚠️ Không thể kiểm tra tài khoản. Vui lòng thử lại sau.");
   }
 }
+</script>
+<script>
+  function logout() {
+    localStorage.removeItem("authenticated");
+    localStorage.removeItem("nickname"); // nếu có lưu tên người dùng
+    window.location.href = "index.html";
+  }
 </script>
 
 </body>
