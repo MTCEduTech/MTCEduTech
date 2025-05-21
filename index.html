@@ -763,7 +763,6 @@ localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
   function logout() {
     localStorage.removeItem("authenticated");
     localStorage.removeItem("nickname"); // nếu có lưu tên người dùng
-    localStorage.clear(); // ← Xóa tất cả
     window.location.href = "index.html";
   }
 </script>
