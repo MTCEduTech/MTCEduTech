@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quản lý tài khoản người dùng</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    input[type="text"] { width: 95%; }
+    .search-box { margin-bottom: 10px; }
+
+    .password-container {
+      position: relative;
+      display: inline-block;
+      width: 85%;
+    }
+    .password-container input {
+      width: 100%;
+      padding-right: 25px;
+    }
+    .password-container .toggle-eye {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .nickname-container {
+      position: relative;
+      display: inline-block;
+      width: 80%;
+    }
+    .nickname-container input {
+      width: 100%;
+      padding-right: 35px;
+    }
+    .nickname-container .confirm-btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 2px 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 28px;
+      color: #007acc;
+      text-shadow: 1px 1px 2px #ccc;
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <h2 class="page-title">ADMIN QUẢN LÝ TÀI KHOẢN NGƯỜI DÙNG</h2>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Tìm nickname..." onkeyup="searchTable()" />
+    <button onclick="addRow()">➕ Thêm tài khoản</button>
+    <button onclick="downloadJSON()">💾 Lưu</button>
+  </div>
+
+  <table id="accountTable">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Nickname</th>
+        <th>Mật khẩu</th>
+        <th>Tên hiển thị</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script>
+    const data = [
+      { "username": "admin", "password": "mtc$", "name": "Tác giả: Mai Thiện Chánh" },
+      { "username": "demo", "password": "demo@", "name": "Tài khoản DEMO" },
+      { "username": "gv1", "password": "12345", "name": "Giáo viên thời đại số" }
+    ];
+
+    function renderTable() {
+      const tbody = document.querySelector('#accountTable tbody');
+      tbody.innerHTML = '';
+      data.forEach((acc, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${i + 1}</td>
+          <td>
+            <div class="nickname-container">
+              <input type="text" value="${acc.username}" class="username" id="user${i}" />
+              <button class="confirm-btn" onclick="generatePassword(${i})">OK</button>
+            </div>
+          </td>
+          <td>
+            <div class="password-container">
+              <input type="password" value="${acc.password}" class="password" id="pwd${i}" />
+              <button class="toggle-eye" onclick="togglePassword(${i})" title="Hiện/Ẩn mật khẩu">👁️</button>
+            </div>
+          </td>
+          <td><input type="text" value="${acc.name}" /></td>
+          <td><button onclick="removeRow(${i})">🗑️ Xoá</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function togglePassword(index) {
+      const pwdInput = document.getElementById(`pwd${index}`);
+      pwdInput.type = pwdInput.type === "password" ? "text" : "password";
+    }
+
+    function generatePassword(index) {
+      const nickname = document.getElementById(`user${index}`).value;
+      if (!nickname) return;
+
+      const prefix = nickname[0].toUpperCase() + nickname.slice(1);
+      const existingPasswords = [];
+
+      for (let i = 0; i < index; i++) {
+        const pwd = document.getElementById(`pwd${i}`);
+        if (pwd) existingPasswords.push(pwd.value);
+      }
+
+      let newPass;
+      do {
+        const suffix = Math.floor(1000 + Math.random() * 9000);
+        newPass = `${prefix}@${suffix}`;
+      } while (existingPasswords.includes(newPass));
+
+      document.getElementById(`pwd${index}`).value = newPass;
+    }
+
+    // Hàm cập nhật dữ liệu từ các input vào mảng data
+    function updateDataFromInputs() {
+      const rows = document.querySelectorAll("#accountTable tbody tr");
+      rows.forEach((row, i) => {
+        const inputs = row.querySelectorAll('input');
+        data[i].username = inputs[0].value;
+        data[i].password = inputs[1].value;
+        data[i].name = inputs[2].value;
+      });
+    }
+
+    // Thêm tài khoản mới, giữ dữ liệu cũ
+    function addRow() {
+      updateDataFromInputs();
+      data.push({ username: '', password: '', name: '' });
+      renderTable();
+    }
+
+    function removeRow(index) {
+      updateDataFromInputs();
+      data.splice(index, 1);
+      renderTable();
+    }
+
+    function searchTable() {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      const rows = document.querySelectorAll("#accountTable tbody tr");
+      rows.forEach(row => {
+        const username = row.querySelector(".username").value.toLowerCase();
+        row.style.display = username.includes(keyword) ? "" : "none";
+      });
+    }
+
+    function downloadJSON() {
+      updateDataFromInputs();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "accounts.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    renderTable();
+  </script>
+  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1001;">
+    <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+      🏠 VỀ TRANG CHỦ
+    </button>
+  </div>
+</body>
+</html>
