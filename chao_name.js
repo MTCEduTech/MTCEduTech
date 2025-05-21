@@ -10,12 +10,12 @@
   // Tạo greeting box HTML
   const greetingBox = document.createElement("div");
   greetingBox.id = "greeting-box";
-  greetingBox.innerHTML = `
+  greetingBox.innerHTML = 
     <div style="display: flex; align-items: center; gap: 6px;">
       <span id="greeting" style="margin: 0;">👋 Xin chào ${username}</span>
       <button id="logout-button">🚪 Thoát</button>
     </div>
-  `;
+  ;
 
   // Gắn CSS cho greeting box
   Object.assign(greetingBox.style, {
@@ -62,9 +62,9 @@
     greetingBox.style.transform = 'translateY(0)';
   }, 100);
 
-  // Gắn sự kiện logout đúng cách
+  // Gắn sự kiện logout
   logoutButton.onclick = () => {
-    localStorage.removeItem("loggedInUser"); // Đúng key cần xóa
-    window.location.href = "index.html";     // Quay về trang đăng nhập
+    localStorage.removeItem("username");
+    window.location.href = "index.html";
   };
-})();
+})(); 
