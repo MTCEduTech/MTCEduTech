@@ -255,30 +255,38 @@ box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
   </style>
 </head>
 <body>
-<p id="greeting" style="
+<div id="greeting-box" style="
   position: fixed;
-  top: 0px;
+  top: 20px;
   right: 20px;
   z-index: 9999;
-  color: white;
-  font-weight: bold;
   background-color: blue;
   border: 3px solid gold;
   border-radius: 12px;
-  padding: 10px 16px;
-  font-size: 16px;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  padding: 12px 16px;
   font-family: 'Times New Roman', serif;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 1s ease, transform 1s ease;
-"></p>  <button onclick="logout()" style="
-        padding: 8px;
-        background: #00BFFF;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;">🚪 Đăng xuất</button>
+  display: inline-block;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+">
+  <p id="greeting" style="margin: 0 0 8px 0;">👋 Xin chào ...</p>
+  <button onclick="logout()" style="
+    padding: 6px 10px;
+    background: #00BFFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    float: right;
+  ">🚪 Đăng xuất</button>
+</div>
+
 	
 <div id="fixed-header">
   <marquee direction="left" scrollamount="8">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CODE CỦA AI</marquee>
@@ -752,6 +760,10 @@ setTimeout(() => {
   greetingEl.style.transform = 'translateY(0)';
 }, 100); // delay nhẹ để hiệu ứng chạy mượt
 
+	    function logout() {
+    localStorage.clear();
+    window.location.href = "index.html"; // ← về trang đăng nhập
+  }
     }
 </script>
 </body>
