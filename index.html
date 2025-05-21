@@ -699,11 +699,10 @@ async function handleLogin() {
     if (found) {
   alert("✅ Đăng nhập thành công!");
   localStorage.setItem("authenticated", "true");
-  localStorage.setItem("nickname", nickname);
-  localStorage.setItem("loggedInUser", JSON.stringify({ name: nickname })); // ✅ thêm dòng này
+  localStorage.setItem("nickname", found.username); // (tuỳ chọn, có thể giữ lại)
+  localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name })); // ✅ dùng name từ dữ liệu JSON
   closeIntroPopup();
-}
- else {
+} else {
       alert("❌ Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
 
