@@ -732,9 +732,18 @@ async function handleLogin() {
     if (found) {
   alert("✅ Đăng nhập thành công!");
   localStorage.setItem("authenticated", "true");
-  localStorage.setItem("nickname", found.username); // (tuỳ chọn, có thể giữ lại)
-  localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name })); // ✅ dùng name từ dữ liệu JSON
+  localStorage.setItem("nickname", found.username);
+  localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
   closeIntroPopup();
+
+  // 👉 Hiển thị lời chào ngay
+  const greetingBox = document.getElementById('greeting-box');
+  const greetingEl = document.getElementById('greeting');
+  greetingEl.textContent = '👋 Xin chào ' + found.name;
+  setTimeout(() => {
+    greetingBox.style.opacity = '1';
+    greetingBox.style.transform = 'translateY(0)';
+  }, 100);
 } else {
       alert("❌ Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
