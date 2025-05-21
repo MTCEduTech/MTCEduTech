@@ -202,17 +202,27 @@
   }
 
   function downloadJSON() {
-    updateDataFromInputs();
-    localStorage.setItem("savedAccounts", JSON.stringify(data));
+  updateDataFromInputs();
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "accounts.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+  // Gửi dữ liệu đến server qua POST
+  fetch('save.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data, null, 2)
+  })
+  .then(response => response.json())
+  .then(res => {
+    if (res.status === 'success') {
+      alert('💾 Dữ liệu đã được lưu lên server!');
+      localStorage.setItem("savedAccounts", JSON.stringify(data)); // vẫn lưu local
+    } else {
+      alert('❌ Lỗi khi lưu dữ liệu: ' + res.message);
+    }
+  })
+  .catch(err => {
+    alert('❌ Không thể kết nối server: ' + err);
+  });
+}
 
   // Cho phép gọi từ HTML onclick
   window.togglePassword = togglePassword;
