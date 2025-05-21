@@ -88,14 +88,35 @@
     </tbody>
   </table>
 
-<script type="module">
-  import { accounts } from './accounts.js';
+<script>
+  let data = [];
 
-  const data = [...accounts]; // dùng bản sao để thao tác
+  async function loadAccounts() {
+    try {
+      const response = await fetch('accounts.json');
+      if (!response.ok) throw new Error('Không thể tải dữ liệu');
 
-  // (các hàm như renderTable, addRow, removeRow...) giữ nguyên
+      const json = await response.json();
 
-  // Đặt toàn bộ logic sau đây bên trong script module
+      // Kiểm tra nếu localStorage có bản ghi thì dùng nó
+      const saved = localStorage.getItem("savedAccounts");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          data = parsed;
+        } else {
+          data = json;
+        }
+      } else {
+        data = json;
+      }
+
+      renderTable();
+    } catch (error) {
+      console.error("Lỗi khi tải accounts.json:", error);
+    }
+  }
+
   function renderTable() {
     const tbody = document.querySelector('#accountTable tbody');
     tbody.innerHTML = '';
@@ -122,32 +143,89 @@
     });
   }
 
-  // (Giữ nguyên các hàm togglePassword, generatePassword, addRow, removeRow, v.v...)
-
-  // Nếu có localStorage, nạp lại
-  const saved = localStorage.getItem("savedAccounts");
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed)) {
-        data.length = 0;
-        data.push(...parsed);
-      }
-    } catch (e) {
-      console.error("Lỗi khi đọc localStorage:", e);
-    }
+  // Các hàm khác (giữ nguyên)
+  function togglePassword(index) {
+    const pwdInput = document.getElementById(`pwd${index}`);
+    pwdInput.type = pwdInput.type === "password" ? "text" : "password";
   }
 
-  renderTable();
+  function generatePassword(index) {
+    const nickname = document.getElementById(`user${index}`).value;
+    if (!nickname) return;
 
-  // Gắn các hàm vào window để dùng trong HTML onclick
+    const prefix = nickname[0].toUpperCase() + nickname.slice(1);
+    const existingPasswords = [];
+
+    for (let i = 0; i < index; i++) {
+      const pwd = document.getElementById(`pwd${i}`);
+      if (pwd) existingPasswords.push(pwd.value);
+    }
+
+    let newPass;
+    do {
+      const suffix = Math.floor(1000 + Math.random() * 9000);
+      newPass = `${prefix}@${suffix}`;
+    } while (existingPasswords.includes(newPass));
+
+    document.getElementById(`pwd${index}`).value = newPass;
+  }
+
+  function updateDataFromInputs() {
+    const rows = document.querySelectorAll("#accountTable tbody tr");
+    rows.forEach((row, i) => {
+      const inputs = row.querySelectorAll('input');
+      data[i].username = inputs[0].value;
+      data[i].password = inputs[1].value;
+      data[i].name = inputs[2].value;
+    });
+  }
+
+  function addRow() {
+    updateDataFromInputs();
+    data.push({ username: '', password: '', name: '' });
+    renderTable();
+  }
+
+  function removeRow(index) {
+    updateDataFromInputs();
+    data.splice(index, 1);
+    renderTable();
+  }
+
+  function searchTable() {
+    const keyword = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#accountTable tbody tr");
+    rows.forEach(row => {
+      const username = row.querySelector(".username").value.toLowerCase();
+      row.style.display = username.includes(keyword) ? "" : "none";
+    });
+  }
+
+  function downloadJSON() {
+    updateDataFromInputs();
+    localStorage.setItem("savedAccounts", JSON.stringify(data));
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "accounts.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Cho phép gọi từ HTML onclick
   window.togglePassword = togglePassword;
   window.generatePassword = generatePassword;
   window.addRow = addRow;
   window.removeRow = removeRow;
   window.searchTable = searchTable;
   window.downloadJSON = downloadJSON;
+
+  // Gọi khi trang tải xong
+  window.onload = loadAccounts;
 </script>
+
 
   <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1001;">
     <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
