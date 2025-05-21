@@ -88,131 +88,67 @@
     </tbody>
   </table>
 
-  <script>
-    const data = [
-      { "username": "admin", "password": "mtc$", "name": "Tác giả: Mai Thiện Chánh" },
-      { "username": "demo", "password": "demo@", "name": "Tài khoản DEMO" },
-      { "username": "gv1", "password": "12345", "name": "Giáo viên thời đại số" }
-    ];
+<script type="module">
+  import { accounts } from './accounts.js';
 
-    function renderTable() {
-      const tbody = document.querySelector('#accountTable tbody');
-      tbody.innerHTML = '';
-      data.forEach((acc, i) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${i + 1}</td>
-          <td>
-            <div class="nickname-container">
-              <input type="text" value="${acc.username}" class="username" id="user${i}" />
-              <button class="confirm-btn" onclick="generatePassword(${i})">OK</button>
-            </div>
-          </td>
-          <td>
-            <div class="password-container">
-              <input type="password" value="${acc.password}" class="password" id="pwd${i}" />
-              <button class="toggle-eye" onclick="togglePassword(${i})" title="Hiện/Ẩn mật khẩu">👁️</button>
-            </div>
-          </td>
-          <td><input type="text" value="${acc.name}" /></td>
-          <td><button onclick="removeRow(${i})">🗑️ Xoá</button></td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
+  const data = [...accounts]; // dùng bản sao để thao tác
 
-    function togglePassword(index) {
-      const pwdInput = document.getElementById(`pwd${index}`);
-      pwdInput.type = pwdInput.type === "password" ? "text" : "password";
-    }
+  // (các hàm như renderTable, addRow, removeRow...) giữ nguyên
 
-    function generatePassword(index) {
-      const nickname = document.getElementById(`user${index}`).value;
-      if (!nickname) return;
-
-      const prefix = nickname[0].toUpperCase() + nickname.slice(1);
-      const existingPasswords = [];
-
-      for (let i = 0; i < index; i++) {
-        const pwd = document.getElementById(`pwd${i}`);
-        if (pwd) existingPasswords.push(pwd.value);
-      }
-
-      let newPass;
-      do {
-        const suffix = Math.floor(1000 + Math.random() * 9000);
-        newPass = `${prefix}@${suffix}`;
-      } while (existingPasswords.includes(newPass));
-
-      document.getElementById(`pwd${index}`).value = newPass;
-    }
-
-    // Hàm cập nhật dữ liệu từ các input vào mảng data
-    function updateDataFromInputs() {
-      const rows = document.querySelectorAll("#accountTable tbody tr");
-      rows.forEach((row, i) => {
-        const inputs = row.querySelectorAll('input');
-        data[i].username = inputs[0].value;
-        data[i].password = inputs[1].value;
-        data[i].name = inputs[2].value;
-      });
-    }
-
-    // Thêm tài khoản mới, giữ dữ liệu cũ
-    function addRow() {
-      updateDataFromInputs();
-      data.push({ username: '', password: '', name: '' });
-      renderTable();
-    }
-
-    function removeRow(index) {
-      updateDataFromInputs();
-      data.splice(index, 1);
-      renderTable();
-    }
-
-    function searchTable() {
-      const keyword = document.getElementById("searchInput").value.toLowerCase();
-      const rows = document.querySelectorAll("#accountTable tbody tr");
-      rows.forEach(row => {
-        const username = row.querySelector(".username").value.toLowerCase();
-        row.style.display = username.includes(keyword) ? "" : "none";
-      });
-    }
-
-    function downloadJSON() {
-  updateDataFromInputs();
-
-  // ✅ Lưu vào localStorage
-  localStorage.setItem("savedAccounts", JSON.stringify(data));
-
-  // ✅ Xuất ra file JSON
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "accounts.json";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-    // Nếu có dữ liệu đã lưu trong localStorage, thì nạp lại
-const saved = localStorage.getItem("savedAccounts");
-if (saved) {
-  try {
-    const parsed = JSON.parse(saved);
-    if (Array.isArray(parsed)) {
-      data.length = 0;
-      data.push(...parsed);
-    }
-  } catch (e) {
-    console.error("Lỗi khi đọc dữ liệu localStorage:", e);
+  // Đặt toàn bộ logic sau đây bên trong script module
+  function renderTable() {
+    const tbody = document.querySelector('#accountTable tbody');
+    tbody.innerHTML = '';
+    data.forEach((acc, i) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${i + 1}</td>
+        <td>
+          <div class="nickname-container">
+            <input type="text" value="${acc.username}" class="username" id="user${i}" />
+            <button class="confirm-btn" onclick="generatePassword(${i})">OK</button>
+          </div>
+        </td>
+        <td>
+          <div class="password-container">
+            <input type="password" value="${acc.password}" class="password" id="pwd${i}" />
+            <button class="toggle-eye" onclick="togglePassword(${i})" title="Hiện/Ẩn mật khẩu">👁️</button>
+          </div>
+        </td>
+        <td><input type="text" value="${acc.name}" /></td>
+        <td><button onclick="removeRow(${i})">🗑️ Xoá</button></td>
+      `;
+      tbody.appendChild(row);
+    });
   }
-}
 
-// Gọi hiển thị bảng sau khi đã khôi phục dữ liệu (nếu có)
-    renderTable();
-  </script>
+  // (Giữ nguyên các hàm togglePassword, generatePassword, addRow, removeRow, v.v...)
+
+  // Nếu có localStorage, nạp lại
+  const saved = localStorage.getItem("savedAccounts");
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        data.length = 0;
+        data.push(...parsed);
+      }
+    } catch (e) {
+      console.error("Lỗi khi đọc localStorage:", e);
+    }
+  }
+
+  renderTable();
+
+  // Gắn các hàm vào window để dùng trong HTML onclick
+  window.togglePassword = togglePassword;
+  window.generatePassword = generatePassword;
+  window.addRow = addRow;
+  window.removeRow = removeRow;
+  window.searchTable = searchTable;
+  window.downloadJSON = downloadJSON;
+</script>
+
   <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1001;">
     <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
       🏠 VỀ TRANG CHỦ
