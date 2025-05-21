@@ -751,13 +751,15 @@ async function handleLogin() {
     const user = JSON.parse(localStorage.getItem('loggedInUser'));
     if (user) {
       document.getElementById('greeting').textContent = 'Xin chào ' + user.name;
-	    const greetingEl = document.getElementById('greeting');
+	    const greetingBox = document.getElementById('greeting-box');
+const greetingEl = document.getElementById('greeting');
+
 greetingEl.textContent = '👋 Xin chào ' + user.name;
 
-// Kích hoạt hiệu ứng sau khi gán nội dung
+// Hiện toàn bộ greeting-box (không chỉ riêng nội dung p)
 setTimeout(() => {
-  greetingEl.style.opacity = '1';
-  greetingEl.style.transform = 'translateY(0)';
+  greetingBox.style.opacity = '1';
+  greetingBox.style.transform = 'translateY(0)';
 }, 100); // delay nhẹ để hiệu ứng chạy mượt
 
 	    function logout() {
