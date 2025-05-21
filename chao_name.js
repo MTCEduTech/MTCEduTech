@@ -62,9 +62,9 @@
     greetingBox.style.transform = 'translateY(0)';
   }, 100);
 
-  // Gắn sự kiện logout
+  // Gắn sự kiện logout đúng cách
   logoutButton.onclick = () => {
-    localStorage.removeItem("username");
-    window.location.href = "index.html";
+    localStorage.removeItem("loggedInUser"); // Đúng key cần xóa
+    window.location.href = "index.html";     // Quay về trang đăng nhập
   };
 })();
