@@ -7,15 +7,14 @@
     return;
   }
 
-  // Tạo greeting box HTML
+  // Tạo greeting box HTML (không có nút thoát)
   const greetingBox = document.createElement("div");
   greetingBox.id = "greeting-box";
-  greetingBox.innerHTML = 
+  greetingBox.innerHTML = `
     <div style="display: flex; align-items: center; gap: 6px;">
       <span id="greeting" style="margin: 0;">👋 Xin chào ${username}</span>
-      <button id="logout-button">🚪 Thoát</button>
     </div>
-  ;
+  `;
 
   // Gắn CSS cho greeting box
   Object.assign(greetingBox.style, {
@@ -42,29 +41,9 @@
   // Thêm greeting box vào trang
   document.body.appendChild(greetingBox);
 
-  // Thêm style cho nút thoát
-  const logoutButton = document.getElementById("logout-button");
-  Object.assign(logoutButton.style, {
-    padding: '2px 6px',
-    background: '#00BFFF',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    fontWeight: 'bold',
-    fontSize: '12.5px',
-    cursor: 'pointer',
-    lineHeight: '1.2'
-  });
-
-  // Hiển thị box với hiệu ứng
+  // Hiển thị greeting box với hiệu ứng
   setTimeout(() => {
     greetingBox.style.opacity = '1';
     greetingBox.style.transform = 'translateY(0)';
   }, 100);
-
-  // Gắn sự kiện logout
-  logoutButton.onclick = () => {
-    localStorage.removeItem("username");
-    window.location.href = "index.html";
-  };
-})(); 
+})();
