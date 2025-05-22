@@ -801,33 +801,31 @@ localStorage.setItem("displayName", found.name);
 </script>
 <script>
   function logout() {
-    localStorage.removeItem("authenticated");
-    localStorage.removeItem("nickname"); // nếu có lưu tên người dùng
-    window.location.href = "index.html";
-  }
+  localStorage.clear();
+  window.location.href = "index.html";
+}
 </script>
 
 
 <script>
-    const user = JSON.parse(localStorage.getItem('loggedInUser'));
-    if (user) {
-      document.getElementById('greeting').textContent = 'Xin chào ' + user.name;
-	    const greetingBox = document.getElementById('greeting-box');
-const greetingEl = document.getElementById('greeting');
+  const user = JSON.parse(localStorage.getItem('loggedInUser'));
+  if (user) {
+    const greetingBox = document.getElementById('greeting-box');
+    const greetingEl = document.getElementById('greeting');
 
-greetingEl.textContent = '👋 Xin chào ' + user.name;
+    greetingEl.textContent = '👋 Xin chào ' + user.name;
 
-// Hiện toàn bộ greeting-box (không chỉ riêng nội dung p)
-setTimeout(() => {
-  greetingBox.style.opacity = '1';
-  greetingBox.style.transform = 'translateY(0)';
-}, 100); // delay nhẹ để hiệu ứng chạy mượt
-
-	    function logout() {
-    localStorage.clear();
-    window.location.href = "index.html"; // ← về trang đăng nhập
+    setTimeout(() => {
+      greetingBox.style.opacity = '1';
+      greetingBox.style.transform = 'translateY(0)';
+    }, 100);
   }
-    }
+
+  // ⚠️ Đặt logout() bên ngoài để mọi phần HTML đều dùng được
+  function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
 </script>
 
 <script>
