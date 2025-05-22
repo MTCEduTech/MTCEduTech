@@ -608,7 +608,7 @@ function exitFullscreen() {
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 9999;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 ">
@@ -714,17 +714,17 @@ function exitFullscreen() {
     sessionStorage.setItem("popupShown", "true");
   }
 
-  window.addEventListener("DOMContentLoaded", function() {
-  const isAuthenticated = localStorage.getItem("authenticated");
-  if (isAuthenticated === "true") {
-    // Đã đăng nhập: ẩn popup
-    document.getElementById('introPopup').style.display = 'none';
-  } else {
-    // Chưa đăng nhập: xóa sessionStorage để hiển thị lại popup
-    sessionStorage.removeItem("popupShown");
-    document.getElementById('introPopup').style.display = 'flex';
-  }
-});
+   document.addEventListener("DOMContentLoaded", function () {
+    const popup = document.getElementById("introPopup");
+    if (!popup) return;
+
+    const isAuthenticated = localStorage.getItem("authenticated");
+    if (isAuthenticated === "true") {
+      popup.style.display = "none";
+    } else {
+      popup.style.display = "flex";
+    }
+  });
 
 </script>
 
