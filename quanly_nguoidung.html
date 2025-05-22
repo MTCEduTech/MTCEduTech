@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <script src="auth.js"></script>
+  <script>
+  const currentUser = localStorage.getItem('loggedInUser');
+  if (currentUser !== 'admin') {
+    alert("🚫 Bạn không có quyền truy cập trang này!");
+    window.location.href = 'index.html';
+  }
+</script>
+
   <title>Quản lý tài khoản người dùng</title>
   <style>
     body { font-family: Arial; padding: 20px; }
