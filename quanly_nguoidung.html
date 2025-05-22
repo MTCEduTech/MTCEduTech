@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <script src="auth.js"></script>
   <script>
   const currentUser = localStorage.getItem('loggedInUser');
   if (currentUser !== 'admin') {
@@ -10,8 +9,8 @@
     window.location.href = 'index.html';
   }
 </script>
-
-  <title>Quản lý tài khoản người dùng</title>
+  <script src="auth.js"></script>
+   <title>Quản lý tài khoản người dùng</title>
   <style>
     body { font-family: Arial; padding: 20px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
