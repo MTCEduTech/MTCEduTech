@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
+(function() {
+  // Kiểm tra trạng thái đăng nhập
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const username = loggedInUser?.name;
   if (!username) {
@@ -6,9 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Không thêm greeting-box nếu đã có
-  if (document.getElementById("greeting-box")) return;
-
+  // Tạo greeting box HTML (không có nút thoát)
   const greetingBox = document.createElement("div");
   greetingBox.id = "greeting-box";
   greetingBox.innerHTML = `
@@ -17,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
   `;
 
+  // Gắn CSS cho greeting box
   Object.assign(greetingBox.style, {
     position: 'fixed',
     top: '0px',
@@ -38,10 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
     lineHeight: '1.2'
   });
 
+  // Thêm greeting box vào trang
   document.body.appendChild(greetingBox);
 
+  // Hiển thị greeting box với hiệu ứng
   setTimeout(() => {
     greetingBox.style.opacity = '1';
     greetingBox.style.transform = 'translateY(0)';
   }, 100);
-});
+})();
