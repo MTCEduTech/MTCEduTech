@@ -2,15 +2,8 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <script>
-  const currentUser = localStorage.getItem('loggedInUser');
-  if (currentUser !== 'admin') {
-    alert("🚫 Bạn không có quyền truy cập trang này!");
-    window.location.href = 'index.html';
-  }
-</script>
-  <script src="auth.js"></script>
-   <title>Quản lý tài khoản người dùng</title>
+<script src="auth.js"></script>
+  <title>Quản lý tài khoản người dùng</title>
   <style>
     body { font-family: Arial; padding: 20px; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -247,6 +240,6 @@
       🏠 VỀ TRANG CHỦ
     </button>
   </div>
-  <script src="chao_name.js"></script>
+<script src="chao_name.js"></script>
 </body>
 </html>
