@@ -686,7 +686,8 @@ function exitFullscreen() {
 <div style="text-align: center; margin-top: 15px;">
   <img src="GV.png" alt="Giáo viên" style="max-width: 100%; width: 380px; height: auto; display: block; margin: 0 auto;">
 </div>
-	    <div style="
+
+<div style="
   text-align: center;
   margin-top: 15px;
   font-weight: bold;
@@ -701,6 +702,7 @@ function exitFullscreen() {
     <img src="https://stc-zaloprofile.zdn.vn/pc/v1/images/zalo_sharelogo.png" alt="Zalo" width="40" style="vertical-align: middle;">
   </a>
 </div>
+ 
     </div>
   </div>
 </div>
@@ -772,12 +774,7 @@ async function handleLogin() {
   localStorage.setItem("authenticated", "true");
 localStorage.setItem("nickname", found.username);
 localStorage.setItem("username", found.username);
-// 🔐 Dùng cho kiểm tra quyền
-localStorage.setItem("loggedInUser", found.username); 
-
-// 👤 Dùng để hiển thị tên đẹp
-localStorage.setItem("displayName", found.name);
-
+localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
 	    updateAdminButton();  // Gọi lại để hiển thị nút admin ngay
   closeIntroPopup();
 
@@ -801,33 +798,33 @@ localStorage.setItem("displayName", found.name);
 </script>
 <script>
   function logout() {
-  localStorage.clear();
-  window.location.href = "index.html";
-}
+    localStorage.removeItem("authenticated");
+    localStorage.removeItem("nickname"); // nếu có lưu tên người dùng
+    window.location.href = "index.html";
+  }
 </script>
 
 
 <script>
-  const user = JSON.parse(localStorage.getItem('loggedInUser'));
-  if (user) {
-    const greetingBox = document.getElementById('greeting-box');
-    const greetingEl = document.getElementById('greeting');
+    const user = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (user) {
+      document.getElementById('greeting').textContent = 'Xin chào ' + user.name;
+	    const greetingBox = document.getElementById('greeting-box');
+const greetingEl = document.getElementById('greeting');
 
-    greetingEl.textContent = '👋 Xin chào ' + user.name;
+greetingEl.textContent = '👋 Xin chào ' + user.name;
 
-    setTimeout(() => {
-      greetingBox.style.opacity = '1';
-      greetingBox.style.transform = 'translateY(0)';
-    }, 100);
+// Hiện toàn bộ greeting-box (không chỉ riêng nội dung p)
+setTimeout(() => {
+  greetingBox.style.opacity = '1';
+  greetingBox.style.transform = 'translateY(0)';
+}, 100); // delay nhẹ để hiệu ứng chạy mượt
+
+	    function logout() {
+    localStorage.clear();
+    window.location.href = "index.html"; // ← về trang đăng nhập
   }
-
-  // ⚠️ Đặt logout() bên ngoài để mọi phần HTML đều dùng được
-  function logout() {
-  localStorage.removeItem("authenticated");
-  localStorage.removeItem("nickname");
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "index.html";
-  }
+    }
 </script>
 
 <script>
