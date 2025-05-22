@@ -823,8 +823,10 @@ localStorage.setItem("displayName", found.name);
 
   // ⚠️ Đặt logout() bên ngoài để mọi phần HTML đều dùng được
   function logout() {
-    localStorage.clear();
-    window.location.href = "index.html";
+  localStorage.removeItem("authenticated");
+  localStorage.removeItem("nickname");
+  localStorage.removeItem("loggedInUser");
+  window.location.href = "index.html";
   }
 </script>
 
