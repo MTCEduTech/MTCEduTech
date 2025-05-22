@@ -772,7 +772,12 @@ async function handleLogin() {
   localStorage.setItem("authenticated", "true");
 localStorage.setItem("nickname", found.username);
 localStorage.setItem("username", found.username);
-localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
+// 🔐 Dùng cho kiểm tra quyền
+localStorage.setItem("loggedInUser", found.username); 
+
+// 👤 Dùng để hiển thị tên đẹp
+localStorage.setItem("displayName", found.name);
+
 	    updateAdminButton();  // Gọi lại để hiển thị nút admin ngay
   closeIntroPopup();
 
