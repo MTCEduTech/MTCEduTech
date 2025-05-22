@@ -1,5 +1,4 @@
-(function() {
-  // Kiểm tra trạng thái đăng nhập
+document.addEventListener("DOMContentLoaded", () => {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const username = loggedInUser?.name;
   if (!username) {
@@ -7,7 +6,9 @@
     return;
   }
 
-  // Tạo greeting box HTML (không có nút thoát)
+  // Không thêm greeting-box nếu đã có
+  if (document.getElementById("greeting-box")) return;
+
   const greetingBox = document.createElement("div");
   greetingBox.id = "greeting-box";
   greetingBox.innerHTML = `
@@ -16,7 +17,6 @@
     </div>
   `;
 
-  // Gắn CSS cho greeting box
   Object.assign(greetingBox.style, {
     position: 'fixed',
     top: '0px',
@@ -38,12 +38,10 @@
     lineHeight: '1.2'
   });
 
-  // Thêm greeting box vào trang
   document.body.appendChild(greetingBox);
 
-  // Hiển thị greeting box với hiệu ứng
   setTimeout(() => {
     greetingBox.style.opacity = '1';
     greetingBox.style.transform = 'translateY(0)';
   }, 100);
-})();
+});
