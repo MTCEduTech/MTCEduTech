@@ -660,24 +660,27 @@ function exitFullscreen() {
 
     <!-- Cột phải: Đăng nhập -->
     <div style="flex: 1; min-width: 250px; background: #f0f8ff; padding: 20px; border-radius: 12px;">
-      <h3 style="text-align: center; color: #e91e63;">🔐 ĐĂNG NHẬP</h3>
-      <label for="nickname">Nickname:</label><br>
-      <input type="text" id="nickname" style="width: 100%; padding: 6px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;"><br>
+      <form onsubmit="handleLogin(); return false;">
+  <h3 style="text-align: center; color: #e91e63;">🔐 ĐĂNG NHẬP</h3>
 
-      <label for="password">Mật khẩu:</label><br>
-      <input type="password" id="password" style="width: 100%; padding: 6px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc;"><br>
+  <label for="nickname">Nickname:</label><br>
+  <input type="text" id="nickname" style="width: 100%; padding: 6px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;"><br>
 
-     <div style="text-align: center;">
-      <button onclick="handleLogin()" style="
-        width: 50%;
-        padding: 8px;
-        background: #00BFFF;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-      ">ĐĂNG NHẬP</button>
-</div>
+  <label for="password">Mật khẩu:</label><br>
+  <input type="password" id="password" style="width: 100%; padding: 6px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc;"><br>
+
+  <div style="text-align: center;">
+    <button type="submit" style="
+      width: 50%;
+      padding: 8px;
+      background: #00BFFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+    ">ĐĂNG NHẬP</button>
+  </div>
+</form>
 
 <!-- Ảnh dưới form đăng nhập -->
 <div style="text-align: center; margin-top: 15px;">
