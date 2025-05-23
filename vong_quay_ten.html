@@ -437,6 +437,12 @@ document.getElementById("cheerSound").play(); // 🎉 Phát âm thanh khi hiện
 
     window.onload = function() {
       updateWheel();
+const canvasRect = canvas.getBoundingClientRect();
+  const logo = document.getElementById('logo');
+  logo.style.left = (canvasRect.left + canvas.width / 2) + 'px';
+  logo.style.top = (canvasRect.top + canvas.height / 2) + 'px';
+  logo.style.position = 'absolute';
+  logo.style.transform = 'translate(-50%, -50%)';
     };
 
 function removeLastWinner() {
