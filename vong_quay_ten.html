@@ -161,22 +161,10 @@ button.red {
   background-color: #dc3545;
   color: white;
 }
-.info-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 5px;
-  flex-wrap: wrap; /* Để khi màn hình nhỏ thì nút sẽ xuống dòng */
-}
+
 button.info {
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: #2196F3;
+  background-color: #2196f3;
   color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 button:hover {
@@ -220,17 +208,11 @@ Mai Đăng Khôi
 Mai Đăng Khoa
 ***</textarea><br/>
 <div>
-  <button class="green" onclick="updateWheel()">Cập nhật tên vào vòng quay</button><br/><br/>
-
-  <div class="info-buttons">
-    <button class="info" onclick="showInstructions()">HƯỚNG DẪN</button>
-    <button class="info" onclick="showContact()">TT TÁC GIẢ</button>
-  </div>
-
-  <div id="info-box" style="margin-top: 10px; display: none; background-color: #e3f2fd; padding: 15px; border-radius: 10px; border: 1px solid #90caf9;">
-  </div>
+<button class="green" onclick="updateWheel()">Cập nhật tên vào vòng quay</button><br/>
+<button class="info" onclick="showInstructions()">HƯỚNG DẪN</button>
+<button class="info" onclick="showContact()">THÔNG TIN TÁC GIẢ</button>
+<div id="info-box" style="margin-top: 10px; display: none; background-color: #e3f2fd; padding: 15px; border-radius: 10px; border: 1px solid #90caf9;">
 </div>
-
 </div>
     
 </div>
@@ -277,7 +259,7 @@ Mai Đăng Khoa
     const gio = String(now.getHours()).padStart(2, '0');
     const phut = String(now.getMinutes()).padStart(2, '0');
     const giay = String(now.getSeconds()).padStart(2, '0');
-    dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
+    dongHo.textContent = ⏰ Bây giờ là: ${gio}:${phut}:${giay};
   }
 
   setInterval(capNhatDongHo, 1000);
@@ -475,7 +457,7 @@ function removeLastWinner() {
   const lastRow = table.rows[table.rows.length - 1];
   const lastName = lastRow.cells[1].innerText;
 
-  const confirmDelete = confirm(`Bạn có chắc muốn xóa tên "${lastName}" khỏi vòng quay?`);
+  const confirmDelete = confirm(Bạn có chắc muốn xóa tên "${lastName}" khỏi vòng quay?);
 
   if (confirmDelete) {
     // Xóa tên khỏi danh sách
@@ -526,9 +508,9 @@ function showInstructions() {
     const minutes = Math.floor(i / 60);
     const seconds = i % 60;
     let label = "";
-    if (minutes > 0) label += `${minutes} phút`;
-    if (seconds > 0) label += ` ${seconds} giây`;
-    timeSelect.innerHTML += `<option value="${i}">${label.trim()}</option>`;
+    if (minutes > 0) label += ${minutes} phút;
+    if (seconds > 0) label +=  ${seconds} giây;
+    timeSelect.innerHTML += <option value="${i}">${label.trim()}</option>;
   }
 
   let countdownInterval;
@@ -552,10 +534,10 @@ function showInstructions() {
   function updateDisplay(secondsLeft, totalSeconds) {
     const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60;
-    const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const timeStr = ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')};
     const percentElapsed = 1 - secondsLeft / totalSeconds;
     const red = Math.floor(255 * percentElapsed);
-    const color = `rgb(${red}, 0, 0)`;
+    const color = rgb(${red}, 0, 0);
     const timerBox = document.getElementById("timer-box");
     timerBox.textContent = timeStr;
     timerBox.style.backgroundColor = color;
