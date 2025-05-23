@@ -10,6 +10,8 @@
       font-family: Arial, sans-serif;
       background: url('Nen.jpg') no-repeat center center fixed;
 	background-size: cover;
+	white-space: nowrap;
+  	overflow-x: auto;
 
       display: flex;
       flex-direction: column;
@@ -251,6 +253,10 @@ font-family: Times New roman, sans-serif; /* Hạn chế lỗi tiếng Việt */
 box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
 
   </style>
 </head>
@@ -305,7 +311,7 @@ box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 <div id="fixed-header">
   <marquee direction="left" scrollamount="8">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CODE CỦA AI</marquee>
 
-  <div style="text-align: center;">
+  <div style="text-align: center; min-width: 300px;">
     <h1 id="wave-text" style="font-size: 32px; font-weight: bold; color: #e91e63; font-family: 'Times New Roman', Times, serif;">BỘ CÔNG CỤ HỖ TRỢ GD DÀNH CHO GIÁO VIÊN </h1>
       </div>
 </div>
@@ -314,10 +320,11 @@ box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 
 
   <!-- Bố cục 3 cột -->
-  <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 60px;">
+  <div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 60px; overflow-x: auto;">
+
     
     <!-- Cột trái -->
-    <div style="text-align: center;">
+    <div style="text-align: center; min-width: 300px;">
       <a href="vong_quay_so.html">
   <img src="icon_quay_so.png" alt="Vòng quay số" width="60">
 </a><br>
@@ -405,7 +412,7 @@ box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
     </div>
 
     <!-- Cột phải -->
-    <div style="text-align: center;">
+    <div style="text-align: center; min-width: 300px;">
       <a href="soan_cau_hoi.html">
   <img src="icon_soan_cau_hoi.png" alt="Soạn đề" width="70">
 </a><br>
@@ -670,7 +677,7 @@ function exitFullscreen() {
   <label for="password">Mật khẩu:</label><br>
   <input type="password" id="password" style="width: 100%; padding: 6px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc;"><br>
 
-  <div style="text-align: center;">
+  <div style="text-align: center; min-width: 300px;">
     <button type="submit" style="
       width: 50%;
       padding: 8px;
