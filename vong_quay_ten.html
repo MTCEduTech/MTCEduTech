@@ -6,87 +6,132 @@
 <script src="auth.js"></script>
 <title>Vòng Quay May Mắn - Nhập Tên</title>
 <style>
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 body {
-  max-width: 100vw;
-  max-height: 100vh;
-  overflow-y: auto;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+div {
+    box-sizing: border-box;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#countdown {
+    font-family: 'DongHoFont', sans-serif;
+}
+#result {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex: 1;
+}
+body {
+  font-family: Times New Roman;
   margin: 0;
   padding: 0;
-  font-size: 16px;
-  font-family: 'Times New Roman', serif;
-  background-image: url('Nen2.jpg');
+  background-image: url('Nen2.jpg'); /* thay 'Nen2.jpg' bằng đường dẫn ảnh thật */
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: 0.8fr 2fr 1.2fr;
-  gap: 20px;
-  align-items: start;
-  padding: 20px;
+    .container {
+      display: grid;
+      grid-template-columns: 0.8fr 2fr 1.2fr;
+      gap: 20px;
+      align-items: start;
+      padding: 20px;
+    }
+    canvas {
+      border: 5px solid white;
+      border-radius: 50%;
+      display: block;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    #logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      z-index: 2;
+      pointer-events: none;
+    }
+    #arrow {
+      position: absolute;
+      top: 50%;
+      left: calc(50% + 235px); /* Đặt tại viền phải vòng quay */
+      transform: translateY(-50%) rotate(180deg); /* Xoay vào tâm vòng */
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 30px solid red;
+      z-index: 3;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      font-size: 16px;
+      padding: 5px;
+    }
+    .results {
+      margin-top: 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+       .action-buttons {
+      margin-top: 20px;
+    }
+    h1, h2, h3 {
+      text-align: center;
+    }
+
+    /* Nút */
+    button {
+      font-size: 16px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+     button.red {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+button.info {
+  background-color: #2196f3; /* xanh dương */
+  color: white;
 }
 
-canvas {
-  border: 5px solid white;
-  border-radius: 50%;
-  display: block;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
+.left-column {
+  text-align: center;
 }
 
-#canvas-container {
-  position: relative;
-  width: 80vw;
-  max-width: 500px;
-  height: 80vw;
-  max-height: 500px;
-  margin: 0 auto;
-}
-
-canvas#wheelCanvas,
-#logo {
-  width: 100%;
-  height: 100%;
-  max-width: 500px;
-  max-height: 500px;
-}
-
-#arrow {
-  position: absolute;
-  top: 50%;
-  left: calc(50% + 235px);
-  transform: translateY(-50%) rotate(180deg);
-  width: 0;
-  height: 0;
-  border-top: 20px solid transparent;
-  border-bottom: 20px solid transparent;
-  border-left: 30px solid red;
-  z-index: 3;
-}
-
-#countdown {
-  font-family: 'DongHoFont', sans-serif;
-}
-
-#result {
-  max-width: 100%;
-  width: 100%;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  flex: 1;
-}
-
-textarea,
 #nameInput {
   width: 100%;
   height: 300px;
@@ -95,18 +140,7 @@ textarea,
   resize: none;
 }
 
-.results {
-  margin-top: 0;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-#resultTable,
-#resultTable th,
-#resultTable td {
+#resultTable, #resultTable th, #resultTable td {
   color: yellow;
   border: 1px solid white;
 }
@@ -114,14 +148,12 @@ table {
 #resultTable td:first-child {
   text-align: center;
 }
-
 #resultTable td:nth-child(2) {
   padding-left: 12px;
   padding-right: 12px;
 }
-
 #info-box {
-  text-align: justify; /* Canh đều chữ */
+  text-align: justify;	// Canh đều chữ trong ô mở ra dễ đọc
 }
 
 #resultBox {
@@ -133,7 +165,7 @@ table {
   border-radius: 10px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 #resultBox h3 {
@@ -147,45 +179,8 @@ table {
   font-weight: bold;
   color: blue;
 }
-
-button {
-  font-size: 16px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  margin: 5px;
-  cursor: pointer;
-}
-
-button.red {
-  background-color: #dc3545;
-  color: white;
-}
-
-button.info {
-  background-color: #2196f3;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-.left-column {
-  text-align: center;
-}
-
-h1,
-h2,
-h3 {
-  text-align: center;
-}
-
-.action-buttons {
-  margin-top: 20px;
 }
 </style>
-
 </head>
 <body>
 <marquee direction="left" scrollamount="8" style="color:white; font-weight:bold; font-size: 20px; margin: 0px 0;">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CỦA AI</marquee>
@@ -216,25 +211,10 @@ Mai Đăng Khoa
 </div>
     
 </div>
-<div id="canvas-container">
-  <canvas id="wheelCanvas" width="500" height="500"></canvas>
-  <img id="logo" src="logo.png" alt="Logo" />
-  <div id="arrow"></div>
-</div>
-
-    
-  <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; color: yellow; font-weight: bold;">
-    <label for="timeSelect" style="font-size: 24px;">Thời gian đếm ngược:</label>
-    <select id="timeSelect" style="padding: 6px;"></select>
-    <button onclick="startCountdown()" style="padding: 8px 16px; background-color: #28a745; color: white; font-weight: bold; font-size: 16px; border: none; border-radius: 6px; cursor: pointer;">
-      Bắt đầu
-    </button>
-    <div id="timer-box" style="text-align: center; height: 50px; line-height: 50px; font-size: 24px; font-weight: bold; color: white; border-radius: 8px; background-color: black; padding: 0 12px;">
-      00:00
-    </div>
-  </div>
-</div>
-
+<div style="position: relative; text-align: center;">
+<canvas height="500" id="wheelCanvas" width="500"></canvas>
+<img alt="Logo" id="logo" src="logo.png"/>
+<div id="arrow"></div></div>
 <div class="results">
 <div id="resultBox">
 <h3>KẾT QUẢ RANDOM</h3>
@@ -259,7 +239,7 @@ Mai Đăng Khoa
     const gio = String(now.getHours()).padStart(2, '0');
     const phut = String(now.getMinutes()).padStart(2, '0');
     const giay = String(now.getSeconds()).padStart(2, '0');
-    dongHo.textContent = ⏰ Bây giờ là: ${gio}:${phut}:${giay};
+    dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
   }
 
   setInterval(capNhatDongHo, 1000);
@@ -457,7 +437,7 @@ function removeLastWinner() {
   const lastRow = table.rows[table.rows.length - 1];
   const lastName = lastRow.cells[1].innerText;
 
-  const confirmDelete = confirm(Bạn có chắc muốn xóa tên "${lastName}" khỏi vòng quay?);
+  const confirmDelete = confirm(`Bạn có chắc muốn xóa tên "${lastName}" khỏi vòng quay?`);
 
   if (confirmDelete) {
     // Xóa tên khỏi danh sách
@@ -477,7 +457,7 @@ function showInstructions() {
       "1. Nhập tên người tham gia vào ô bên trái.<br/>" +
       "2. Click vào vòng quay để bắt đầu quay.<br/>" +
       "3. Kết quả quay được hiển thị ở bảng bên phải.<br/>" +
-      "4. Nhấn 'F5' để làm mới tất cả, Các nút full/thoát full màn hình<br/>" +
+      "4. Nhấn 'F5' để làm mới tất cả, 'F11' để zoom full màn hình<br/>" +
       "Ứng dụng đang thử nghiệm và phát triển tùy theo nhu cầu và mục đích sử dụng khác nhau, rất mong sự góp ý của các bạn!<br/> 🎯 Chúc bạn may mắn và có trải nghiệm thú vị!";
     infoBox.style.display = "block";
   }
@@ -490,14 +470,38 @@ function showInstructions() {
     infoBox.style.display = "none";
   } else {
     infoBox.innerHTML = "<strong>Thông tin liên hệ tác giả:</strong><br/><br/>" +
-      "👨‍🏫 Họ tên: Mai Thiện Chánh<br/>" +
-      "🏫 Đơn vị công tác: Trường THCS Đức Phú, tỉnh Lâm Đồng<br/>" +
-      "📧 Email: <a href='mailto:maithienchanh@gmail.com'>maithienchanh@gmail.com</a><br/>" +
-      "📱 Phone: 0333.289.379";
+      "Họ tên: Mai Thiện Chánh<br/>" +
+      "Đơn vị công tác: Trường THCS Đức Phú, tỉnh Lâm Đồng<br/>" +
+      "Email: <a href='mailto:maithienchanh@gmail.com'>maithienchanh@gmail.com</a><br/>" +
+      "Phone: 0333.289.379";
     infoBox.style.display = "block";
   }
 }
+
+
   </script>
+<!-- Bắt đầu đồng hồ đếm ngược dạng ngang -->
+<div style="width: 100%; max-width: 700px; margin: 20px auto; padding: 10px; background: #eee; border-radius: 10px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; color: red; font-weight: bold;">
+<label for="timeSelect">Thời gian đếm ngược:</label>
+<select id="timeSelect" style="flex: 1; padding: 6px;"></select>
+<button onclick="startCountdown()" style="
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+">
+  Bắt đầu
+</button>
+<div id="timer-box" style="flex: 1.2; text-align: center; height: 50px; line-height: 50px; font-size: 24px; font-weight: bold; color: white; border-radius: 8px; background-color: black;">00:00</div>
+</div>
+</div>
 <!-- Thêm phần tử audio -->
 <audio id="alarmSound" preload="auto" src="chuong.mp3"></audio>
 <script>
@@ -508,9 +512,9 @@ function showInstructions() {
     const minutes = Math.floor(i / 60);
     const seconds = i % 60;
     let label = "";
-    if (minutes > 0) label += ${minutes} phút;
-    if (seconds > 0) label +=  ${seconds} giây;
-    timeSelect.innerHTML += <option value="${i}">${label.trim()}</option>;
+    if (minutes > 0) label += `${minutes} phút`;
+    if (seconds > 0) label += ` ${seconds} giây`;
+    timeSelect.innerHTML += `<option value="${i}">${label.trim()}</option>`;
   }
 
   let countdownInterval;
@@ -534,10 +538,10 @@ function showInstructions() {
   function updateDisplay(secondsLeft, totalSeconds) {
     const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60;
-    const timeStr = ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')};
+    const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     const percentElapsed = 1 - secondsLeft / totalSeconds;
     const red = Math.floor(255 * percentElapsed);
-    const color = rgb(${red}, 0, 0);
+    const color = `rgb(${red}, 0, 0)`;
     const timerBox = document.getElementById("timer-box");
     timerBox.textContent = timeStr;
     timerBox.style.backgroundColor = color;
