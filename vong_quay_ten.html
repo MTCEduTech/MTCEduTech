@@ -57,10 +57,10 @@ body {
     }
    .wheel-container {
        flex: 2;
-  min-width: 300px;
   position: relative;
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
   margin: auto;
 }
 
@@ -69,7 +69,8 @@ body {
   border-radius: 50%;
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
 }
 
 #logo {
@@ -225,10 +226,12 @@ Bé cún Nâu Nâu</textarea><br/>
 </div>
     
 </div>
-<div class="wheel-container">
-  <canvas id="wheelCanvas" width="500" height="500"></canvas>
-  <img id="logo" src="logo.png" alt="Logo">
-  <div id="arrow"></div></div>
+<div class="wheel-section">
+  <div class="wheel-container">
+    <canvas id="wheelCanvas" width="500" height="500"></canvas>
+    <img id="logo" src="logo.png" alt="Logo">
+    <div id="arrow"></div>
+  </div>
 
 <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; color: yellow; font-weight: bold;">
     <label for="timeSelect" style="font-size: 24px;">Thời gian đếm ngược:</label>
