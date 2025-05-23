@@ -71,32 +71,31 @@
 
 
     #center-logo {
-     width: 25%;
-  height: 25%;
-  max-width: 150px;
-  max-height: 150px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      cursor: pointer;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+     width: 120px;
+  height: 120px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  cursor: pointer;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-    #pointer {
-      width: 0;
-      height: 0;
-      border-top: 15px solid transparent;
-      border-bottom: 15px solid transparent;
-      border-left: 25px solid red;
-      position: absolute;
-      top: 50%;
-      right: -20px;
-      transform: translateY(-50%) rotate(180deg);
-      z-index: 3;
-    }
+   #pointer {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 30px solid red;
+  position: absolute;
+  top: -20px; /* nằm phía trên canvas */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
 
     button {
       padding: 10px 20px;
