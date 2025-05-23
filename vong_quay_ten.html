@@ -18,13 +18,6 @@ body {
 div {
     box-sizing: border-box;
 }
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
 #countdown {
     font-family: 'DongHoFont', sans-serif;
 }
@@ -62,29 +55,45 @@ body {
       position: relative;
       z-index: 1;
     }
-    #logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      z-index: 2;
-      pointer-events: none;
-    }
-    #arrow {
-      position: absolute;
-      top: 50%;
-      left: calc(50% + 235px); /* Đặt tại viền phải vòng quay */
-      transform: translateY(-50%) rotate(180deg); /* Xoay vào tâm vòng */
-      width: 0;
-      height: 0;
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-      border-left: 30px solid red;
-      z-index: 3;
-    }
+   .wheel-container {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  margin: auto;
+}
+
+#wheelCanvas {
+  border: 5px solid white;
+  border-radius: 50%;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#arrow {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%) rotate(180deg);
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 30px solid red;
+  z-index: 3;
+}
     textarea {
       width: 100%;
       height: 300px;
@@ -211,10 +220,10 @@ Mai Đăng Khoa
 </div>
     
 </div>
-<div style="position: relative; text-align: center;">
-<canvas height="500" id="wheelCanvas" width="500"></canvas>
-<img alt="Logo" id="logo" src="logo.png"/>
-<div id="arrow"></div>
+<div class="wheel-container">
+  <canvas id="wheelCanvas" width="500" height="500"></canvas>
+  <img id="logo" src="logo.png" alt="Logo">
+  <div id="arrow"></div></div>
 
 <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; color: yellow; font-weight: bold;">
     <label for="timeSelect" style="font-size: 24px;">Thời gian đếm ngược:</label>
@@ -437,12 +446,6 @@ document.getElementById("cheerSound").play(); // 🎉 Phát âm thanh khi hiện
 
     window.onload = function() {
       updateWheel();
-const canvasRect = canvas.getBoundingClientRect();
-  const logo = document.getElementById('logo');
-  logo.style.left = (canvasRect.left + canvas.width / 2) + 'px';
-  logo.style.top = (canvasRect.top + canvas.height / 2) + 'px';
-  logo.style.position = 'absolute';
-  logo.style.transform = 'translate(-50%, -50%)';
     };
 
 function removeLastWinner() {
