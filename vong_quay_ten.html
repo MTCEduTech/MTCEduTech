@@ -161,10 +161,22 @@ button.red {
   background-color: #dc3545;
   color: white;
 }
-
+.info-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 5px;
+  flex-wrap: wrap; /* Để khi màn hình nhỏ thì nút sẽ xuống dòng */
+}
 button.info {
-  background-color: #2196f3;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: #2196F3;
   color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 button:hover {
@@ -208,11 +220,17 @@ Mai Đăng Khôi
 Mai Đăng Khoa
 ***</textarea><br/>
 <div>
-<button class="green" onclick="updateWheel()">Cập nhật tên vào vòng quay</button><br/>
-<button class="info" onclick="showInstructions()">HƯỚNG DẪN</button>
-<button class="info" onclick="showContact()">THÔNG TIN TÁC GIẢ</button>
-<div id="info-box" style="margin-top: 10px; display: none; background-color: #e3f2fd; padding: 15px; border-radius: 10px; border: 1px solid #90caf9;">
+  <button class="green" onclick="updateWheel()">Cập nhật tên vào vòng quay</button><br/><br/>
+
+  <div class="info-buttons">
+    <button class="info" onclick="showInstructions()">HƯỚNG DẪN</button>
+    <button class="info" onclick="showContact()">TT TÁC GIẢ</button>
+  </div>
+
+  <div id="info-box" style="margin-top: 10px; display: none; background-color: #e3f2fd; padding: 15px; border-radius: 10px; border: 1px solid #90caf9;">
+  </div>
 </div>
+
 </div>
     
 </div>
