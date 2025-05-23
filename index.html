@@ -775,6 +775,7 @@ async function handleLogin() {
 localStorage.setItem("nickname", found.username);
 localStorage.setItem("username", found.username);
 localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
+	    localStorage.setItem("name", found.name); // ✅ thêm dòng này để chỉ cho admin truy cập quản lý tài khoản
 	    updateAdminButton();  // Gọi lại để hiển thị nút admin ngay
   closeIntroPopup();
 
