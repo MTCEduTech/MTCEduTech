@@ -176,6 +176,7 @@ button {
         <h3>Giải phương trình bậc 2: ax² + bx + c = 0</h3>
     a: <input type="number" id="a2"> b: <input type="number" id="b2"> c: <input type="number" id="c2">
     <button onclick="giaiBac2()">Giải</button>
+    <button onclick="xoaKetQuaPT2()">Xóa</button>
     <p id="pt2-result"></p>
 
     <h3>Giải hệ phương trình 2 ẩn</h3>
@@ -184,6 +185,7 @@ button {
     a₂x + b₂y = c₂<br>
     a₂: <input type="number" id="a12"> b₂: <input type="number" id="b12"> c₂: <input type="number" id="c12">
     <button onclick="giaiHePT()">Giải</button>
+    <button onclick="xoaKetQuaHePT()">Xóa</button>
     <p id="hept-result"></p>
   </div>
 </div>
@@ -1346,6 +1348,21 @@ function fractionToDecimal() {
   } else {
     display.innerText = "Không hợp lệ";
   }
+}
+
+
+  function xoaKetQuaPT2() {
+  document.getElementById("pt2-result").innerText = "";
+  document.getElementById("a2").value = "";
+  document.getElementById("b2").value = "";
+  document.getElementById("c2").value = "";
+}
+
+function xoaKetQuaHePT() {
+  document.getElementById("hept-result").innerText = "";
+  ["a11", "b11", "c11", "a12", "b12", "c12"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
 }
 
   </script>
