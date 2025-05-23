@@ -138,6 +138,23 @@
     .btn-shuffle {
       background-color: #fd7e14; /* Cam */
     }
+
+    #info-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 500px;
+  background-color: #fff;
+  color: #000;
+  padding: 20px;
+  border: 2px solid #2196f3;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: none;
+  z-index: 9999;
+}
+
    
   </style>
   
@@ -166,9 +183,11 @@
 <center><label><strong>Nhập số lượng người tham gia (Không nhập quá số 100) <br/></strong></label>
     <input type="number" id="number-count" min="1" max="100" onchange="generateItemsFromCount()" />
     <button onclick="resetAll()" style="background-color:#f44336;">RESET</button>
-   <button onclick="showInstructions()">HƯỚNG DẪN</button>
-  <button onclick="showContact()">THÔNG TIN TÁC GIẢ</button>
+   <button onmouseenter="showPopup('instructions')">HƯỚNG DẪN</button>
+<button onmouseenter="showPopup('contact')">THÔNG TIN TÁC GIẢ</button>
+
 </div>
+<div id="info-popup" onmouseleave="hidePopup()"></div>
 
 <div id="info-box" style="margin-top: 10px; display: none; background-color: #e3f2fd; padding: 15px; border-radius: 10px; border: 1px solid #90caf9;">
 </div>
@@ -508,36 +527,29 @@
 
   drawWheel();
 
-  function showInstructions() {
-  const infoBox = document.getElementById("info-box");
-  if (infoBox.style.display === "block" && infoBox.innerHTML.includes("Hướng dẫn sử dụng")) {
-    infoBox.style.display = "none";
-  } else {
-    infoBox.innerHTML = "<strong>Hướng dẫn sử dụng Vòng quay:</strong><br/><br/>" +
+  function showPopup(type) {
+  const popup = document.getElementById('info-popup');
+  if (type === 'instructions') {
+    popup.innerHTML = "<strong>Hướng dẫn sử dụng Vòng quay:</strong><br/><br/>" +
       "1. Nhập số lượng người tham gia vào ô bên trái (tối đa 100).<br/>" +
       "2. Click vào vòng quay để bắt đầu quay số.<br/>" +
       "3. Kết quả quay được hiển thị ở khung bên phải.<br/>" +
       "4. Sử dụng các nút: 'RESET' hoặc 'F5' để làm mới tất cả.<br/>" +
-      "5. Góc dưới trái có nút full/thoát full màn hình<br/>" +
-      "Ứng dụng đang thử nghiệm và phát triển tùy theo nhu cầu và mục đích sử dụng khác nhau, rất mong sự góp ý của các bạn!<br/> 🎯 Chúc bạn may mắn và có trải nghiệm thú vị!";
-    infoBox.style.display = "block";
-  }
-}
-
-
-  function showContact() {
-  const infoBox = document.getElementById("info-box");
-  if (infoBox.style.display === "block" && infoBox.innerHTML.includes("Thông tin liên hệ")) {
-    infoBox.style.display = "none";
-  } else {
-    infoBox.innerHTML = "<strong>Thông tin liên hệ tác giả:</strong><br/><br/>" +
+      "5. Ứng dụng có thể tùy chỉnh theo từng mục đích sử dụng.<br/>🎯 Chúc bạn may mắn!";
+  } else if (type === 'contact') {
+    popup.innerHTML = "<strong>Thông tin liên hệ tác giả:</strong><br/><br/>" +
       "Họ tên: Mai Thiện Chánh<br/>" +
       "Đơn vị công tác: Trường THCS Đức Phú, xã Nghị Đức, tỉnh Lâm Đồng<br/>" +
       "Email: <a href='mailto:maithienchanh@gmail.com'>maithienchanh@gmail.com</a><br/>" +
       "Phone: 0333.289.379";
-    infoBox.style.display = "block";
   }
+  popup.style.display = 'block';
 }
+
+function hidePopup() {
+  document.getElementById('info-popup').style.display = 'none';
+}
+
 
 
 function removeLastSpunNumber() {
