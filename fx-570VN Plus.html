@@ -1266,7 +1266,10 @@ font-size: 10px;
         const x2 = (-b - Math.sqrt(delta)) / (2*a);
         result = `x₁ = ${x1}, x₂ = ${x2}`;
       }
-      document.getElementById("pt2-result").innerText = result;
+        const resultEl = document.getElementById("pt2-result");
+resultEl.innerText = result;
+resultEl.style.color = "blue";
+
     }
 
     function giaiHePT() {
@@ -1287,7 +1290,10 @@ font-size: 10px;
         const y = Dy / D;
         result = `x = ${x}, y = ${y}`;
       }
-      document.getElementById("hept-result").innerText = result;
+      const resultEl = document.getElementById("hept-result");
+resultEl.innerText = result;
+resultEl.style.color = "blue";
+
     }
 
 let memory = 0;
