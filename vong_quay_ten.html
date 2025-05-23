@@ -212,9 +212,22 @@ Mai Đăng Khoa
     
 </div>
 <div style="position: relative; text-align: center;">
-<canvas height="500" id="wheelCanvas" width="500"></canvas>
-<img alt="Logo" id="logo" src="logo.png"/>
-<div id="arrow"></div></div>
+  <canvas height="500" id="wheelCanvas" width="500"></canvas>
+  <img alt="Logo" id="logo" src="logo.png"/>
+  <div id="arrow"></div>
+    
+  <div style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; color: yellow; font-weight: bold;">
+    <label for="timeSelect" style="font-size: 24px;">Thời gian đếm ngược:</label>
+    <select id="timeSelect" style="padding: 6px;"></select>
+    <button onclick="startCountdown()" style="padding: 8px 16px; background-color: #28a745; color: white; font-weight: bold; font-size: 16px; border: none; border-radius: 6px; cursor: pointer;">
+      Bắt đầu
+    </button>
+    <div id="timer-box" style="text-align: center; height: 50px; line-height: 50px; font-size: 24px; font-weight: bold; color: white; border-radius: 8px; background-color: black; padding: 0 12px;">
+      00:00
+    </div>
+  </div>
+</div>
+
 <div class="results">
 <div id="resultBox">
 <h3>KẾT QUẢ RANDOM</h3>
@@ -239,7 +252,7 @@ Mai Đăng Khoa
     const gio = String(now.getHours()).padStart(2, '0');
     const phut = String(now.getMinutes()).padStart(2, '0');
     const giay = String(now.getSeconds()).padStart(2, '0');
-    dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
+    dongHo.textContent = ⏰ Bây giờ là: ${gio}:${phut}:${giay};
   }
 
   setInterval(capNhatDongHo, 1000);
@@ -437,7 +450,7 @@ function removeLastWinner() {
   const lastRow = table.rows[table.rows.length - 1];
   const lastName = lastRow.cells[1].innerText;
 
-  const confirmDelete = confirm(`Bạn có chắc muốn xóa tên "${lastName}" khỏi vòng quay?`);
+  const confirmDelete = confirm(Bạn có chắc muốn xóa tên "${lastName}" khỏi vòng quay?);
 
   if (confirmDelete) {
     // Xóa tên khỏi danh sách
@@ -457,7 +470,7 @@ function showInstructions() {
       "1. Nhập tên người tham gia vào ô bên trái.<br/>" +
       "2. Click vào vòng quay để bắt đầu quay.<br/>" +
       "3. Kết quả quay được hiển thị ở bảng bên phải.<br/>" +
-      "4. Nhấn 'F5' để làm mới tất cả, 'F11' để zoom full màn hình<br/>" +
+      "4. Nhấn 'F5' để làm mới tất cả, Các nút full/thoát full màn hình<br/>" +
       "Ứng dụng đang thử nghiệm và phát triển tùy theo nhu cầu và mục đích sử dụng khác nhau, rất mong sự góp ý của các bạn!<br/> 🎯 Chúc bạn may mắn và có trải nghiệm thú vị!";
     infoBox.style.display = "block";
   }
@@ -470,38 +483,14 @@ function showInstructions() {
     infoBox.style.display = "none";
   } else {
     infoBox.innerHTML = "<strong>Thông tin liên hệ tác giả:</strong><br/><br/>" +
-      "Họ tên: Mai Thiện Chánh<br/>" +
-      "Đơn vị công tác: Trường THCS Đức Phú, tỉnh Lâm Đồng<br/>" +
-      "Email: <a href='mailto:maithienchanh@gmail.com'>maithienchanh@gmail.com</a><br/>" +
-      "Phone: 0333.289.379";
+      "👨‍🏫 Họ tên: Mai Thiện Chánh<br/>" +
+      "🏫 Đơn vị công tác: Trường THCS Đức Phú, tỉnh Lâm Đồng<br/>" +
+      "📧 Email: <a href='mailto:maithienchanh@gmail.com'>maithienchanh@gmail.com</a><br/>" +
+      "📱 Phone: 0333.289.379";
     infoBox.style.display = "block";
   }
 }
-
-
   </script>
-<!-- Bắt đầu đồng hồ đếm ngược dạng ngang -->
-<div style="width: 100%; max-width: 700px; margin: 20px auto; padding: 10px; background: #eee; border-radius: 10px;">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; color: red; font-weight: bold;">
-<label for="timeSelect">Thời gian đếm ngược:</label>
-<select id="timeSelect" style="flex: 1; padding: 6px;"></select>
-<button onclick="startCountdown()" style="
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-">
-  Bắt đầu
-</button>
-<div id="timer-box" style="flex: 1.2; text-align: center; height: 50px; line-height: 50px; font-size: 24px; font-weight: bold; color: white; border-radius: 8px; background-color: black;">00:00</div>
-</div>
-</div>
 <!-- Thêm phần tử audio -->
 <audio id="alarmSound" preload="auto" src="chuong.mp3"></audio>
 <script>
@@ -512,9 +501,9 @@ function showInstructions() {
     const minutes = Math.floor(i / 60);
     const seconds = i % 60;
     let label = "";
-    if (minutes > 0) label += `${minutes} phút`;
-    if (seconds > 0) label += ` ${seconds} giây`;
-    timeSelect.innerHTML += `<option value="${i}">${label.trim()}</option>`;
+    if (minutes > 0) label += ${minutes} phút;
+    if (seconds > 0) label +=  ${seconds} giây;
+    timeSelect.innerHTML += <option value="${i}">${label.trim()}</option>;
   }
 
   let countdownInterval;
@@ -538,10 +527,10 @@ function showInstructions() {
   function updateDisplay(secondsLeft, totalSeconds) {
     const minutes = Math.floor(secondsLeft / 60);
     const seconds = secondsLeft % 60;
-    const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const timeStr = ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')};
     const percentElapsed = 1 - secondsLeft / totalSeconds;
     const red = Math.floor(255 * percentElapsed);
-    const color = `rgb(${red}, 0, 0)`;
+    const color = rgb(${red}, 0, 0);
     const timerBox = document.getElementById("timer-box");
     timerBox.textContent = timeStr;
     timerBox.style.backgroundColor = color;
