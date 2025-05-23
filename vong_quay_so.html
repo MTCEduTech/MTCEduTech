@@ -48,9 +48,10 @@
     }
 
     #wheel-container {
-      position: relative;
-      width: 400px;
-      height: 400px;
+      width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin: auto;
     }
 
     canvas {
@@ -60,6 +61,8 @@
       top: 0;
       left: 0;
       z-index: 1;
+       width: 100% !important;
+  height: auto !important;
     }
 
     #center-logo {
@@ -139,7 +142,73 @@
     .btn-shuffle {
       background-color: #fd7e14; /* Cam */
     }
-   
+
+    @media screen and (max-width: 600px) {
+  #main-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #result-box,
+  #custom-input {
+    width: 90%;
+  }
+
+  #wheel-container {
+    max-width: 90vw;
+    height: auto;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  #center-logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  #pointer {
+    border-left: 15px solid red;
+    right: -10px;
+  }
+}
+
+    input[type="number"], select, button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+
+    .marquee {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.marquee-content {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee-left 20s linear infinite;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
   </style>
   
 
@@ -153,7 +222,13 @@
 </style>
 </head>
 <body>
-<marquee direction="left" scrollamount="8" style="color:white; font-weight:bold; font-size: 20px; margin: 0px 0;">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CỦA AI</marquee>
+  
+<div class="marquee">
+  <div class="marquee-content">
+    HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CỦA AI
+  </div>
+</div>
+
 <center><span style="font-size: 32px; font-weight: bold; color: #e91e63;">🎉 VÒNG QUAY MAY MẮN (NHẬP SỐ) & THỜI GIAN ĐẾM NGƯỢC 🎉</span><br/>
   <span style="font-size: 16px; color: yellow;">
     <em><strong>Tác giả:</strong></em> Mai Thiện Chánh –
