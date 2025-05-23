@@ -149,12 +149,15 @@ button.info {
 }
 
 #nameInput {
-  width: 100%;
-  height: 300px;
+  width: 80%;           /* nhỏ hơn, không chiếm hết chiều ngang */
+  height: 180px;         /* giảm chiều cao */
   font-size: 16px;
   padding: 5px;
   resize: none;
+  margin: 0 auto;        /* canh giữa theo chiều ngang */
+  display: block;        /* cần thiết để margin auto hoạt động */
 }
+
 
 #resultTable, #resultTable th, #resultTable td {
   color: yellow;
