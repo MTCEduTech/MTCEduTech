@@ -6,64 +6,45 @@
 <script src="auth.js"></script>
 <title>Vòng Quay May Mắn - Nhập Tên</title>
 <style>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
-    max-width: 100vw;
-    max-height: 100vh;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-div {
-    box-sizing: border-box;
-}
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-#countdown {
-    font-family: 'DongHoFont', sans-serif;
-}
-#result {
-    max-width: 100%;
-    width: 100%;
-    box-sizing: border-box;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    flex: 1;
-}
-body {
-  font-family: Times New Roman;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow-y: auto;
   margin: 0;
   padding: 0;
-  background-image: url('Nen2.jpg'); /* thay 'Nen2.jpg' bằng đường dẫn ảnh thật */
+  font-size: 16px;
+  font-family: 'Times New Roman', serif;
+  background-image: url('Nen2.jpg');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-    .container {
-      display: grid;
-      grid-template-columns: 0.8fr 2fr 1.2fr;
-      gap: 20px;
-      align-items: start;
-      padding: 20px;
-    }
-    canvas {
-      border: 5px solid white;
-      border-radius: 50%;
-      display: block;
-      margin: 0 auto;
-      position: relative;
-        
-      z-index: 1;
-    }
-   #canvas-container {
+.container {
+  display: grid;
+  grid-template-columns: 0.8fr 2fr 1.2fr;
+  gap: 20px;
+  align-items: start;
+  padding: 20px;
+}
+
+canvas {
+  border: 5px solid white;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+#canvas-container {
   position: relative;
   width: 80vw;
   max-width: 500px;
@@ -72,72 +53,40 @@ body {
   margin: 0 auto;
 }
 
-canvas#wheelCanvas, #logo {
+canvas#wheelCanvas,
+#logo {
   width: 100%;
   height: 100%;
   max-width: 500px;
   max-height: 500px;
 }
 
-    #arrow {
-      position: absolute;
-      top: 50%;
-      left: calc(50% + 235px); /* Đặt tại viền phải vòng quay */
-      transform: translateY(-50%) rotate(180deg); /* Xoay vào tâm vòng */
-      width: 0;
-      height: 0;
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-      border-left: 30px solid red;
-      z-index: 3;
-    }
-    textarea {
-      width: 100%;
-      height: 300px;
-      font-size: 16px;
-      padding: 5px;
-    }
-    .results {
-      margin-top: 0;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-    }
-       .action-buttons {
-      margin-top: 20px;
-    }
-    h1, h2, h3 {
-      text-align: center;
-    }
-
-    /* Nút */
-    button {
-      font-size: 16px;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      margin: 5px;
-      cursor: pointer;
-    }
-
-     button.red {
-      background-color: #dc3545;
-      color: white;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-button.info {
-  background-color: #2196f3; /* xanh dương */
-  color: white;
+#arrow {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 235px);
+  transform: translateY(-50%) rotate(180deg);
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 30px solid red;
+  z-index: 3;
 }
 
-.left-column {
-  text-align: center;
+#countdown {
+  font-family: 'DongHoFont', sans-serif;
 }
 
+#result {
+  max-width: 100%;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  flex: 1;
+}
+
+textarea,
 #nameInput {
   width: 100%;
   height: 300px;
@@ -146,7 +95,18 @@ button.info {
   resize: none;
 }
 
-#resultTable, #resultTable th, #resultTable td {
+.results {
+  margin-top: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#resultTable,
+#resultTable th,
+#resultTable td {
   color: yellow;
   border: 1px solid white;
 }
@@ -154,12 +114,14 @@ button.info {
 #resultTable td:first-child {
   text-align: center;
 }
+
 #resultTable td:nth-child(2) {
   padding-left: 12px;
   padding-right: 12px;
 }
+
 #info-box {
-  text-align: justify;	// Canh đều chữ trong ô mở ra dễ đọc
+  text-align: justify; /* Canh đều chữ */
 }
 
 #resultBox {
@@ -171,7 +133,7 @@ button.info {
   border-radius: 10px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #resultBox h3 {
@@ -185,8 +147,45 @@ button.info {
   font-weight: bold;
   color: blue;
 }
+
+button {
+  font-size: 16px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+button.red {
+  background-color: #dc3545;
+  color: white;
+}
+
+button.info {
+  background-color: #2196f3;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.left-column {
+  text-align: center;
+}
+
+h1,
+h2,
+h3 {
+  text-align: center;
+}
+
+.action-buttons {
+  margin-top: 20px;
 }
 </style>
+
 </head>
 <body>
 <marquee direction="left" scrollamount="8" style="color:white; font-weight:bold; font-size: 20px; margin: 0px 0;">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CỦA AI</marquee>
