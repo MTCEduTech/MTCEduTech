@@ -145,44 +145,60 @@
       background-color: #fd7e14; /* Cam */
     }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
   #main-layout {
     flex-direction: column;
     align-items: center;
+    padding: 10px;
+    gap: 20px;
   }
 
-  #result-box,
-  #custom-input {
-    width: 90%;
+  #custom-input, #result-box {
+    width: 95%;
+    margin: 0 auto;
   }
 
   #wheel-container {
+    max-width: 100%;
+  }
+
+  canvas {
     max-width: 90vw;
     height: auto;
   }
 
-  canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
-
   #center-logo {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
   }
 
   #pointer {
-    border-left: 15px solid red;
+    border-left: 12px solid red;
     right: -10px;
   }
-}
 
-    input[type="number"], select, button {
+  button, select, input[type="number"], input[type="range"] {
+    font-size: 16px;
+    padding: 10px;
     width: 100%;
-    max-width: 100%;
     box-sizing: border-box;
+  }
+
+  table {
+    font-size: 16px;
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
+
+  .marquee-content {
     font-size: 16px;
   }
+}
 
 
     .marquee {
