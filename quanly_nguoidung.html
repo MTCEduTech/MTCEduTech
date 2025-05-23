@@ -90,6 +90,14 @@
   </table>
 
 <script>
+ const user = localStorage.getItem('username');
+const name = localStorage.getItem('name');
+
+if (user !== 'admin' || name !== 'Tác giả: Mai Thiện Chánh') {
+  alert('⛔ Bạn không có quyền truy cập trang này!');
+  window.location.href = 'index.html'; // hoặc trang đăng nhập
+}
+
   let data = [];
 
   async function loadAccounts() {
