@@ -47,13 +47,6 @@ body {
   background-repeat: no-repeat;
 }
 
-    .container {
-      display: grid;
-      grid-template-columns: 0.8fr 2fr 1.2fr;
-      gap: 20px;
-      align-items: start;
-      padding: 20px;
-    }
     canvas {
       border: 5px solid white;
       border-radius: 50%;
@@ -63,6 +56,8 @@ body {
       z-index: 1;
     }
    .wheel-container {
+       flex: 2;
+  min-width: 300px;
   position: relative;
   width: 500px;
   height: 500px;
@@ -108,6 +103,8 @@ body {
       padding: 5px;
     }
     .results {
+        flex: 1.2;
+  min-width: 250px;
       margin-top: 0;
     }
     table {
@@ -146,6 +143,8 @@ button.info {
 
 .left-column {
   text-align: center;
+    flex: 1;
+  min-width: 250px;
 }
 
 #nameInput {
