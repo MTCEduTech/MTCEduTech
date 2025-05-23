@@ -90,12 +90,12 @@
   </table>
 
 <script>
- const user = localStorage.getItem('username');
-const name = localStorage.getItem('name');
+ const user = localStorage.getItem('username')?.trim();
+const name = localStorage.getItem('name')?.trim();
 
 if (user !== 'admin' || name !== 'Tác giả: Mai Thiện Chánh') {
   alert('⛔ Bạn không có quyền truy cập trang này!');
-  window.location.href = 'index.html'; // hoặc trang đăng nhập
+  window.location.href = 'index.html';
 }
 
   let data = [];
