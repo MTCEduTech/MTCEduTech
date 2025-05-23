@@ -202,17 +202,28 @@
   </audio>
 </div>
  
- <div id="wheel-container">
-    <canvas id="wheel" width="400" height="400"></canvas>
-        <img id="center-logo" src="logo.png" onclick="spinWheel()" alt="Logo" />
-<div id="pointer"></div>
+<div id="wheel-container">
+  <canvas id="wheel" width="400" height="400"></canvas>
+  <img id="center-logo" src="logo.png" onclick="spinWheel()" alt="Logo" />
+  <div id="pointer"></div>
+
+  <!-- Thêm phần đếm ngược vào đây -->
+  <div id="countdown-container" style="margin-top: 420px; text-align: center;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+      <label for="timeSelect" style="color: red; font-weight: bold;">Thời gian đếm ngược:</label>
+      <select id="timeSelect" style="padding: 6px;"></select>
+      <button onclick="startCountdown()" style="
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;">Bắt đầu</button>
+      <div id="timer-box" style="width: 120px; text-align: center; font-size: 24px; font-weight: bold; color: white; border-radius: 8px; background-color: black; padding: 10px;">00:00</div>
+    </div>
   </div>
-<!-- Bắt đầu đồng hồ đếm ngược dạng ngang -->
-<div id="countdown-container" style="width: 250px; background: #eee; border-radius: 10px; padding: 10px;">
-  <label for="timeSelect" style="font-weight: bold;">⏱ Chọn thời gian:</label>
-  <select id="timeSelect" style="width: 100%; margin-bottom: 8px;"></select>
-  <button onclick="startCountdown()" style="width: 100%; background-color: #28a745; color: white; font-weight: bold; padding: 8px; border-radius: 6px; border: none; margin-bottom: 8px;">Bắt đầu</button>
-  <div id="timer-box" style="text-align: center; height: 50px; line-height: 50px; font-size: 24px; font-weight: bold; color: white; border-radius: 8px; background-color: black;">00:00</div>
 </div>
 
 
