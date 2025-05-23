@@ -71,28 +71,28 @@
 
 
     #center-logo {
-     width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   position: absolute;
-  top: 50%;
   left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  cursor: pointer;
   border-radius: 50%;
   object-fit: cover;
+  pointer-events: none; /* không cản thao tác quay */
 }
 
-   #pointer {
+  #pointer {
   width: 0;
   height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 30px solid red;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 30px solid red;
   position: absolute;
-  top: -20px; /* nằm phía trên canvas */
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
   z-index: 3;
 }
 
