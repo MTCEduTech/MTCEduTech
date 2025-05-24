@@ -200,8 +200,7 @@ animation: blinkColor 1s infinite;
 <body>
 <div id="header">
   <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-    <button id="helpToggle">❓ HƯỚNG DẪN</button>
-    <button id="editToggle" onclick="openSoanTuKhoa()">📝 SOẠN TỪ </button>
+    <button id="helpToggle">❓ HƯỚNG DẪN SỬ DỤNG</button>
   </div>
 
 <div id="helpBox" class="hidden">
@@ -620,6 +619,15 @@ function exitFullscreen() {
 
 
 <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1001;">
+  <button id="editToggle" onclick="openSoanTuKhoa()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  ">📝 SOẠN TỪ KHÓA</button>
   <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
     🏠 VỀ TRANG CHỦ
   </button>
