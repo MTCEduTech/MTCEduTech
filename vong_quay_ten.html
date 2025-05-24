@@ -222,6 +222,7 @@ button.info {
     font-weight: normal;
   }
 </style>
+    <link rel="stylesheet" href="menu.css">
 </head>
 <body>
 <marquee direction="left" scrollamount="8" style="color:white; font-weight:bold; font-size: 20px; margin: 0px 0;">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ CÔNG CỤ ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT NHỜ SỰ HỖ TRỢ CỦA AI</marquee>
@@ -647,7 +648,29 @@ function exitFullscreen() {
 
 <audio id="spinSound" src="spin.mp3" preload="auto"></audio>
 <audio id="cheerSound" src="cheer.mp3" preload="auto"></audio>
-    
+
+    <!-- Nút cố định có thể kéo -->
+<button class="menu-toggle draggable"><img src="TC.png" alt="Menu" class="menu-icon"></button>
+
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+
+<!-- Menu -->
+<div id="sideMenu" class="side-menu">
+<a href="index.html">🏠 Trang chủ</a>
+  <a href="vong_quay_so.html">🎯 Vòng quay số</a>
+  <a href="vong_quay_ten.html">👥 Vòng quay tên</a>
+  <a href="Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
+  <a href="O_Chu_bi_mat.html">🧩 Tìm Ô chữ bí mật</a>
+  <a href="O_Chu_tron_tim.html">🔍 Tinh mắt tìm từ</a>
+  <a href="soan_cau_hoi.html">📝 Soạn đề TN Tick chọn + chấm điểm</a>
+  <a href="fx-570VN%20Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
+  <a href="Caro.html">🎮 Game Caro + Music</a>
+  <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
+
+</div>
+
+<script src="menu.js"></script>
 <div class="footer-fixed">  
 <span style="font-size: 16px; color: yellow;">
 <em><strong>👨‍💻 Tác giả:</strong></em> Mai Thiện Chánh –
