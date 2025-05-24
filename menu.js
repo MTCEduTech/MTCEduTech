@@ -2,14 +2,11 @@ let menuVisible = false;
 
 function toggleMenu() {
   const menu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('overlay');
 
   if (menuVisible) {
     menu.style.left = '-260px';
-    overlay.classList.remove('active');
   } else {
     menu.style.left = '0';
-    overlay.classList.add('active');
   }
 
   menuVisible = !menuVisible;
@@ -21,11 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   toggles.forEach(btn => {
     btn.addEventListener('click', toggleMenu);
   });
-
-  const overlay = document.getElementById('overlay');
-  if (overlay) {
-    overlay.addEventListener('click', toggleMenu);
-  }
 
   // Thêm chức năng kéo thả cho nút có class draggable
   const draggable = document.querySelector('.menu-toggle.draggable');
