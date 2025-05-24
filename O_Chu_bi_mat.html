@@ -449,6 +449,8 @@ header {
 
   </style>
 <style id="waveDelays"></style>
+	
+	<link rel="stylesheet" href="menu.css">
 </head>
 <body>
 <div id="clock-container">
@@ -1026,6 +1028,28 @@ function openmarquee() {
   🚀 CÙNG CHINH PHỤC TRÒ CHƠI "ĐI TÌM Ô CHỮ BÍ MẬT" – CÙNG PHÁT HUY TƯ DUY VÀ KHẢ NĂNG SUY LUẬN! 🎯 
 </marquee>
 
-	<script src="chao_name.js"></script>
+<!-- Nút cố định có thể kéo -->
+<button class="menu-toggle draggable"><img src="MTC.png" alt="Menu" class="menu-icon"></button>
+
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+
+<!-- Menu -->
+<div id="sideMenu" class="side-menu">
+<a href="index.html">🏠 Trang chủ</a>
+  <a href="vong_quay_so.html">🎯 Vòng quay số</a>
+  <a href="vong_quay_ten.html">👥 Vòng quay tên</a>
+  <a href="Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
+  <a href="O_Chu_bi_mat.html">🧩 Tìm Ô chữ bí mật</a>
+  <a href="O_Chu_tron_tim.html">🔍 Tinh mắt tìm từ</a>
+  <a href="soan_cau_hoi.html">📝 Soạn đề TN Tick chọn + chấm điểm</a>
+  <a href="fx-570VN%20Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
+  <a href="Caro.html">🎮 Game Caro + Music</a>
+  <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
+
+</div>
+
+<script src="menu.js"></script>
+<script src="chao_name.js"></script>
 </body>
 </html>
