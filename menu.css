@@ -9,7 +9,6 @@ body {
   top: 20px;
   left: 20px;
   z-index: 1101;
-  background-color: white; /* 🎯 Nền trắng */
   padding: 10px;
   border: none;
   border-radius: 50%;
@@ -19,10 +18,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.menu-toggle.draggable:hover {
-  background-color: yellow; /* 🎯 Màu vàng khi hover */
 }
 
 .menu-toggle .menu-icon {
