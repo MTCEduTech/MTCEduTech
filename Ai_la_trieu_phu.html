@@ -298,6 +298,21 @@ color: white;
   color: red;
 }
 
+
+.fade-out {
+  animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; display: none; }
+}
+#result-box span {
+  font-size: 16px;
+  word-wrap: break-word;
+  text-align: center;
+}
+
 </style>
 </head>
 <body>
@@ -436,6 +451,8 @@ let used5050 = false, usedHint = false, usedSkip = false;
 let questionStatus = []; // Mảng lưu trạng thái của từng câu hỏi: 'unanswered', 'correct', 'incorrect'
 
 function loadQuestion() {
+  document.getElementById("hint-box").style.display = "none";
+  document.getElementById("hint-box").textContent = "";
 renderQuestionList();  
 document.getElementById("hint").textContent = "";
   const q = questions[current];
@@ -477,7 +494,17 @@ correctSound.onended = function () {
 
     const resultBox = document.getElementById("result-box");
 resultBox.innerHTML = '<span class="result-green">✅ Đúng rồi!</span>';
-resultBox.style.display = "block";
+resultBox.style.opacity = "1";
+resultBox.classList.remove("fade-out");
+resultBox.style.display = "flex";
+setTimeout(() => {
+  resultBox.classList.add("fade-out");
+  setTimeout(() => {
+    resultBox.style.display = "none";
+    resultBox.classList.remove("fade-out");
+    resultBox.style.opacity = "1";
+  }, 1000);
+}, 7000);
     setTimeout(() => {
       current++;
       if (current < questions.length) {
@@ -508,7 +535,17 @@ wrongSound.onended = function () {
 
     const resultBox = document.getElementById("result-box");
 resultBox.innerHTML = '<span class="result-red">❌ Sai rồi! Kết thúc trò chơi.</span>';
-resultBox.style.display = "block";
+resultBox.style.opacity = "1";
+resultBox.classList.remove("fade-out");
+resultBox.style.display = "flex";
+setTimeout(() => {
+  resultBox.classList.add("fade-out");
+  setTimeout(() => {
+    resultBox.style.display = "none";
+    resultBox.classList.remove("fade-out");
+    resultBox.style.opacity = "1";
+  }, 1000);
+}, 7000);
     buttons.forEach(b => b.disabled = true);
   }
 }
