@@ -257,27 +257,7 @@ img {
   height: auto;
 }
 
-	  .footer-fixed {
-  position: fixed;
-  bottom: 0;
-  left: 50%; /* Bắt đầu từ giữa */
-  transform: translateX(-45%); /* Lệch phải nhẹ từ giữa */
-  color: yellow;
-  font-size: 16px;
-  padding: 10px 20px;
-  z-index: 9999;
-  font-family: 'Times New Roman', serif;
-}
 
-
-  .footer-fixed em strong {
-    font-style: italic;
-    font-weight: bold;
-  }
-  .footer-fixed em {
-    font-style: italic;
-    font-weight: normal;
-  }
   </style>
 </head>
 <body>
@@ -868,11 +848,12 @@ setTimeout(() => {
   // Gọi hàm lúc tải trang (trường hợp user đã đăng nhập từ trước)
   document.addEventListener("DOMContentLoaded", updateAdminButton);
 </script>
- <div class="footer-fixed">  
-<span style="font-size: 16px; color: yellow;">
-<em><strong>👨‍💻 Tác giả:</strong></em> Mai Thiện Chánh –
-    <em>🏫 Đơn vị công tác:</em> Trường THCS Đức Phú, tỉnh Lâm Đồng
-  </span><center></center></div>
+ <footer>
+  <p style="color: yellow;">
+    👨‍💻 Tác giả: Mai Thiện Chánh – 🏫 Đơn vị công tác: Trường THCS Đức Phú, tỉnh Lâm Đồng
+  </p>
+</footer>
+
 	  
 </body>
 </body>
