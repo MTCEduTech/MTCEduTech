@@ -285,7 +285,20 @@ color: white;
   letter-spacing: 5px;
 }
 
-  </style>
+  
+.help-btn.used {
+  background-color: red !important;
+  color: black !important;
+  font-weight: bold;
+}
+.result-green {
+  color: green;
+}
+.result-red {
+  color: red;
+}
+
+</style>
 </head>
 <body>
   <h1 style="margin-bottom: 10px; color: #0066cc; text-shadow: 2px 2px 4px white; font-size: 32px;">
@@ -313,7 +326,24 @@ color: white;
 
     <div id="hint"></div>
     <div id="status"></div>
-  </div>
+  
+<div id="result-box" style="
+  position: fixed;
+  top: 130px;
+  right: 50px;
+  background: white;
+  color: black;
+  border: 3px solid red;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  min-width: 230px;
+  display: none;
+  z-index: 999;
+"></div>
+
 
   <audio id="sound-correct" src="correct.mp3"></audio>
   <audio id="sound-wrong" src="wrong.mp3"></audio>
@@ -386,7 +416,9 @@ correctSound.onended = function () {
   bgm.play();
 };
 
-    document.getElementById("status").textContent = "✅ Đúng rồi!";
+    const resultBox = document.getElementById("result-box");
+resultBox.innerHTML = '<span class="result-green">✅ Đúng rồi!</span>';
+resultBox.style.display = "block";
     setTimeout(() => {
       current++;
       if (current < questions.length) {
@@ -415,7 +447,9 @@ wrongSound.onended = function () {
   bgm.play();
 };
 
-    document.getElementById("status").textContent = "❌ Sai rồi! Kết thúc trò chơi.";
+    const resultBox = document.getElementById("result-box");
+resultBox.innerHTML = '<span class="result-red">❌ Sai rồi! Kết thúc trò chơi.</span>';
+resultBox.style.display = "block";
     buttons.forEach(b => b.disabled = true);
   }
 }
@@ -423,6 +457,7 @@ wrongSound.onended = function () {
 function use5050() {
   if (used5050) return;
   used5050 = true;
+  document.querySelector('.help button:nth-child(1)').classList.add('used');
   const correct = questions[current].correct;
   let removed = 0;
   const buttons = document.querySelectorAll("#answers button");
@@ -437,6 +472,7 @@ function use5050() {
 function useHint() {
   if (usedHint) return;
   usedHint = true;
+  document.querySelector('.help button:nth-child(2)').classList.add('used');
   const hint = questions[current].hint;
   if (hint) {
     document.getElementById("hint").textContent = "💡 Gợi ý: " + hint;
@@ -449,6 +485,7 @@ else {
 function skipQuestion() {
   if (usedSkip) return;
   usedSkip = true;
+  document.querySelector('.help button:nth-child(3)').classList.add('used');
   current++;
   if (current < questions.length) 
   loadQuestion();
