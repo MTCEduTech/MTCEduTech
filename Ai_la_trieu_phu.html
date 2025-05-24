@@ -47,8 +47,30 @@
     }
 
     body { font-family: sans-serif; background: #000; color: #fff; text-align: center; padding: 20px; }
-    .question-box { background: #111; border-radius: 10px; padding: 20px; max-width: 600px; margin: auto; }
-    .answers button, .help button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    
+    .question-box {
+  background: rgba(0, 0, 0, 0.6); /* Nền mờ trong suốt */
+  border: 3px solid #2196f3;      /* Viền xanh dương đậm */
+  border-radius: 15px;
+  padding: 20px;
+  max-width: 700px;
+  margin: auto;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+    #answers button,
+.help button {
+  background-color: rgba(0, 191, 255, 0.6); /* màu xanh nhạt mờ */
+  color: white;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+#answers button:hover,
+.help button:hover {
+  background-color: rgba(0, 191, 255, 0.8);
+}
+
     .correct { background: green; }
     .wrong { background: red; }
 
@@ -182,7 +204,10 @@ color: white;
   </style>
 </head>
 <body>
-  <h1 style="margin-bottom: 5px;">🎓 TRÒ CHƠI KIẾN THỨC - Đi tìm AI LÀ TRIỆU PHÚ TRI THỨC</h1>
+  <h1 style="margin-bottom: 10px; color: #0066cc; text-shadow: 2px 2px 4px white; font-size: 32px;">
+  🎓 TRÒ CHƠI KIẾN THỨC - TÌM KIẾM: <br/> <span style="font-weight:bold;">AI LÀ "TRIỆU PHÚ TRI THỨC"</span>
+</h1>
+
 <div class="rotating-border">
   <img src="ALTP.png" alt="logo" />
 </div>
