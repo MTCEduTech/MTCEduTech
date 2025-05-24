@@ -201,6 +201,90 @@ color: white;
 }
 
 
+
+#clock-container {
+  position: fixed;
+  top: 30px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 16px;
+  z-index: 9999;
+}
+
+.fixed-clock-box {
+    position: fixed;
+  top: 40px;
+  right: 20px;
+  z-index: 1000;
+  background: #fffacd;
+  border: 2px solid #000;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+ 
+}
+.fixed-clock-box .title {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: blue;
+}
+.fixed-clock-box .time-input input {
+  width: 40px;
+  font-size: 16px;
+  text-align: center;
+}
+.fixed-clock-box .label {
+  font-size: 16px;
+  margin-left: 3px;
+  color: blue;
+  font-weight: bold;
+}
+.fixed-clock-box .countdown {
+  background: red;
+  color: white;
+  font-size: 26px;
+  padding: 5px 0;
+  border-radius: 10px;
+  border: 2px solid #333;
+  margin: 6px 0;
+}
+.fixed-clock-box .btn {
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+@font-face {
+  font-family: 'MyDigitalFont';
+  src: url('Donghodemnguoc.ttf') format('truetype');
+}
+
+.countdown {
+  font-family: 'MyDigitalFont', monospace;
+  font-size: 48px;
+  color: #0F0;
+  background: #222;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #0F0;
+  text-shadow:
+    0 0 5px #0F0,
+    0 0 20px #0F0,
+    0 0 30px #0F0;
+  letter-spacing: 5px;
+}
+
   </style>
 </head>
 <body>
@@ -235,6 +319,26 @@ color: white;
   <audio id="sound-wrong" src="wrong.mp3"></audio>
   <audio id="sound-win" src="win.mp3"></audio>
 
+  <div class="fixed-clock-box">
+  <div class="title">TIMES SUY NGHĨ & TRẢ LỜI</div>
+  <div class="time-input">
+    <input type="number" id="timeInput" min="5" max="600" step="5" value="30">
+    <span class="label">GIÂY</span>
+  </div>
+  <div class="countdown" id="countdownDisplay">00 : 00</div>
+  <button class="btn" onclick="startCountdown(() => {
+    if (pendingRowToLock) {
+      if (!answeredCorrectly[pendingRowToLock.rowIndex]) {
+        lockRow(pendingRowToLock.rowInputs);
+      }
+      pendingRowToLock = null;
+    }
+  })">BẮT ĐẦU</button>
+
+  <audio id="alarmSound" src="chuong.mp3" preload="auto"></audio>
+</div>
+
+  
 <script>
 let questions = [];
 let importedQuestions = [];
@@ -514,6 +618,34 @@ function renderQuestionList() {
   });
 }
 
+
+
+
+  function startCountdown(callback) {
+  let duration = parseInt(document.getElementById("timeInput").value);
+  const display = document.getElementById("countdownDisplay");
+  const alarm = document.getElementById("alarmSound");
+
+  let timer = duration;
+  updateDisplay(timer);
+
+  const interval = setInterval(() => {
+    timer--;
+    updateDisplay(timer);
+
+    if (timer <= 0) {
+      clearInterval(interval);
+      alarm.play();
+      if (typeof callback === 'function') callback();
+    }
+  }, 1000);
+}
+
+function updateDisplay(seconds) {
+  const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const secs = String(seconds % 60).padStart(2, "0");
+  document.getElementById("countdownDisplay").textContent = `${minutes} : ${secs}`;
+}
 
 </script>
 
