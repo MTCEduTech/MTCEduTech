@@ -16,8 +16,7 @@
   z-index: 1000;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  flex-direction: row;
-    }
+     }
 body {
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -199,9 +198,11 @@ animation: blinkColor 1s infinite;
 </head>
 <body>
 <div id="header">
-<button id="helpToggle">❓ XEM HƯỚNG DẪN</button>
-<button id="editToggle" onclick="openSoanTuKhoa()">📝  SOẠN CÁC TỪ KHÓA</button>
-</div>
+  <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+    <button id="helpToggle">❓ XEM HƯỚNG DẪN</button>
+    <button id="editToggle" onclick="openSoanTuKhoa()">📝 SOẠN CÁC TỪ KHÓA</button>
+  </div>
+
 <div id="helpBox" class="hidden">
   <h3>Hướng dẫn</h3>
   <ul>
