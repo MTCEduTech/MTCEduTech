@@ -17,4 +17,7 @@
   width: 100%;
   height: auto;
   display: block;
+  border-radius: 50%; /* Làm tròn hình */
+  overflow: hidden;
 }
+
