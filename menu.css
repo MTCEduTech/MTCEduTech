@@ -27,23 +27,6 @@ body {
   pointer-events: none; /* tránh ảnh cản kéo */
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease;
-  z-index: 999;
-}
-
-.overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
 .side-menu {
   position: fixed;
   top: 0;
