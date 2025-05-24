@@ -1,8 +1,8 @@
 const audioEl = document.getElementById("audioPlayer");
 const popup = document.getElementById("music-visualizer-popup");
-const canvas = document.getElementById("visualizerCanvas");
-const ctx = canvas.getContext("2d");
-const homeButton = document.getElementById("homeButton");
+const visualizerCanvas = document.getElementById("visualizerCanvas"); // Đổi tên tránh trùng
+const ctx = visualizerCanvas.getContext("2d");
+const homeButton = document.getElementById("homeButton"); // An toàn cho cả hai trang
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();
@@ -22,14 +22,14 @@ function drawBars() {
   requestAnimationFrame(drawBars);
   analyser.getByteFrequencyData(dataArray);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
 
-  const barWidth = canvas.width / bufferLength;
+  const barWidth = visualizerCanvas.width / bufferLength;
   for (let i = 0; i < bufferLength; i++) {
     const value = dataArray[i];
     const barHeight = value / 2;
     const x = i * barWidth;
-    const y = canvas.height - barHeight;
+    const y = visualizerCanvas.height - barHeight;
 
     const hue = i * 10;
     ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
@@ -43,7 +43,7 @@ function drawBars() {
     }
 
     ctx.fillStyle = "#ffffff";
-    ctx.fillRect(x, canvas.height - peakValues[i] - 2, barWidth - 1, 2);
+    ctx.fillRect(x, visualizerCanvas.height - peakValues[i] - 2, barWidth - 1, 2);
   }
 }
 
@@ -55,8 +55,8 @@ audioEl.addEventListener("play", () => {
   popup.style.width = popupWidth + "px";
   popup.style.height = popupHeight + "px";
 
-  canvas.width = popupWidth;
-  canvas.height = popupHeight;
+  visualizerCanvas.width = popupWidth;
+  visualizerCanvas.height = popupHeight;
 
   popup.style.display = "flex";
 
