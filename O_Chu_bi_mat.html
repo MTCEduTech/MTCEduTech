@@ -894,19 +894,9 @@ font-weight: bold;
   left: 20px;
   z-index: 9999;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1px;
 ">
-<button onclick="openmarquee()" style="
-    padding: 10px 16px;
-    font-size: 14px;
-    background: yellow;
-    border: none;
-    border-radius: 6px;
-    color: blue;
-    cursor: pointer;
-  ">📘 Hướng dẫn</button>
-
   <button onclick="openFullscreen()" style="
     padding: 10px 16px;
     font-size: 14px;
@@ -915,7 +905,7 @@ font-weight: bold;
     border-radius: 6px;
     color: white;
     cursor: pointer;
-  ">🔍 Full</button>
+  ">🔍 Full màn hình</button>
 
   <button onclick="exitFullscreen()" style="
     padding: 10px 16px;
@@ -925,7 +915,17 @@ font-weight: bold;
     border-radius: 6px;
     color: white;
     cursor: pointer;
-  ">❌ UnFull</button>
+  ">❌ Unfull màn hình</button>
+	
+	<button onclick="openmarquee()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: yellow;
+    border: none;
+    border-radius: 6px;
+    color: blue;
+    cursor: pointer;
+  ">📘 Hướng dẫn</button>
 </div>
 <script>
 function openFullscreen() {
