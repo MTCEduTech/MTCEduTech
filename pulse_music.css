@@ -2,19 +2,19 @@
   position: fixed;
   bottom: 70px;
   right: 20px;
-  width: 120px;
-  height: 80px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 8px;
   padding: 5px;
   z-index: 1002;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  width: auto;
 }
 
 #visualizerCanvas {
   width: 100%;
-  height: 100%;
+  height: auto;
+  display: block;
 }
