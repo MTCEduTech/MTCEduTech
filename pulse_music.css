@@ -15,9 +15,17 @@
 
 #visualizerCanvas {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
-  border-radius: 50%; /* Làm tròn hình */
-  overflow: hidden;
+  border-radius: 50%; /* làm tròn hình elip */
+  object-fit: cover;
+  background: transparent;
 }
+#music-visualizer-popup {
+  overflow: hidden;           /* ẩn phần dư ngoài elip */
+  border-radius: 50%;         /* làm popup thành hình tròn hoặc elip */
+  background: transparent;    /* không có nền mờ */
+  padding: 0;                 /* bỏ khoảng trắng */
+}
+
 
