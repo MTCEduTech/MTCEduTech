@@ -689,7 +689,7 @@ function spinWheel() {
 
 
 <div style="position: fixed; bottom: 2px; right: 20px; z-index: 1001;">
-  <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+  <button id="homeButton" onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
     🏠 VỀ TRANG CHỦ
   </button>
 </div>
@@ -755,9 +755,10 @@ function exitFullscreen() {
     <em>🏫 Đơn vị công tác:</em> Trường THCS Đức Phú, xã Nghị Đức, tỉnh Lâm Đồng
   </span><center></center></div>
        
-<div id="music-visualizer-popup">
+<div id="music-visualizer-popup" style="display: none;">
   <canvas id="visualizerCanvas" width="120" height="80"></canvas>
 </div>
+
 <script src="pulse_music.js"></script>
 
        
