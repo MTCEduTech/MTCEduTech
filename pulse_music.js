@@ -1,7 +1,8 @@
 const audio = document.getElementById("audioPlayer");
+const popup = document.getElementById("music-visualizer-popup");
 const canvas = document.getElementById("visualizerCanvas");
 const ctx = canvas.getContext("2d");
-
+const homeButton = document.querySelector("button[onclick*='index.html']");
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();
 const source = audioCtx.createMediaElementSource(audio);
@@ -29,7 +30,17 @@ function drawBars() {
 }
 
 audio.addEventListener("play", () => {
-  const popup = document.getElementById("music-visualizer-popup");
+  // Tính kích thước popup dựa theo nút "Về trang chủ"
+  const rect = homeButton.getBoundingClientRect();
+  const popupWidth = rect.width;
+  const popupHeight = popupWidth * 0.5;
+
+  popup.style.width = popupWidth + "px";
+  popup.style.height = popupHeight + "px";
+
+  canvas.width = popupWidth;
+  canvas.height = popupHeight;
+
   popup.style.display = "flex";
 
   if (audioCtx.state === "suspended") {
@@ -38,6 +49,7 @@ audio.addEventListener("play", () => {
 
   drawBars();
 });
+
 
 audio.addEventListener("pause", () => {
   document.getElementById("music-visualizer-popup").style.display = "none";
