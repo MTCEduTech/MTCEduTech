@@ -1,8 +1,8 @@
 const audioEl = document.getElementById("audioPlayer");
 const popup = document.getElementById("music-visualizer-popup");
-const visualizerCanvas = document.getElementById("visualizerCanvas"); // Đổi tên tránh trùng
-const ctx = visualizerCanvas.getContext("2d");
-const homeButton = document.getElementById("homeButton"); // An toàn cho cả hai trang
+const visualizerCanvas = document.getElementById("visualizerCanvas");
+const visualizerCtx = visualizerCanvas.getContext("2d");
+const homeButton = document.getElementById("homeButton");
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();
@@ -22,7 +22,7 @@ function drawBars() {
   requestAnimationFrame(drawBars);
   analyser.getByteFrequencyData(dataArray);
 
-  ctx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+  visualizerCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
 
   const barWidth = visualizerCanvas.width / bufferLength;
   for (let i = 0; i < bufferLength; i++) {
@@ -32,8 +32,8 @@ function drawBars() {
     const y = visualizerCanvas.height - barHeight;
 
     const hue = i * 10;
-    ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-    ctx.fillRect(x, y, barWidth - 1, barHeight);
+    visualizerCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+    visualizerCtx.fillRect(x, y, barWidth - 1, barHeight);
 
     if (barHeight > peakValues[i]) {
       peakValues[i] = barHeight;
@@ -42,8 +42,8 @@ function drawBars() {
       if (peakValues[i] < 0) peakValues[i] = 0;
     }
 
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(x, visualizerCanvas.height - peakValues[i] - 2, barWidth - 1, 2);
+    visualizerCtx.fillStyle = "#ffffff";
+    visualizerCtx.fillRect(x, visualizerCanvas.height - peakValues[i] - 2, barWidth - 1, 2);
   }
 }
 
