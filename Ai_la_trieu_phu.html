@@ -327,16 +327,66 @@ color: white;
     <div id="hint"></div>
     <div id="status"></div>
   
-<div id="result-box" style="
+<!-- KQ LỰA CHỌN -->
+<div style="
   position: fixed;
   top: 270px;
   right: 20px;
   width: 200px;
-  height: 200px;
+  z-index: 999;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+  color: darkred;
+">KQ LỰA CHỌN</div>
+<div id="result-box" style="
+  position: fixed;
+  top: 290px;
+  right: 20px;
+  width: 200px;
+  height: 100px;
   background: white;
   color: black;
   border: 3px solid red;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  display: none;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+"></div>
+
+<!-- Gợi ý -->
+<div style="
+  position: fixed;
+  top: 400px;
+  right: 20px;
+  width: 200px;
+  z-index: 999;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+  color: darkgreen;
+">Gợi ý</div>
+<div id="hint-box" style="
+  position: fixed;
+  top: 420px;
+  right: 20px;
+  width: 200px;
+  height: 100px;
+  background: white;
+  color: blue;
+  border: 3px solid #2196f3;
+  font-size: 16px;
   font-weight: bold;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.4);
@@ -484,10 +534,12 @@ function useHint() {
   document.querySelector('.help button:nth-child(2)').classList.add('used');
   const hint = questions[current].hint;
   if (hint) {
-    document.getElementById("hint").textContent = "💡 Gợi ý: " + hint;
+    document.getElementById("hint-box").textContent = hint;
+document.getElementById("hint-box").style.display = "flex";
   }
 else {
-  document.getElementById("hint").textContent = "💡 Không có gợi ý cho câu hỏi này.";
+  document.getElementById("hint-box").textContent = "Không có gợi ý.";
+document.getElementById("hint-box").style.display = "flex";
 }
 }
 
