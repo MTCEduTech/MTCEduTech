@@ -2,7 +2,7 @@ const audioEl = document.getElementById("audioPlayer");
 const popup = document.getElementById("music-visualizer-popup");
 const canvas = document.getElementById("visualizerCanvas");
 const ctx = canvas.getContext("2d");
-const homeButton = document.querySelector("button[onclick*='index.html']");
+const homeButton = document.getElementById("homeButton");
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();
