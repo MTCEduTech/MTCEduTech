@@ -521,16 +521,10 @@ img {
   text-align: right;
 ">
   <div style="position: relative; display: inline-block;">
-    <button onclick="toggleDropdown()" style="
-      padding: 10px 16px;
-      background-color: #f0ad4e;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    ">🌐 Liên kết website</button>
+    <button onclick="toggleDropdown()">
+  🌐 Liên kết website <svg width="12" height="12" style="vertical-align: middle; margin-left: 4px;" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 12,0 6,6" fill="white"/></svg>
+</button>
+
 
     <div id="dropdown" style="
       display: none;
@@ -928,6 +922,26 @@ setTimeout(() => {
       eyeIcon.innerHTML = '<path d="M12 6a9.77 9.77 0 0 0-9.5 6 9.77 9.77 0 0 0 19 0A9.77 9.77 0 0 0 12 6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/><circle cx="12" cy="12" r="2"/>';
     }
   }
+</script>
+
+	  <script>
+  function toggleDropdown() {
+    const dropdown = document.getElementById("dropdown");
+    if (dropdown.style.display === "block") {
+      dropdown.style.display = "none";
+    } else {
+      dropdown.style.display = "block";
+    }
+  }
+
+  // Ẩn dropdown khi click ra ngoài
+  window.addEventListener('click', function(event) {
+    const button = event.target.closest('button');
+    const dropdown = document.getElementById("dropdown");
+    if (!dropdown.contains(event.target) && (!button || !button.onclick || button.onclick.toString().indexOf('toggleDropdown') === -1)) {
+      dropdown.style.display = "none";
+    }
+  });
 </script>
 
 </body>
