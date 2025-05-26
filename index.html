@@ -258,6 +258,42 @@ img {
 }
 
 
+  #dropdown {
+    display: none;
+    position: absolute;
+    bottom: 110%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    min-width: 160px;
+    font-size: 13.5px;
+    overflow: hidden;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    opacity: 0;
+  }
+
+  #dropdown.show {
+    display: block;
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  #dropdown a {
+    display: block;
+    padding: 6px 12px;
+    color: #333;
+    text-decoration: none;
+  }
+
+  #dropdown a:hover {
+    background-color: #f0f0f0;
+  }
+
+
   </style>
 </head>
 <body>
@@ -522,7 +558,7 @@ img {
 ">
   <div style="position: relative; display: inline-block;">
     <button onclick="toggleDropdown()" style="
-  width: 160px;
+  width: 170px;
   background-color: orange;
   color: white;
   border: none;
@@ -557,6 +593,7 @@ img {
   <a href="https://baigiang.violet.vn/" style="display: block; padding: 6px 12px; color: #333; text-decoration: none;" target="_blank">Thư viện bài giảng điện tử</a>
   <a href="https://giaoan.violet.vn/" style="display: block; padding: 6px 12px; color: #333; text-decoration: none;" target="_blank">Thư viện KH bài dạy</a>
   <a href="https://dethi.violet.vn/" style="display: block; padding: 6px 12px; color: #333; text-decoration: none;" target="_blank">Thư viện đề kiểm tra</a>
+<a href="https://vnedu.vn/" style="display: block; padding: 6px 12px; color: #333; text-decoration: none;" target="_blank">VnEdu quản lý trường học</a>
 </div>
 
   </div>
@@ -941,25 +978,31 @@ setTimeout(() => {
   }
 </script>
 
-	  <script>
+	 <script>
   function toggleDropdown() {
     const dropdown = document.getElementById("dropdown");
-    if (dropdown.style.display === "block") {
-      dropdown.style.display = "none";
+    if (dropdown.classList.contains("show")) {
+      dropdown.classList.remove("show");
+      setTimeout(() => dropdown.style.display = "none", 200);
     } else {
       dropdown.style.display = "block";
+      setTimeout(() => dropdown.classList.add("show"), 10);
     }
   }
 
-  // Ẩn dropdown khi click ra ngoài
+  // Click ngoài để đóng
   window.addEventListener('click', function(event) {
-    const button = event.target.closest('button');
     const dropdown = document.getElementById("dropdown");
-    if (!dropdown.contains(event.target) && (!button || !button.onclick || button.onclick.toString().indexOf('toggleDropdown') === -1)) {
-      dropdown.style.display = "none";
+    const button = event.target.closest('button');
+    if (!dropdown.contains(event.target) && (!button || !button.onclick || !button.onclick.toString().includes('toggleDropdown'))) {
+      if (dropdown.classList.contains("show")) {
+        dropdown.classList.remove("show");
+        setTimeout(() => dropdown.style.display = "none", 200);
+      }
     }
   });
 </script>
+
 
 </body>
 </body>
