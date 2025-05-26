@@ -513,6 +513,43 @@ img {
 
   </script>
 
+<div style="
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  z-index: 9999;
+  text-align: right;
+">
+  <div style="position: relative; display: inline-block;">
+    <button onclick="toggleDropdown()" style="
+      padding: 10px 16px;
+      background-color: #f0ad4e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    ">🌐 Liên kết website</button>
+
+    <div id="dropdown" style="
+      display: none;
+      position: absolute;
+      bottom: 110%;
+      right: 0;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      min-width: 180px;
+      z-index: 10000;
+    ">
+      <a href="https://baigiang.violet.vn/" style="display: block; padding: 10px; color: #333; text-decoration: none;" target="_blank">🔗 Thư viện bài giảng điện tử</a>
+      <a href="https://giaoan.violet.vn/" style="display: block; padding: 10px; color: #333; text-decoration: none;" target="_blank">🔗 Thư viện KHBD </a>
+      <a href="https://dethi.violet.vn/" style="display: block; padding: 10px; color: #333; text-decoration: none;" target="_blank">🔗 Thư viện đề kiểm tra </a>
+    </div>
+  </div>
+</div>
 
 <!-- Nút Thoát Hoàn Toàn -->
 <button id="exitApp" style="
