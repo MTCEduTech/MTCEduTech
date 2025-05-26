@@ -521,10 +521,23 @@ img {
   text-align: right;
 ">
   <div style="position: relative; display: inline-block;">
-    <button onclick="toggleDropdown()">
-  🌐 Liên kết website <svg width="12" height="12" style="vertical-align: middle; margin-left: 4px;" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 12,0 6,6" fill="white"/></svg>
+    <button onclick="toggleDropdown()" style="
+  width: 200px;
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+">
+  🌐 Liên kết website
+  <svg width="12" height="12" style="vertical-align: middle; margin-left: 6px;" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="0,0 12,0 6,6" fill="white"/>
+  </svg>
 </button>
-
 
     <div id="dropdown" style="
       display: none;
