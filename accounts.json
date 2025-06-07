@@ -1,6 +1,5 @@
 [
   { "username": "admin", "password": "mtc$", "name": "Tác giả: Mai Thiện Chánh" },
-  { "username": "demo", "password": "demo@", "name": "Tài khoản DEMO" },
-  { "username": "gv1", "password": "12345!", "name": "Giáo viên thời đại số" },
-  { "username": "8386", "password": "3979!", "name": "Phát Tài Phát Lộc" }
+  { "username": "demo", "password": "demo@", "name": "T.khoản DEMO - Hết hạn vào ngày 31/8/2025" },
+  { "username": "gv1", "password": "12345!", "name": "Giáo viên thời đại số" }
 ]
