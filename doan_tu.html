@@ -120,6 +120,11 @@ font-weight: bold;
     font-style: italic;
     font-weight: normal;
   }
+	  button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
   </style>
 
 <link rel="stylesheet" href="menu.css">
@@ -164,7 +169,8 @@ font-weight: bold;
 
     <button onclick="setupGame()">BẮT ĐẦU</button>
     <button onclick="checkAnswer()">KIỂM TRA</button>
-    <button onclick="showAnswer()">HIỆN ĐÁP ÁN</button>
+    <button id="showAnswerBtn" onclick="showAnswer()">HIỆN ĐÁP ÁN</button>
+
   </div>
 
   <div id="timer"></div>
@@ -251,6 +257,8 @@ timerDisplay.style.color = 'white';        // giữ màu trắng trong khi chạ
             timerDisplay.textContent = 'Hết giờ!';
 timerDisplay.style.color = 'white';      // vẫn màu trắng đậm khi hết giờ
       timerDisplay.style.fontWeight = 'bold';
+		  document.getElementById('showAnswerBtn').disabled = false;
+
             Array.from(letters.children).forEach(div => {
               div.draggable = false;
               div.ondragstart = null;
@@ -259,7 +267,11 @@ timerDisplay.style.color = 'white';      // vẫn màu trắng đậm khi hết 
             checkAnswer();
           }
         }, 1000);
-      }
+	      
+     } else {
+  // ✅ Không giới hạn thời gian → bật sẵn nút "HIỆN ĐÁP ÁN"
+  document.getElementById('showAnswerBtn').disabled = false;
+}
 
     infoArea.innerHTML = `
   <div style="
@@ -275,6 +287,8 @@ text-align: left;
     <div>🧩 Số chữ cái của từ là: 👉 <strong>${answer.length}</strong> chữ cái</div>
     <div>💡 Gợi ý: 👉 <em>${document.getElementById('hintInput').value}</em></div>
   </div>`;
+
+document.getElementById('showAnswerBtn').disabled = true; // <-- Thêm dòng này ẩn hiện nút hiện đáp án
 
 }
 
