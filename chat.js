@@ -1,14 +1,11 @@
-function toggleComments() {
-  const popup = document.getElementById("commento-popup");
-  const isVisible = popup.style.display === "block";
-  popup.style.display = isVisible ? "none" : "block";
-
-  // Chỉ tải Commento script một lần
-  if (!window.commentoScriptLoaded && !isVisible) {
-    const s = document.createElement("script");
-    s.src = "https://cdn.commento.io/js/commento.js";
-    s.defer = true;
-    document.body.appendChild(s);
-    window.commentoScriptLoaded = true;
-  }
-}
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/YOUR_ID/default';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
