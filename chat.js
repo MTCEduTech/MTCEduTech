@@ -1,20 +1,13 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const toggle = document.getElementById("chat-toggle");
-  const popup = document.getElementById("chat-popup");
+function showComments() {
+  const wrapper = document.getElementById("commento-wrapper");
+  wrapper.style.display = "block";
 
-  toggle.addEventListener("click", function () {
-    popup.style.display = popup.style.display === "block" ? "none" : "block";
-  });
-
-  // Load Disqus only once
-  let disqusLoaded = false;
-  toggle.addEventListener("click", function () {
-    if (!disqusLoaded) {
-      const d = document, s = d.createElement('script');
-      s.src = 'https://mtcedutech.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-      disqusLoaded = true;
-    }
-  });
-});
+  // Chỉ tải script nếu chưa có
+  if (!window.commentoScriptLoaded) {
+    const s = document.createElement("script");
+    s.src = "https://cdn.commento.io/js/commento.js";
+    s.defer = true;
+    document.body.appendChild(s);
+    window.commentoScriptLoaded = true;
+  }
+}
