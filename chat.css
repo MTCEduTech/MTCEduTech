@@ -1,9 +1,9 @@
 #chat-toggle {
   position: fixed;
-  bottom: 50px;
+  bottom: 100px;
   left: 20px;
-  width: 20px;
-  height: 20px;
+  width: 100px;
+  height: 100px;
   cursor: pointer;
   z-index: 10000;
 }
@@ -11,9 +11,9 @@
 #commento-popup {
   display: none;
   position: fixed;
-  bottom: 80px;
+  bottom: 200px;
   left: 20px;
-  width: 350px;
+  width: 200px;
   height: 400px;
   background: white;
   border: 1px solid #ccc;
