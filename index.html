@@ -293,7 +293,10 @@ img {
     background-color: #f0f0f0;
   }
 
-
+  /* Ẩn dòng Markdown */
+    .commento-markdown-help {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -1024,39 +1027,45 @@ setTimeout(() => {
 
 <script src="chat.js"></script>
 <!-- Tuỳ chỉnh giao diện khung chat-->
-<script>
-  const customizeCommento = () => {
-    // Ẩn dòng markdown
-    const markdownLabel = document.querySelector(".commento-markdown-help");
-    if (markdownLabel) markdownLabel.style.display = "none";
+<div id="commento"></div>
 
-    // Việt hóa các tab lọc bình luận
-    const upvotes = document.querySelector(".commento-sort-upvotes");
-    const newest = document.querySelector(".commento-sort-newest");
-    const oldest = document.querySelector(".commento-sort-oldest");
-    if (upvotes) upvotes.textContent = "Yêu thích";
-    if (newest) newest.textContent = "Mới nhất";
-    if (oldest) oldest.textContent = "Cũ nhất";
+  <script>
+    function vietHoaCommento() {
+      const tryUpdate = () => {
+        // Nút đăng nhập
+        const loginBtn = document.querySelector(".commento-login-button");
+        if (loginBtn) loginBtn.textContent = "Đăng nhập";
 
-    // Việt hóa nút gửi bình luận
-    const addButton = document.querySelector(".commento-button");
-    if (addButton) addButton.textContent = "Gửi bình luận";
+        // Nút gửi bình luận
+        const addBtn = document.querySelector(".commento-button");
+        if (addBtn) addBtn.textContent = "Gửi bình luận";
 
-    // Việt hóa nút Login
-    const loginButton = document.querySelector(".commento-login-button");
-    if (loginButton) loginButton.textContent = "Đăng nhập";
-  };
+        // Bộ lọc bình luận
+        const upvotes = document.querySelector(".commento-sort-upvotes");
+        const newest = document.querySelector(".commento-sort-newest");
+        const oldest = document.querySelector(".commento-sort-oldest");
+        if (upvotes) upvotes.textContent = "Yêu thích";
+        if (newest) newest.textContent = "Mới nhất";
+        if (oldest) oldest.textContent = "Cũ nhất";
 
-  // Theo dõi khi phần tử commento render xong
-  const observer = new MutationObserver((_, obs) => {
-    if (document.querySelector(".commento-button")) {
-      customizeCommento();
-      obs.disconnect();
+        // Ẩn dòng markdown nếu còn sót
+        const markdownHelp = document.querySelector(".commento-markdown-help");
+        if (markdownHelp) markdownHelp.style.display = "none";
+      };
+
+      const observer = new MutationObserver(() => {
+        tryUpdate();
+      });
+
+      observer.observe(document.getElementById("commento"), {
+        childList: true,
+        subtree: true
+      });
     }
-  });
 
-  observer.observe(document, { childList: true, subtree: true });
-</script>
+    // Chạy sau khi commento tải
+    window.addEventListener("load", vietHoaCommento);
+  </script>
 
 </body>
 </html>
