@@ -1,23 +1,14 @@
 #chat-toggle {
   position: fixed;
   bottom: 50px;
-  left: 10px;
+  left: 20px;
   width: 20px;
   height: 20px;
   cursor: pointer;
   z-index: 9999;
 }
 
-#chat-popup {
+#commento-wrapper {
   display: none;
-  position: fixed;
-  bottom: 80px;
-  left: 10px;
-  width: 350px;
-  max-height: 500px;
-  background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  z-index: 9998;
-  overflow: auto;
+  margin-top: 20px;
 }
