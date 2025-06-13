@@ -1023,7 +1023,40 @@ setTimeout(() => {
 </div>
 
 <script src="chat.js"></script>
+<!-- Tuỳ chỉnh giao diện khung chat-->
+<script>
+  const customizeCommento = () => {
+    // Ẩn dòng markdown
+    const markdownLabel = document.querySelector(".commento-markdown-help");
+    if (markdownLabel) markdownLabel.style.display = "none";
 
+    // Việt hóa các tab lọc bình luận
+    const upvotes = document.querySelector(".commento-sort-upvotes");
+    const newest = document.querySelector(".commento-sort-newest");
+    const oldest = document.querySelector(".commento-sort-oldest");
+    if (upvotes) upvotes.textContent = "Yêu thích";
+    if (newest) newest.textContent = "Mới nhất";
+    if (oldest) oldest.textContent = "Cũ nhất";
+
+    // Việt hóa nút gửi bình luận
+    const addButton = document.querySelector(".commento-button");
+    if (addButton) addButton.textContent = "Gửi bình luận";
+
+    // Việt hóa nút Login
+    const loginButton = document.querySelector(".commento-login-button");
+    if (loginButton) loginButton.textContent = "Đăng nhập";
+  };
+
+  // Theo dõi khi phần tử commento render xong
+  const observer = new MutationObserver((_, obs) => {
+    if (document.querySelector(".commento-button")) {
+      customizeCommento();
+      obs.disconnect();
+    }
+  });
+
+  observer.observe(document, { childList: true, subtree: true });
+</script>
 
 </body>
 </html>
