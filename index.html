@@ -1014,18 +1014,12 @@ setTimeout(() => {
   });
 </script>
 
-<!-- Chat Toggle Button -->
-<img id="chat-toggle" src="imagechat.png" alt="Chat">
-
-<!-- Chat Popup Container -->
-<div id="chat-popup">
-  <div id="disqus_thread"></div>
-</div>
-
-<!-- Liên kết đến CSS và JS -->
 <link rel="stylesheet" href="chat.css">
+<img src="imagechat.png" alt="Bình luận" id="chat-toggle" onclick="showComments()" />
+<div id="commento-wrapper">
+  <div id="commento"></div>
+</div>
 <script src="chat.js"></script>
 
-</body>
 </body>
 </html>
