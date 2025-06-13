@@ -1,9 +1,10 @@
-function showComments() {
-  const wrapper = document.getElementById("commento-wrapper");
-  wrapper.style.display = "block";
+function toggleComments() {
+  const popup = document.getElementById("commento-popup");
+  const isVisible = popup.style.display === "block";
+  popup.style.display = isVisible ? "none" : "block";
 
-  // Chỉ tải script nếu chưa có
-  if (!window.commentoScriptLoaded) {
+  // Chỉ tải Commento script một lần
+  if (!window.commentoScriptLoaded && !isVisible) {
     const s = document.createElement("script");
     s.src = "https://cdn.commento.io/js/commento.js";
     s.defer = true;
