@@ -116,6 +116,8 @@ body {
   transition: background 0.2s;
   word-break: break-word;     /* ✅ Ngắt từ khi cần để không tràn */
   color: blue;
+  font-size: 18px;       /* ✅ chữ to hơn */
+  font-weight: bold;     /* ✅ chữ đậm */
 }
 
 .event-item:hover {
