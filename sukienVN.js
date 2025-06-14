@@ -38,7 +38,7 @@ function applyFilter() {
 
   // Ghi thông báo phù hợp
   if (filtered.length > 0) {
-    displayDate.textContent = `Những sự kiện ngày ${currentDay} tháng ${currentMonth} ở Việt Nam`;
+    displayDate.textContent = `Những sự kiện ngày ${currentDay} tháng ${currentMonth} trước đây ở Việt Nam`;
   } else {
     displayDate.textContent = `Vui lòng chọn ngày khác (Ngày này đang cập nhật dữ liệu)`;
   }
