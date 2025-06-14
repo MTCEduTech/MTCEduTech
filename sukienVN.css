@@ -1,0 +1,146 @@
+/* sukienVN.css */
+html, body {
+  height: 100%;
+  overflow: hidden;  /* ✅ Ngăn không cho body có thanh cuộn */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  background-image: url('sukienVN.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed; /* giữ ảnh cố định khi cuộn */
+}
+/* Gói chứa phần sự kiện có chiều cao và scroll */
+.event-list-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;  /* 👈 chuyển từ center → flex-start */
+  height: 100vh;                /* 👈 toàn bộ chiều cao màn hình */
+  overflow: hidden;             /* 👈 ngăn scroll toàn trang */
+}
+
+.title {
+  text-align: center;
+  color: #d81b60;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.date-display {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: #d81b60;
+  color: white;
+  border-radius: 24px;
+  display: inline-block;
+  padding: 8px 24px;
+  margin: 20px auto;
+}
+
+.filter-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.filter-box input {
+  width: 100px;            /* rộng hơn */
+  padding: 14px 10px;      /* cao hơn */
+  font-size: 20px;         /* chữ lớn hơn */
+  border: 2px solid #aaa;
+  border-radius: 8px;
+}
+
+.filter-box button {
+  background-color: #d81b60;
+  color: white;
+  border: none;
+  padding: 14px 16px;      /* nút cao hơn, rộng hơn */
+  font-size: 22px;         /* biểu tượng kính lúp lớn */
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+.event-list {
+  height: calc(100vh - 250px); /* Điều chỉnh tùy chiều cao header phía trên */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.event-year {
+  width: 100%;
+  max-width: 600px;
+  text-align: left;      /* ✅ Thêm dòng này để căn trái chữ năm */
+  font-weight: bold;
+  margin: 20px 0 10px;
+  font-size: 18px;
+  color: #d81b60;
+}
+
+.event-item {
+  margin: 6px 0;
+  max-width: 600px;
+  width: 100%;
+  text-align: justify;        /* ✅ Căn đều hai bên */
+  text-align-last: left;
+  line-height: 1.6;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  word-break: break-word;     /* ✅ Ngắt từ khi cần để không tràn */
+  color: blue;
+}
+
+.event-item:hover {
+  background-color: #f9f9f9;
+}
+
+#popup-date-box {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  background: white;
+  color: red;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  font-size: 14px;
+  z-index: 1002;
+}
+
+.hidden {
+  display: none;
+}
+.overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.6); 
+  z-index: -1;
+}
+
