@@ -105,7 +105,7 @@ body {
 
 .event-item {
   margin: 6px 0;
-  max-width: 600px;
+  max-width: 1000px;
   width: 100%;
   text-align: justify;        /* ✅ Căn đều hai bên */
   text-align-last: left;
