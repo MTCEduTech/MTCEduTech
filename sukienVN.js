@@ -51,8 +51,8 @@ function applyFilter() {
     if (hasKeyword && !hasDayMonth && !year) {
       displayDate.textContent = `Các sự kiện liên quan đến từ khóa: "${keyword}"`;
     } else {
-      let msg = `Sự kiện`;
-      if (hasDayMonth) msg += ` ngày ${currentDay} tháng ${currentMonth}`;
+      let msg = `Lịch sử và Sự kiện đáng nhớ`;
+      if (hasDayMonth) msg += ` Lịch sử và Sự kiện ngày ${currentDay} tháng ${currentMonth} ở Việt Nam`;
       if (year) msg += ` năm ${year}`;
       if (hasKeyword) msg += ` có từ khóa "${keyword}"`;
       displayDate.textContent = msg;
