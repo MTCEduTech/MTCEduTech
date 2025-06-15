@@ -63,9 +63,9 @@ function applyFilter() {
       !hasYear && !hasKeyword;
 
     if (isToday) {
-      msg += ` ngày ${currentDay} tháng ${currentMonth} (hiện tại)`;
+      msg += ` ngày ${currentDay} tháng ${currentMonth} (Ngày này năm xưa)`;
     } else if (hasDayMonth && !hasKeyword && !hasYear) {
-      msg += ` ngày ${currentDay} tháng ${currentMonth} (tìm kiếm)`;
+      msg += ` ngày ${currentDay} tháng ${currentMonth} (mà bạn tìm kiếm)`;
     } else if (hasKeyword && !hasDayMonth && !hasYear) {
       msg += ` theo từ khóa "${keyword}"`;
     } else {
