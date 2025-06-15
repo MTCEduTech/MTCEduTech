@@ -65,7 +65,7 @@ function applyFilter() {
     if (isToday) {
       msg += ` ngày ${currentDay} tháng ${currentMonth} (Ngày này năm xưa)`;
     } else if (hasDayMonth && !hasKeyword && !hasYear) {
-      msg += ` ngày ${currentDay} tháng ${currentMonth} (mà bạn tìm kiếm)`;
+      msg += ` ngày ${currentDay} tháng ${currentMonth}`;
     } else if (hasKeyword && !hasDayMonth && !hasYear) {
       msg += ` theo từ khóa "${keyword}"`;
     } else {
