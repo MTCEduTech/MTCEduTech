@@ -25,9 +25,10 @@ function applyFilter() {
   let currentMonth = parseInt(monthInput.value);
   let hasDayMonth = !isNaN(currentDay) && !isNaN(currentMonth);
   const hasKeyword = keyword.length > 0;
+  const hasYear = year.length > 0;
 
-  // Nếu không có ngày/tháng => lấy ngày hiện tại
-  if (!hasDayMonth) {
+  // Nếu không nhập gì cả → dùng ngày hiện tại
+  if (!hasDayMonth && !hasKeyword && !hasYear) {
     currentDay = today.getDate();
     currentMonth = today.getMonth() + 1;
     dayInput.value = currentDay;
@@ -35,10 +36,16 @@ function applyFilter() {
     hasDayMonth = true;
   }
 
+  // Nếu chỉ tìm từ khóa hoặc năm, thì xóa giá trị ngày/tháng khỏi ô input
+  if ((hasKeyword || hasYear) && !hasDayMonth) {
+    dayInput.value = '';
+    monthInput.value = '';
+  }
+
   // Lọc dữ liệu
   const filtered = data.filter(item => {
     const matchDayMonth = hasDayMonth ? item.Ngày === currentDay && item.Tháng === currentMonth : true;
-    const matchYear = year ? item.Năm == year : true;
+    const matchYear = hasYear ? item.Năm == year : true;
     const matchKeyword = hasKeyword
       ? (item["Sự kiện"]?.toLowerCase().includes(keyword) || item["Thông tin"]?.toLowerCase().includes(keyword))
       : true;
@@ -53,17 +60,17 @@ function applyFilter() {
     const isToday =
       currentDay === today.getDate() &&
       currentMonth === today.getMonth() + 1 &&
-      !year && !hasKeyword;
+      !hasYear && !hasKeyword;
 
     if (isToday) {
       msg += ` ngày ${currentDay} tháng ${currentMonth} (hiện tại)`;
-    } else if (hasDayMonth && !hasKeyword && !year) {
+    } else if (hasDayMonth && !hasKeyword && !hasYear) {
       msg += ` ngày ${currentDay} tháng ${currentMonth} (tìm kiếm)`;
-    } else if (hasKeyword && !hasDayMonth && !year) {
+    } else if (hasKeyword && !hasDayMonth && !hasYear) {
       msg += ` theo từ khóa "${keyword}"`;
     } else {
       if (hasDayMonth) msg += ` ngày ${currentDay} tháng ${currentMonth}`;
-      if (year) msg += ` năm ${year}`;
+      if (hasYear) msg += ` năm ${year}`;
       if (hasKeyword) msg += ` với từ khóa "${keyword}"`;
     }
 
@@ -74,6 +81,22 @@ function applyFilter() {
 
   renderEvents(filtered);
 }
+document.addEventListener('DOMContentLoaded', () => {
+  const keywordInput = document.getElementById('keyword');
+  const dayInput = document.getElementById('day');
+  const monthInput = document.getElementById('month');
+
+  if (keywordInput) {
+    keywordInput.addEventListener('input', () => {
+      // Khi người dùng bắt đầu nhập từ khóa, xóa ngày & tháng
+      if (keywordInput.value.trim().length > 0) {
+        dayInput.value = '';
+        monthInput.value = '';
+      }
+    });
+  }
+});
+
 
 function renderEvents(events) {
   const container = document.getElementById("events");
