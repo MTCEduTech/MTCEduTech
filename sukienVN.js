@@ -48,26 +48,25 @@ function applyFilter() {
 
   // Hiển thị tiêu đề tùy theo điều kiện lọc
 if (filtered.length > 0) {
+  let msg = 'Những sự kiện lịch sử';
+
   if (!hasDayMonth && !hasKeyword && !year) {
-    // Trường hợp vừa load trang lần đầu
-    displayDate.textContent = `Những sự kiện lịch sử ngày ${currentDay} tháng ${currentMonth} (hiện tại)`;
+    msg += ` ngày ${currentDay} tháng ${currentMonth} (hiện tại)`;
   } else if (hasDayMonth && !hasKeyword) {
-    // Chỉ tìm theo ngày/tháng
-    displayDate.textContent = `Những sự kiện lịch sử ngày ${currentDay} tháng ${currentMonth} (tìm kiếm)`;
-  } else if (hasKeyword && !hasDayMonth) {
-    // Chỉ tìm theo từ khóa
-    displayDate.textContent = `Những sự kiện lịch sử theo từ khóa "${keyword}"`;
+    msg += ` ngày ${currentDay} tháng ${currentMonth} (tìm kiếm)`;
+  } else if (hasKeyword && !hasDayMonth && !year) {
+    msg += ` theo từ khóa "${keyword}"`;
   } else {
-    // Kết hợp nhiều điều kiện
-    let msg = `Những sự kiện lịch sử`;
     if (hasDayMonth) msg += ` ngày ${currentDay} tháng ${currentMonth}`;
     if (year) msg += ` năm ${year}`;
     if (hasKeyword) msg += ` với từ khóa "${keyword}"`;
-    displayDate.textContent = msg;
   }
+
+  displayDate.textContent = msg;
 } else {
   displayDate.textContent = `Không tìm thấy sự kiện phù hợp.`;
 }
+
 
   renderEvents(filtered);
 }
