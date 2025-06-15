@@ -47,19 +47,27 @@ function applyFilter() {
   });
 
   // Hiển thị tiêu đề tùy theo điều kiện lọc
-  if (filtered.length > 0) {
-    if (hasKeyword && !hasDayMonth && !year) {
-      displayDate.textContent = `Các sự kiện liên quan đến từ khóa: "${keyword}"`;
-    } else {
-      let msg = `Lịch sử và Sự kiện đáng nhớ`;
-      if (hasDayMonth) msg += ` Lịch sử và Sự kiện ngày ${currentDay} tháng ${currentMonth} ở Việt Nam`;
-      if (year) msg += ` năm ${year}`;
-      if (hasKeyword) msg += ` có từ khóa "${keyword}"`;
-      displayDate.textContent = msg;
-    }
+if (filtered.length > 0) {
+  if (!hasDayMonth && !hasKeyword && !year) {
+    // Trường hợp vừa load trang lần đầu
+    displayDate.textContent = `Những sự kiện lịch sử ngày ${currentDay} tháng ${currentMonth} (hiện tại)`;
+  } else if (hasDayMonth && !hasKeyword) {
+    // Chỉ tìm theo ngày/tháng
+    displayDate.textContent = `Những sự kiện lịch sử ngày ${currentDay} tháng ${currentMonth} (tìm kiếm)`;
+  } else if (hasKeyword && !hasDayMonth) {
+    // Chỉ tìm theo từ khóa
+    displayDate.textContent = `Những sự kiện lịch sử theo từ khóa "${keyword}"`;
   } else {
-    displayDate.textContent = `Không tìm thấy sự kiện phù hợp.`;
+    // Kết hợp nhiều điều kiện
+    let msg = `Những sự kiện lịch sử`;
+    if (hasDayMonth) msg += ` ngày ${currentDay} tháng ${currentMonth}`;
+    if (year) msg += ` năm ${year}`;
+    if (hasKeyword) msg += ` với từ khóa "${keyword}"`;
+    displayDate.textContent = msg;
   }
+} else {
+  displayDate.textContent = `Không tìm thấy sự kiện phù hợp.`;
+}
 
   renderEvents(filtered);
 }
