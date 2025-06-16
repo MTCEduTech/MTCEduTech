@@ -466,7 +466,7 @@ window.answerChecked = true; // Đánh dấu là đã kiểm tra từ này rồi
   }
 
   // 👉 Đánh dấu nút hiện tại là đã dùng
-  if (window.currentWordButton && isFromFile) {
+  if (window.currentWordButton) {
     window.currentWordButton.dataset.clicked = "true";
     window.currentWordButton.disabled = true;
     window.currentWordButton.style.backgroundColor = correct ? "green" : "red";
