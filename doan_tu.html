@@ -431,14 +431,19 @@ if (window.answerChecked) return;
 const info = document.getElementById('infoArea');
 if (isTimeOutTriggered) {
   const msg = document.createElement('div');
-  msg.className = 'blink-alert';
- msg.style.color = correct ? 'limegreen' : 'crimson';
-  msg.innerHTML = correct
-    ? '✅ Hết giờ nhưng bạn đã hoàn thành đúng – ĐƯỢC TÍNH ĐIỂM!'
-    : '❌ Hết giờ và bạn chưa hoàn thành đúng – KHÔNG ĐƯỢC TÍNH ĐIỂM!';
-  info.appendChild(msg);
-}
-
+msg.className = 'blink-alert';
+msg.style.color = correct ? 'green' : 'red';
+msg.style.backgroundColor = 'white';
+msg.style.border = '3px solid ' + (correct ? 'green' : 'red');
+msg.style.borderRadius = '12px';
+msg.style.padding = '12px 16px';
+msg.style.marginTop = '20px';
+msg.style.display = 'inline-block';
+msg.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
+msg.innerHTML = correct
+  ? '✅ Hết giờ nhưng bạn đã hoàn thành đúng – <strong>ĐƯỢC TÍNH ĐIỂM!</strong>'
+  : '❌ Hết giờ và bạn chưa hoàn thành đúng – <strong>KHÔNG ĐƯỢC TÍNH ĐIỂM!</strong>';
+info.appendChild(msg);
 
   // Phát âm thanh đúng hoặc sai
   const sound = document.getElementById(correct ? 'correctSound' : 'wrongSound');
