@@ -444,7 +444,7 @@ msg.innerHTML = correct
   ? '✅ Hết giờ nhưng bạn đã hoàn thành đúng – <strong>ĐƯỢC TÍNH ĐIỂM!</strong>'
   : '❌ Hết giờ và bạn chưa hoàn thành đúng – <strong>KHÔNG ĐƯỢC TÍNH ĐIỂM!</strong>';
 info.appendChild(msg);
-
+}
   // Phát âm thanh đúng hoặc sai
   const sound = document.getElementById(correct ? 'correctSound' : 'wrongSound');
   sound.play();
