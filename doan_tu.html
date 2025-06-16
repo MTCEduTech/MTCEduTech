@@ -246,6 +246,7 @@ function shuffleArray(array) {
 	  // 🔄 Xóa thông báo chớp cũ nếu có
 document.querySelectorAll('.blink-alert').forEach(el => el.remove());
 	  isTimeOutTriggered = false; // reset cờ hết giờ
+	  window.answerChecked = false;
   const rawAnswer = document.getElementById('answerInput').value.toUpperCase().replace(/\s/g, '');
 
   // Kiểm tra khi không có dữ liệu
