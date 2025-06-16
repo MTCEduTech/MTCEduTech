@@ -411,7 +411,7 @@ document.getElementById('checkBtn').disabled = false;
 }
 
 function checkAnswer() {
-if (window.answerChecked && !isTimeOutTriggered) return;
+if (window.answerChecked) return;
   const slots = Array.from(document.getElementById('slots').children);
   const filled = slots.map(slot => slot.textContent).join('');
   const correct = filled === answer;
@@ -473,13 +473,12 @@ window.answerChecked = true; // Đánh dấu là đã kiểm tra từ này rồi
     window.currentWordButton.style.opacity = 1;
     window.currentWordButton.classList.remove("word-button-blink");
   }
+// ✅ Reset trạng thái sau khi xong
+isFromFile = false;
+window.isManualPlay = false;
 
   // 👉 Bỏ lưu trữ nút hiện tại
   window.currentWordButton = null;
-
-  // ✅ Reset trạng thái sau khi xong
-  isFromFile = false;
-  window.isManualPlay = false;
 
   // Hiển thị hình ảnh đúng/sai
   const resultImage = document.getElementById('resultImage');
