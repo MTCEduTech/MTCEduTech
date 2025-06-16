@@ -410,7 +410,7 @@ document.getElementById('checkBtn').disabled = false;
 }
 
 function checkAnswer() {
-if (window.answerChecked) return; // Đã kiểm tra rồi thì không làm gì nữa
+if (window.answerChecked && !isTimeOutTriggered) return;
   const slots = Array.from(document.getElementById('slots').children);
   const filled = slots.map(slot => slot.textContent).join('');
   const correct = filled === answer;
@@ -419,7 +419,7 @@ const info = document.getElementById('infoArea');
 if (isTimeOutTriggered) {
   const msg = document.createElement('div');
   msg.className = 'blink-alert';
-  msg.style.color = correct ? 'yellow' : 'red';
+ msg.style.color = correct ? 'limegreen' : 'crimson';
   msg.innerHTML = correct
     ? '✅ Hết giờ nhưng bạn đã hoàn thành đúng – ĐƯỢC TÍNH ĐIỂM!'
     : '❌ Hết giờ và bạn chưa hoàn thành đúng – KHÔNG ĐƯỢC TÍNH ĐIỂM!';
