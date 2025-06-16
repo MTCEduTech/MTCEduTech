@@ -443,7 +443,11 @@ msg.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
 msg.innerHTML = correct
   ? '✅ Hết giờ nhưng bạn đã hoàn thành đúng – <strong>ĐƯỢC TÍNH ĐIỂM!</strong>'
   : '❌ Hết giờ và bạn chưa hoàn thành đúng – <strong>KHÔNG ĐƯỢC TÍNH ĐIỂM!</strong>';
-info.appendChild(msg);
+const wrapper = document.createElement('div');
+wrapper.style.width = '100%';
+wrapper.style.marginTop = '10px';
+wrapper.appendChild(msg);
+info.appendChild(wrapper);
 }
   // Phát âm thanh đúng hoặc sai
   const sound = document.getElementById(correct ? 'correctSound' : 'wrongSound');
