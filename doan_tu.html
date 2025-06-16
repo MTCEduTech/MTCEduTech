@@ -258,10 +258,7 @@ document.querySelectorAll('.blink-alert').forEach(el => el.remove());
       return alert('Hãy tạo trước một từ ở khung nhập, và ẩn khung nhập để chơi hoặc mở file đề đã có nhé!');
     }
   }
-
-
   answer = rawAnswer;
-
   const slots = document.getElementById('slots');
   const letters = document.getElementById('letters');
   const timerDisplay = document.getElementById('timer');
@@ -291,6 +288,7 @@ document.querySelectorAll('.blink-alert').forEach(el => el.remove());
     div.ondragstart = dragLetter;
     div.ondrop = dropBackToLetters;
     div.ondragover = allowDrop;
+div.onclick = handleLetterClick;
     letters.appendChild(div);
   });
 
@@ -408,6 +406,20 @@ document.getElementById('checkBtn').disabled = false;
 
   slot.textContent = '';
   slot.className = 'slot';
+}
+function handleLetterClick(e) {
+  const letterDiv = e.currentTarget;
+  if (letterDiv.getAttribute('data-used') === 'true') return;
+
+  // Tìm ô trống đầu tiên
+  const emptySlot = Array.from(document.getElementById('slots').children).find(slot => slot.textContent === '');
+  if (!emptySlot) return;
+
+  // Gán chữ và ẩn đi
+  emptySlot.textContent = letterDiv.textContent;
+  emptySlot.className = 'slot';
+  letterDiv.style.visibility = 'hidden';
+  letterDiv.setAttribute('data-used', 'true');
 }
 
 function checkAnswer() {
