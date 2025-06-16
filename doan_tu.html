@@ -224,6 +224,7 @@ let correctWordCount = 0;
     let answer = '';
     let timer = null;
     let timeLeft = 0;
+let isTimeOutTriggered = false;
 
     function hideInput() {
       document.getElementById('inputArea').style.display = 'none';
@@ -244,6 +245,7 @@ function shuffleArray(array) {
   function setupGame(forceManual = false) {
 	  // 🔄 Xóa thông báo chớp cũ nếu có
 document.querySelectorAll('.blink-alert').forEach(el => el.remove());
+	  isTimeOutTriggered = false; // reset cờ hết giờ
   const rawAnswer = document.getElementById('answerInput').value.toUpperCase().replace(/\s/g, '');
 
   // Kiểm tra khi không có dữ liệu
@@ -314,6 +316,7 @@ document.querySelectorAll('.blink-alert').forEach(el => el.remove());
           div.ondragstart = null;
           div.style.cursor = 'default';
         });
+	      isTimeOutTriggered = true; // Đặt cờ
         checkAnswer();
       }
     }, 1000);
@@ -413,15 +416,16 @@ if (window.answerChecked) return; // Đã kiểm tra rồi thì không làm gì 
   const correct = filled === answer;
 
 const info = document.getElementById('infoArea');
-if (timeLeft === 0) {
+if (isTimeOutTriggered) {
   const msg = document.createElement('div');
   msg.className = 'blink-alert';
-  msg.style.color = correct ? 'green' : 'red';
+  msg.style.color = correct ? 'yellow' : 'red';
   msg.innerHTML = correct
     ? '✅ Hết giờ nhưng bạn đã hoàn thành đúng – ĐƯỢC TÍNH ĐIỂM!'
     : '❌ Hết giờ và bạn chưa hoàn thành đúng – KHÔNG ĐƯỢC TÍNH ĐIỂM!';
   info.appendChild(msg);
 }
+
 
   // Phát âm thanh đúng hoặc sai
   const sound = document.getElementById(correct ? 'correctSound' : 'wrongSound');
