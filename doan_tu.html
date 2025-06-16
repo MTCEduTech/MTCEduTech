@@ -242,6 +242,8 @@ function shuffleArray(array) {
     return array;
   }
   function setupGame(forceManual = false) {
+	  // 🔄 Xóa thông báo chớp cũ nếu có
+document.querySelectorAll('.blink-alert').forEach(el => el.remove());
   const rawAnswer = document.getElementById('answerInput').value.toUpperCase().replace(/\s/g, '');
 
   // Kiểm tra khi không có dữ liệu
