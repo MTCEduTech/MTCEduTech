@@ -446,6 +446,26 @@ header {
   padding: 8px 0;
   z-index: 9999;
 }
+@keyframes blinkIcon {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.2);
+  }
+}
+
+.blink-success {
+  animation: blinkIcon 1s ease-in-out 3;
+  color: #00ff00;
+}
+
+.blink-fail {
+  animation: blinkIcon 1s ease-in-out 3;
+  color: #ff4444;
+}
 
   </style>
 <style id="waveDelays"></style>
@@ -632,40 +652,38 @@ function createGrid() {
     const rowContainer = document.createElement("div");
     rowContainer.className = "row-container";
 
-    // Thêm số thứ tự STT và các icon hiệu ứng kết quả
+    // Tạo nhóm hiển thị STT + icon trái phải
     const sttCircleWrapper = document.createElement("div");
     sttCircleWrapper.style.width = "50px"; // cố định chiều rộng
     sttCircleWrapper.style.display = "flex";
-    sttCircleWrapper.style.flexDirection = "column"; // icon trên, số giữa, icon dưới
+    sttCircleWrapper.style.flexDirection = "row"; // icon trái - số - icon phải
     sttCircleWrapper.style.alignItems = "center";
     sttCircleWrapper.style.justifyContent = "center";
+    sttCircleWrapper.style.gap = "4px"; // khoảng cách giữa các phần tử
 
-    // Icon phía trên số (🤔)
+    // Icon bên trái số (ví dụ 🤔)
     const leftIcon = document.createElement("span");
     leftIcon.className = "left-icon";
-    leftIcon.style.fontSize = "16px";
-    leftIcon.style.height = "16px";
-    leftIcon.style.lineHeight = "16px";
-    leftIcon.style.marginBottom = "2px";
+    leftIcon.style.fontSize = "14px";
+    leftIcon.style.lineHeight = "1";
 
     // Vòng tròn STT
     const sttCircle = document.createElement("div");
     sttCircle.className = "stt-circle border-blink";
     sttCircle.textContent = rowIndex + 1;
 
-    // Icon phía dưới số (✔️ / ❌)
+    // Icon bên phải số (✔️ / ❌)
     const rightIcon = document.createElement("span");
     rightIcon.className = "right-icon";
-    rightIcon.style.fontSize = "16px";
-    rightIcon.style.height = "16px";
-    rightIcon.style.lineHeight = "16px";
-    rightIcon.style.marginTop = "2px";
+    rightIcon.style.fontSize = "14px";
+    rightIcon.style.lineHeight = "1";
 
-    // Gắn vào container
+    // Gắn theo thứ tự: trái - giữa - phải
     sttCircleWrapper.appendChild(leftIcon);
     sttCircleWrapper.appendChild(sttCircle);
     sttCircleWrapper.appendChild(rightIcon);
     rowContainer.appendChild(sttCircleWrapper);
+
 
     // Phần tạo ô chữ
     const rowInputs = document.createElement("div");
@@ -778,11 +796,15 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
     const targetCell = cells[verticalIndex].parentElement;
     targetCell.classList.add("vertical-highlight-glow");
   }
-	  rightIconEl.textContent = "✔️"; // ✅ đúng
+	  rightIconEl.textContent = "✔️";
+rightIconEl.classList.remove("blink-fail");
+rightIconEl.classList.add("blink-success"); // ✅ đúng
 } else {
   document.getElementById("wrongSound").play();
   showHintMessage("Chưa đúng rồi, thử lại nhé!", false, originalHintHTML);
-	  rightIconEl.textContent = "❌"; // ❌ nếu sai
+	  rightIconEl.textContent = "❌";
+rightIconEl.classList.remove("blink-success");
+rightIconEl.classList.add("blink-fail"); // ❌ nếu sai
 }
 
 };
