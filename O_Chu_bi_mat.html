@@ -798,7 +798,7 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
 
 } else {
   document.getElementById("wrongSound").play();
-  showHintMessage("Chưa đúng rồi, thử lại nhé!", false, originalHintHTML);
+  showHintMessage("Chưa đúng rồi, bạn đã nhầm chăng?", false, originalHintHTML);
 
   rightIconEl.textContent = "❌";
   rightIconEl.classList.remove("blink-success");
@@ -814,9 +814,27 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
     revealBtn.className = "reveal";
     revealBtn.textContent = "ĐÁP ÁN";
     revealBtn.onclick = () => {
-      const cells = rowInputs.querySelectorAll("input");
-      cells.forEach((input, i) => { input.value = item.answer[i]; });
-    };
+  const cells = rowInputs.querySelectorAll("input");
+
+  cells.forEach((input, i) => {
+    input.value = item.answer[i];
+    input.disabled = true;
+    input.style.fontWeight = "bold";
+    input.parentElement.style.background = "#add8e6"; // Nền xanh nhạt
+    input.style.color = "black"; // Mặc định chữ đen
+  });
+
+  // Xử lý riêng cho ô hàng dọc
+  const verticalIndex = item.verticalLetterIndex;
+  if (verticalIndex >= 0 && verticalIndex < cells.length) {
+    const targetCell = cells[verticalIndex].parentElement;
+    const input = targetCell.querySelector("input");
+
+    targetCell.classList.add("vertical-highlight-glow");       // hiệu ứng sáng
+    targetCell.style.backgroundColor = "#800080";               // tím đậm
+    input.style.color = "white";                                // chữ trắng nổi bật
+  }
+};
 
     rowControls.appendChild(hintBtn);
     rowControls.appendChild(checkBtn);
