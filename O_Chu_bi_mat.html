@@ -795,8 +795,9 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
   const verticalIndex = item.verticalLetterIndex;
   if (verticalIndex >= 0 && verticalIndex < cells.length) {
     const targetCell = cells[verticalIndex].parentElement;
-    targetCell.classList.add("vertical-highlight-glow");
-input.style.color = "black"; // ✅ Đặt lại màu chữ thành đen
+targetCell.classList.add("vertical-highlight-glow"); // ✅ Đặt lại màu chữ trong ô hàng dọc thành đen
+const verticalInput = targetCell.querySelector("input");
+if (verticalInput) verticalInput.style.color = "black"; // ✅ Đặt lại màu chữ thành đen
   }
 
   rightIconEl.textContent = "✔️";
