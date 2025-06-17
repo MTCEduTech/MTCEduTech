@@ -627,37 +627,47 @@ hintBox.style.fontSize = "20px"; // tăng kích thước chữ lớn hơn
 function createGrid() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
+
   data.forEach((item, rowIndex) => {
     const rowContainer = document.createElement("div");
     rowContainer.className = "row-container";
 
     // Thêm số thứ tự STT và các icon hiệu ứng kết quả
     const sttCircleWrapper = document.createElement("div");
-sttCircleWrapper.style.display = "flex";
-sttCircleWrapper.style.alignItems = "center";
-sttCircleWrapper.style.gap = "5px";
+    sttCircleWrapper.style.width = "50px"; // cố định chiều rộng
+    sttCircleWrapper.style.display = "flex";
+    sttCircleWrapper.style.flexDirection = "column"; // icon trên, số giữa, icon dưới
+    sttCircleWrapper.style.alignItems = "center";
+    sttCircleWrapper.style.justifyContent = "center";
 
-// Icon bên trái số (ví dụ 🤔)
-const leftIcon = document.createElement("span");
-leftIcon.className = "left-icon";
-leftIcon.style.fontSize = "18px";
+    // Icon phía trên số (🤔)
+    const leftIcon = document.createElement("span");
+    leftIcon.className = "left-icon";
+    leftIcon.style.fontSize = "16px";
+    leftIcon.style.height = "16px";
+    leftIcon.style.lineHeight = "16px";
+    leftIcon.style.marginBottom = "2px";
 
-// Vòng tròn STT
-const sttCircle = document.createElement("div");
-sttCircle.className = "stt-circle border-blink";
-sttCircle.textContent = rowIndex + 1;
+    // Vòng tròn STT
+    const sttCircle = document.createElement("div");
+    sttCircle.className = "stt-circle border-blink";
+    sttCircle.textContent = rowIndex + 1;
 
-// Icon bên phải số (✔️ ❌)
-const rightIcon = document.createElement("span");
-rightIcon.className = "right-icon";
-rightIcon.style.fontSize = "18px";
+    // Icon phía dưới số (✔️ / ❌)
+    const rightIcon = document.createElement("span");
+    rightIcon.className = "right-icon";
+    rightIcon.style.fontSize = "16px";
+    rightIcon.style.height = "16px";
+    rightIcon.style.lineHeight = "16px";
+    rightIcon.style.marginTop = "2px";
 
-// Gắn vào container
-sttCircleWrapper.appendChild(leftIcon);
-sttCircleWrapper.appendChild(sttCircle);
-sttCircleWrapper.appendChild(rightIcon);
-rowContainer.appendChild(sttCircleWrapper);
+    // Gắn vào container
+    sttCircleWrapper.appendChild(leftIcon);
+    sttCircleWrapper.appendChild(sttCircle);
+    sttCircleWrapper.appendChild(rightIcon);
+    rowContainer.appendChild(sttCircleWrapper);
 
+    // Phần tạo ô chữ
     const rowInputs = document.createElement("div");
     rowInputs.className = "row-inputs";
 
