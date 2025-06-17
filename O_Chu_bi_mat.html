@@ -652,41 +652,33 @@ function createGrid() {
     const rowContainer = document.createElement("div");
     rowContainer.className = "row-container";
 
-    // Wrapper chính chứa 3 phần tách biệt
-const sttWrapper = document.createElement("div");
-sttWrapper.style.display = "flex";
-sttWrapper.style.flexDirection = "row";
-sttWrapper.style.alignItems = "center";
-sttWrapper.style.justifyContent = "center";
-sttWrapper.style.width = "50px";
-sttWrapper.style.gap = "4px";
+    // Wrapper STT + icon kết quả bên phải
+    const sttWrapper = document.createElement("div");
+    sttWrapper.style.display = "flex";
+    sttWrapper.style.flexDirection = "row";
+    sttWrapper.style.alignItems = "center";
+    sttWrapper.style.justifyContent = "center";
+    sttWrapper.style.width = "50px";
+    sttWrapper.style.gap = "4px";
 
-// Icon bên trái
-const leftIcon = document.createElement("span");
-leftIcon.className = "left-icon";
-leftIcon.style.fontSize = "14px";
-leftIcon.style.width = "14px";
-leftIcon.style.textAlign = "center";
+    // Vòng tròn STT
+    const sttCircle = document.createElement("div");
+    sttCircle.className = "stt-circle border-blink";
+    sttCircle.textContent = rowIndex + 1;
 
-// STT vòng tròn
-const sttCircle = document.createElement("div");
-sttCircle.className = "stt-circle border-blink";
-sttCircle.textContent = rowIndex + 1;
+    // Icon bên phải (✔️/❌)
+    const rightIcon = document.createElement("span");
+    rightIcon.className = "right-icon";
+    rightIcon.style.fontSize = "14px";
+    rightIcon.style.width = "14px";
+    rightIcon.style.textAlign = "center";
 
-// Icon bên phải
-const rightIcon = document.createElement("span");
-rightIcon.className = "right-icon";
-rightIcon.style.fontSize = "14px";
-rightIcon.style.width = "14px";
-rightIcon.style.textAlign = "center";
+    // Gắn STT và icon vào wrapper
+    sttWrapper.appendChild(sttCircle);
+    sttWrapper.appendChild(rightIcon);
 
-// Gắn theo thứ tự: icon trái - số - icon phải
-sttWrapper.appendChild(leftIcon);
-sttWrapper.appendChild(sttCircle);
-sttWrapper.appendChild(rightIcon);
-
-// Thêm vào hàng
-rowContainer.appendChild(sttWrapper);
+    // Thêm vào dòng
+    rowContainer.appendChild(sttWrapper);
 
 
     // Phần tạo ô chữ
@@ -736,15 +728,7 @@ rowContainer.appendChild(sttWrapper);
         </div>`;
       hintBox.scrollIntoView({ behavior: 'smooth' });
 
- // Ghi lại dòng đang chọn và chỉ số dòng đó
-  pendingRowToLock = { rowInputs, rowIndex };
-const leftIconEl = rowContainer.querySelector(".left-icon");
-if (!leftIconEl.textContent) {
-  leftIconEl.textContent = "🤔";
-}
-
-
-};
+ };
 
     const checkBtn = document.createElement("button");
     checkBtn.className = "check";
@@ -800,17 +784,25 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
     const targetCell = cells[verticalIndex].parentElement;
     targetCell.classList.add("vertical-highlight-glow");
   }
-	  rightIconEl.textContent = "✔️";
-rightIconEl.classList.remove("blink-fail");
-rightIconEl.classList.add("blink-success"); // ✅ đúng
+
+  rightIconEl.textContent = "✔️";
+  rightIconEl.classList.remove("blink-fail");
+  rightIconEl.classList.add("blink-success");
+
+  checkBtn.disabled = true; // ✅ Khóa nút kiểm tra sau khi đúng
+  lockRow(rowInputs);       // ✅ Khóa input sau khi đúng (giữ thống nhất)
+
 } else {
   document.getElementById("wrongSound").play();
   showHintMessage("Chưa đúng rồi, thử lại nhé!", false, originalHintHTML);
-	  rightIconEl.textContent = "❌";
-rightIconEl.classList.remove("blink-success");
-rightIconEl.classList.add("blink-fail"); // ❌ nếu sai
-}
 
+  rightIconEl.textContent = "❌";
+  rightIconEl.classList.remove("blink-success");
+  rightIconEl.classList.add("blink-fail");
+
+  checkBtn.disabled = true; // ✅ Không cho kiểm tra lại
+  lockRow(rowInputs);       // ✅ Khoá các ô input của dòng đó
+}
 };
 
 
@@ -1016,6 +1008,10 @@ function exitFullscreen() {
   }
 }
 
+function lockRow(rowInputs) {
+  const inputs = rowInputs.querySelectorAll("input");
+  inputs.forEach(input => input.disabled = true);
+}
 
 </script>
 
