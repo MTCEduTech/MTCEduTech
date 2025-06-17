@@ -510,7 +510,7 @@ header {
  <label id="customFileLabel" for="fileInput" class="glow-effect">📂 MỞ ĐỀ TÌM Ô CHỮ</label><br>
 
   <input type="file" id="fileInput" accept=".html" />
-  <button id="verticalAnswerBtn" class="glow-effect" onclick="showVerticalAnswer()">ĐÁP ÁN TỪ DỌC</button> <br>
+  <button id="verticalAnswerBtn" class="glow-effect" onclick="showVerticalAnswer()">ĐÁP ÁN TỪ H.DỌC</button> <br>
 
 <!-- Chèn khối đồng hồ ngay bên dưới -->
     <div class="fixed-clock-box">
@@ -840,6 +840,7 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
     const input = targetCell.querySelector("input");
 
     targetCell.classList.add("vertical-highlight-glow");       // hiệu ứng sáng
+	  input.style.color = "black";
     targetCell.style.backgroundColor = "#800080";               // tím đậm
     input.style.color = "black";                                // chữ trắng nổi bật
   }
