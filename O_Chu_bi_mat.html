@@ -510,7 +510,7 @@ header {
  <label id="customFileLabel" for="fileInput" class="glow-effect">📂 MỞ ĐỀ TÌM Ô CHỮ</label><br>
 
   <input type="file" id="fileInput" accept=".html" />
-  <button id="verticalAnswerBtn" class="glow-effect" onclick="showVerticalAnswer()">ĐÁP ÁN HÀNG DỌC</button> <br>
+  <button id="verticalAnswerBtn" class="glow-effect" onclick="showVerticalAnswer()">ĐÁP ÁN TỪ DỌC</button> <br>
 
 <!-- Chèn khối đồng hồ ngay bên dưới -->
     <div class="fixed-clock-box">
@@ -700,15 +700,24 @@ function createGrid() {
       input.maxLength = 1;
 
       input.addEventListener("input", function () {
-        this.value = this.value.toUpperCase();
-        if (this.value.length === 1) {
-          const inputs = rowInputs.querySelectorAll("input");
-          const index = Array.from(inputs).indexOf(this);
-          if (index < inputs.length - 1) {
-            inputs[index + 1].focus();
-          }
-        }
-      });
+  this.value = this.value.toUpperCase();
+
+  // Đổi màu chữ khi nhập
+  if (c === item.verticalLetterIndex) {
+    this.style.color = "white"; // ô hàng dọc thì chữ trắng
+  } else {
+    this.style.color = "black"; // còn lại chữ đen
+  }
+
+  // Tự động chuyển sang ô tiếp theo
+  if (this.value.length === 1) {
+    const inputs = rowInputs.querySelectorAll("input");
+    const index = Array.from(inputs).indexOf(this);
+    if (index < inputs.length - 1) {
+      inputs[index + 1].focus();
+    }
+  }
+});
 
       cell.appendChild(input);
       rowInputs.appendChild(cell);
@@ -832,7 +841,7 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
 
     targetCell.classList.add("vertical-highlight-glow");       // hiệu ứng sáng
     targetCell.style.backgroundColor = "#800080";               // tím đậm
-    input.style.color = "white";                                // chữ trắng nổi bật
+    input.style.color = "black";                                // chữ trắng nổi bật
   }
 };
 
