@@ -717,7 +717,10 @@ function createGrid() {
  // Ghi lại dòng đang chọn và chỉ số dòng đó
   pendingRowToLock = { rowInputs, rowIndex };
 const leftIconEl = rowContainer.querySelector(".left-icon");
-leftIconEl.textContent = "🤔";
+if (!leftIconEl.textContent) {
+  leftIconEl.textContent = "🤔";
+}
+
 
 };
 
