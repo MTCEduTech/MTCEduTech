@@ -432,8 +432,6 @@ header {
       letter-spacing: 5px;
     }
 
-
-
 #bottom-marquee {
   position: fixed;
   bottom: 0;
@@ -465,6 +463,11 @@ header {
 .blink-fail {
   animation: blinkIcon 1s ease-in-out 3;
   color: #ff4444;
+}
+.stt-red {
+  background-color: red !important;
+  color: white !important;
+  font-weight: bold;
 }
 
   </style>
@@ -727,7 +730,8 @@ function createGrid() {
           <strong>Gợi ý:</strong> ${item.hint}
         </div>`;
       hintBox.scrollIntoView({ behavior: 'smooth' });
-
+// Thêm màu đỏ cho vòng tròn STT khi nhấn dấu ?
+  sttCircle.classList.add("stt-red");
  };
 
     const checkBtn = document.createElement("button");
