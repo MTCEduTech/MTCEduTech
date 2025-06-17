@@ -631,11 +631,32 @@ function createGrid() {
     const rowContainer = document.createElement("div");
     rowContainer.className = "row-container";
 
-    // Thêm số thứ tự STT vào bên trái
-    const sttCircle = document.createElement("div");
-    sttCircle.className = "stt-circle border-blink";
-    sttCircle.textContent = rowIndex + 1;
-    rowContainer.appendChild(sttCircle);
+    // Thêm số thứ tự STT và các icon hiệu ứng kết quả
+    const sttCircleWrapper = document.createElement("div");
+sttCircleWrapper.style.display = "flex";
+sttCircleWrapper.style.alignItems = "center";
+sttCircleWrapper.style.gap = "5px";
+
+// Icon bên trái số (ví dụ 🤔)
+const leftIcon = document.createElement("span");
+leftIcon.className = "left-icon";
+leftIcon.style.fontSize = "18px";
+
+// Vòng tròn STT
+const sttCircle = document.createElement("div");
+sttCircle.className = "stt-circle border-blink";
+sttCircle.textContent = rowIndex + 1;
+
+// Icon bên phải số (✔️ ❌)
+const rightIcon = document.createElement("span");
+rightIcon.className = "right-icon";
+rightIcon.style.fontSize = "18px";
+
+// Gắn vào container
+sttCircleWrapper.appendChild(leftIcon);
+sttCircleWrapper.appendChild(sttCircle);
+sttCircleWrapper.appendChild(rightIcon);
+rowContainer.appendChild(sttCircleWrapper);
 
     const rowInputs = document.createElement("div");
     rowInputs.className = "row-inputs";
@@ -685,6 +706,9 @@ function createGrid() {
 
  // Ghi lại dòng đang chọn và chỉ số dòng đó
   pendingRowToLock = { rowInputs, rowIndex };
+const leftIconEl = rowContainer.querySelector(".left-icon");
+leftIconEl.textContent = "🤔";
+
 };
 
     const checkBtn = document.createElement("button");
@@ -718,6 +742,8 @@ function createGrid() {
       <strong>Độ dài:</strong> ${item.answer.length} chữ cái<br>
       <strong>Gợi ý:</strong> ${item.hint}
     </div>`;
+	    
+const rightIconEl = rowContainer.querySelector(".right-icon");
 
   if (allCorrect) {
   document.getElementById("correctSound").play();
@@ -739,9 +765,11 @@ function createGrid() {
     const targetCell = cells[verticalIndex].parentElement;
     targetCell.classList.add("vertical-highlight-glow");
   }
+	  rightIconEl.textContent = "✔️"; // ✅ đúng
 } else {
   document.getElementById("wrongSound").play();
   showHintMessage("Chưa đúng rồi, thử lại nhé!", false, originalHintHTML);
+	  rightIconEl.textContent = "❌"; // ❌ nếu sai
 }
 
 };
