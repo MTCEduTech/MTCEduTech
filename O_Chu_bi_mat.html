@@ -652,37 +652,41 @@ function createGrid() {
     const rowContainer = document.createElement("div");
     rowContainer.className = "row-container";
 
-    // Tạo nhóm hiển thị STT + icon trái phải
-    const sttCircleWrapper = document.createElement("div");
-    sttCircleWrapper.style.width = "50px"; // cố định chiều rộng
-    sttCircleWrapper.style.display = "flex";
-    sttCircleWrapper.style.flexDirection = "row"; // icon trái - số - icon phải
-    sttCircleWrapper.style.alignItems = "center";
-    sttCircleWrapper.style.justifyContent = "center";
-    sttCircleWrapper.style.gap = "4px"; // khoảng cách giữa các phần tử
+    // Wrapper chính chứa 3 phần tách biệt
+const sttWrapper = document.createElement("div");
+sttWrapper.style.display = "flex";
+sttWrapper.style.flexDirection = "row";
+sttWrapper.style.alignItems = "center";
+sttWrapper.style.justifyContent = "center";
+sttWrapper.style.width = "50px";
+sttWrapper.style.gap = "4px";
 
-    // Icon bên trái số (ví dụ 🤔)
-    const leftIcon = document.createElement("span");
-    leftIcon.className = "left-icon";
-    leftIcon.style.fontSize = "14px";
-    leftIcon.style.lineHeight = "1";
+// Icon bên trái
+const leftIcon = document.createElement("span");
+leftIcon.className = "left-icon";
+leftIcon.style.fontSize = "14px";
+leftIcon.style.width = "14px";
+leftIcon.style.textAlign = "center";
 
-    // Vòng tròn STT
-    const sttCircle = document.createElement("div");
-    sttCircle.className = "stt-circle border-blink";
-    sttCircle.textContent = rowIndex + 1;
+// STT vòng tròn
+const sttCircle = document.createElement("div");
+sttCircle.className = "stt-circle border-blink";
+sttCircle.textContent = rowIndex + 1;
 
-    // Icon bên phải số (✔️ / ❌)
-    const rightIcon = document.createElement("span");
-    rightIcon.className = "right-icon";
-    rightIcon.style.fontSize = "14px";
-    rightIcon.style.lineHeight = "1";
+// Icon bên phải
+const rightIcon = document.createElement("span");
+rightIcon.className = "right-icon";
+rightIcon.style.fontSize = "14px";
+rightIcon.style.width = "14px";
+rightIcon.style.textAlign = "center";
 
-    // Gắn theo thứ tự: trái - giữa - phải
-    sttCircleWrapper.appendChild(leftIcon);
-    sttCircleWrapper.appendChild(sttCircle);
-    sttCircleWrapper.appendChild(rightIcon);
-    rowContainer.appendChild(sttCircleWrapper);
+// Gắn theo thứ tự: icon trái - số - icon phải
+sttWrapper.appendChild(leftIcon);
+sttWrapper.appendChild(sttCircle);
+sttWrapper.appendChild(rightIcon);
+
+// Thêm vào hàng
+rowContainer.appendChild(sttWrapper);
 
 
     // Phần tạo ô chữ
