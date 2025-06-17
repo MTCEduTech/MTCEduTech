@@ -796,6 +796,7 @@ const rightIconEl = rowContainer.querySelector(".right-icon");
   if (verticalIndex >= 0 && verticalIndex < cells.length) {
     const targetCell = cells[verticalIndex].parentElement;
     targetCell.classList.add("vertical-highlight-glow");
+input.style.color = "black"; // ✅ Đặt lại màu chữ thành đen
   }
 
   rightIconEl.textContent = "✔️";
