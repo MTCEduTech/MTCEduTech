@@ -280,6 +280,34 @@ font-size: 10px;
   <div class="legend" data-group="unknown" style="background: #eeeeee; width: 110px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 11px; text-align: center;">Chưa<br>phân loại</div>
 </div>
 
+<div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; margin-top: 20px;">
+  <!-- Ô tìm kiếm (Vị trí 1) -->
+  <div style="width: 250px;">
+    <input id="element-search" type="text" placeholder="Nhập KHHH hoặc tên NTHH" 
+      style="width: 100%; padding: 10px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc;" />
+  </div>
+
+  <!-- Popup hiển thị nguyên tố (Vị trí 2) -->
+  <div id="preview-element" style="
+    width: 120px;
+    height: 120px;
+    background-color: #f0f0f0;
+    border: 2px solid #999;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    text-align: center;
+    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  ">
+    <div class="symbol" style="font-size: 24px; font-weight: bold;">?</div>
+    <div class="name" style="font-size: 14px; margin-top: 4px;"></div>
+    <div class="atomic-number" style="font-size: 10px;"></div>
+  </div>
+</div>
 
 
 <div class="bang-wrapper">
@@ -1482,6 +1510,54 @@ function exitFullscreen() {
       td.addEventListener('mouseenter', () => {
         speak(elementName);
       });
+    }
+  });
+</script>
+<script>
+  // Hàm tìm kiếm và hiển thị ô nguyên tố
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utter);
+    }
+  }
+
+  const input = document.getElementById('element-search');
+  const preview = document.getElementById('preview-element');
+
+  input.addEventListener('input', () => {
+    const keyword = input.value.trim().toLowerCase();
+    let found = false;
+
+    document.querySelectorAll('td').forEach(td => {
+      const symbol = td.querySelector('.symbol')?.innerText.trim().toLowerCase();
+      const name = td.querySelector('.name')?.innerText.trim().toLowerCase();
+
+      if (symbol === keyword || name === keyword) {
+        found = true;
+
+        // Hiển thị trong preview box
+        const previewSymbol = td.querySelector('.symbol')?.innerText || '';
+        const previewName = td.querySelector('.name')?.innerText || '';
+        const previewNumber = td.querySelector('.atomic-number')?.innerText || '';
+        const bgColor = td.style.backgroundColor || getComputedStyle(td).backgroundColor;
+
+        preview.querySelector('.symbol').innerText = previewSymbol;
+        preview.querySelector('.name').innerText = previewName;
+        preview.querySelector('.atomic-number').innerText = previewNumber;
+        preview.style.backgroundColor = bgColor;
+
+        speak(previewName);
+      }
+    });
+
+    if (!found) {
+      preview.querySelector('.symbol').innerText = '?';
+      preview.querySelector('.name').innerText = '';
+      preview.querySelector('.atomic-number').innerText = '';
+      preview.style.backgroundColor = '#f0f0f0';
     }
   });
 </script>
