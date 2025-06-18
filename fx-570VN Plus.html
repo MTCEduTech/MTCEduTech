@@ -283,41 +283,41 @@ font-size: 10px;
 
 <div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; margin-top: 20px;">
  
-<!-- Popup nổi ở vùng trống bảng tuần hoàn -->
-<div style="position: absolute; top: 180px; left: 700px; z-index: 1000; display: flex; gap: 12px;">
+<!-- Popup tìm kiếm + khung nguyên tố -->
+<div style="position: absolute; top: 180px; left: 700px; z-index: 1000; display: flex; align-items: center; gap: 12px;">
   
-  <!-- Ô tìm kiếm -->
-  <div style="position: relative;">
-    <input id="element-search" type="text" placeholder="Nhập số hiệu, KHHH hoặc tên nguyên tố" 
-  style="width: 160px; padding: 6px 10px; font-size: 13px; border-radius: 6px; border: 1px solid #aaa;" />
-    </div>
+  <!-- Ô tìm kiếm (căn giữa chiều cao) -->
+  <div style="display: flex; align-items: center;">
+    <input id="element-search" type="text" placeholder="Nhập KHHH, tên hoặc số" 
+      style="width: 150px; padding: 6px 10px; font-size: 13px; border-radius: 6px; border: 1px solid #aaa;" />
+  </div>
 
-  <!-- Khung preview nguyên tố -->
- <!-- Khung preview nguyên tố đầy đủ -->
-<div id="preview-element" style="
-  width: 130px;
-  height: auto;
-  min-height: 120px;
-  background-color: #f0f0f0;
-  border: 2px solid #999;
-  border-radius: 6px;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  text-align: center;
-  box-shadow: 0 0 6px rgba(0,0,0,0.2);
-  cursor: default;
-">
-  <div class="atomic-number" style="font-size: 12px; font-weight: bold; margin-bottom: 4px;"></div>
-<div class="symbol" style="font-size: 28px; font-weight: bold;"></div>
-  <div class="name" style="font-size: 14px; margin-top: 2px;"></div>
-  <div class="atomic-mass" style="font-size: 11px; margin-top: 2px; color: #444;"></div>
-  <div class="valence" style="font-size: 11px; margin-top: 2px; color: #333; font-style: italic;"></div>
+  <!-- Khung preview nhỏ gọn -->
+  <div id="preview-element" style="
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+    border: 2px solid #999;
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    cursor: default;
+  ">
+    <div class="atomic-number" style="font-size: 11px; font-weight: bold;"></div>
+    <div class="symbol" style="font-size: 24px; font-weight: bold;"></div>
+    <div class="name" style="font-size: 13px;"></div>
+    <div class="atomic-mass" style="font-size: 11px; color: #444;"></div>
+    <div class="valence" style="font-size: 10px; color: #333; font-style: italic;"></div>
+  </div>
+
 </div>
-</div>
+
 
 <div class="bang-wrapper">
 <table style="margin-top: 0px; margin-bottom: 20px;">
