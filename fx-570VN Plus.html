@@ -293,28 +293,29 @@ font-size: 10px;
   </div>
 
   <!-- Khung preview nhỏ gọn -->
-  <div id="preview-element" style="
-    width: 100px;
-    height: 100px;
-    background-color: #f0f0f0;
-    border: 2px solid #999;
-    border-radius: 6px;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    box-shadow: 0 0 6px rgba(0,0,0,0.2);
-    cursor: default;
-  ">
-    <div class="atomic-number" style="font-size: 12px; font-weight: bold; text-align: center; width: 100%; margin-bottom: 4px;"></div>
-    <div class="symbol" style="font-size: 24px; font-weight: bold;"></div>
-    <div class="name" style="font-size: 13px;"></div>
-    <div class="atomic-mass" style="font-size: 11px; color: #444;"></div>
-    <div class="valence" style="font-size: 10px; color: #333; font-style: italic;"></div>
-  </div>
+<div id="preview-element" style="
+  width: 100px;
+  height: 100px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  cursor: default;
+  position: relative;
+">
+  <div class="atomic-number" style="font-size: 11px; font-weight: bold; margin-bottom: 2px;"></div>
+  <div class="symbol" style="font-size: 24px; font-weight: bold;"></div>
+  <div class="name" style="font-size: 13px;"></div>
+  <div class="atomic-mass" style="font-size: 11px; color: #444;"></div>
+  <div class="valence" style="font-size: 10px; color: #333; font-style: italic;"></div>
+</div>
+
 
 </div>
 
