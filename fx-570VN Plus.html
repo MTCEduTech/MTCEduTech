@@ -281,16 +281,28 @@ font-size: 10px;
 </div>
 
 <div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start; margin-top: 20px;">
-  <!-- Ô tìm kiếm (Vị trí 1) -->
-  <div style="width: 250px;">
-    <input id="element-search" type="text" placeholder="Nhập KHHH hoặc tên NTHH" 
-      style="width: 100%; padding: 10px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc;" />
+ 
+  <!-- Vùng công cụ tìm kiếm + hiển thị nguyên tố -->
+<div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 20px 0;">
+  
+  <!-- Ô tìm kiếm (rút ngắn + icon) -->
+  <div style="position: relative;">
+    <input id="element-search" type="text" placeholder="Nhập KHHH hoặc tên" 
+      style="width: 180px; padding: 8px 30px 8px 10px; font-size: 14px; border-radius: 6px; border: 1px solid #aaa;" />
+    <span style="
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #666;
+    ">🔍</span>
   </div>
 
-  <!-- Popup hiển thị nguyên tố (Vị trí 2) -->
+  <!-- Khung nguyên tố preview -->
   <div id="preview-element" style="
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     background-color: #f0f0f0;
     border: 2px solid #999;
     border-radius: 8px;
@@ -302,12 +314,14 @@ font-size: 10px;
     font-size: 12px;
     text-align: center;
     box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    cursor: default;
   ">
-    <div class="symbol" style="font-size: 24px; font-weight: bold;">?</div>
-    <div class="name" style="font-size: 14px; margin-top: 4px;"></div>
+    <div class="symbol" style="font-size: 20px; font-weight: bold;">?</div>
+    <div class="name" style="font-size: 13px; margin-top: 4px;"></div>
     <div class="atomic-number" style="font-size: 10px;"></div>
   </div>
 </div>
+
 
 
 <div class="bang-wrapper">
@@ -1514,22 +1528,15 @@ function exitFullscreen() {
   });
 </script>
 <script>
-  // Hàm tìm kiếm và hiển thị ô nguyên tố
-  function speak(text) {
-    if ('speechSynthesis' in window) {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = 'en-US';
-      speechSynthesis.cancel();
-      speechSynthesis.speak(utter);
-    }
-  }
-
   const input = document.getElementById('element-search');
   const preview = document.getElementById('preview-element');
+  let matchedElement = null;
 
+  // Không đọc ngay khi nhập, chỉ lưu kết quả tìm được
   input.addEventListener('input', () => {
     const keyword = input.value.trim().toLowerCase();
     let found = false;
+    matchedElement = null;
 
     document.querySelectorAll('td').forEach(td => {
       const symbol = td.querySelector('.symbol')?.innerText.trim().toLowerCase();
@@ -1537,19 +1544,17 @@ function exitFullscreen() {
 
       if (symbol === keyword || name === keyword) {
         found = true;
+        matchedElement = td;
 
-        // Hiển thị trong preview box
-        const previewSymbol = td.querySelector('.symbol')?.innerText || '';
-        const previewName = td.querySelector('.name')?.innerText || '';
-        const previewNumber = td.querySelector('.atomic-number')?.innerText || '';
-        const bgColor = td.style.backgroundColor || getComputedStyle(td).backgroundColor;
+        const symbolText = td.querySelector('.symbol').innerText;
+        const nameText = td.querySelector('.name').innerText;
+        const atomicText = td.querySelector('.atomic-number')?.innerText || '';
+        const bgColor = getComputedStyle(td).backgroundColor;
 
-        preview.querySelector('.symbol').innerText = previewSymbol;
-        preview.querySelector('.name').innerText = previewName;
-        preview.querySelector('.atomic-number').innerText = previewNumber;
+        preview.querySelector('.symbol').innerText = symbolText;
+        preview.querySelector('.name').innerText = nameText;
+        preview.querySelector('.atomic-number').innerText = atomicText;
         preview.style.backgroundColor = bgColor;
-
-        speak(previewName);
       }
     });
 
@@ -1560,7 +1565,25 @@ function exitFullscreen() {
       preview.style.backgroundColor = '#f0f0f0';
     }
   });
+
+  // Đọc tên khi rê chuột vào preview (nếu có nguyên tố hợp lệ)
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utter);
+    }
+  }
+
+  preview.addEventListener('mouseenter', () => {
+    if (matchedElement) {
+      const name = matchedElement.querySelector('.name')?.innerText;
+      if (name) speak(name);
+    }
+  });
 </script>
+
 
 <!-- Menu -->
 <div id="sideMenu" class="side-menu">
