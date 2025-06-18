@@ -288,17 +288,9 @@ font-size: 10px;
   
   <!-- Ô tìm kiếm -->
   <div style="position: relative;">
-    <input id="element-search" type="text" placeholder="Nhập KHHH hoặc tên" 
-      style="width: 150px; padding: 6px 26px 6px 8px; font-size: 13px; border-radius: 6px; border: 1px solid #aaa;" />
-    <span style="
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 14px;
-      color: #555;
-    ">🔍</span>
-  </div>
+    <input id="element-search" type="text" placeholder="Nhập số hiệu, KHHH hoặc tên nguyên tố" 
+  style="width: 160px; padding: 6px 10px; font-size: 13px; border-radius: 6px; border: 1px solid #aaa;" />
+    </div>
 
   <!-- Khung preview nguyên tố -->
  <!-- Khung preview nguyên tố đầy đủ -->
@@ -319,8 +311,8 @@ font-size: 10px;
   box-shadow: 0 0 6px rgba(0,0,0,0.2);
   cursor: default;
 ">
-  <div class="atomic-number" style="font-size: 10px; font-weight: bold;"></div>
-  <div class="symbol" style="font-size: 24px; font-weight: bold; margin-top: 4px;"></div>
+  <div class="atomic-number" style="font-size: 12px; font-weight: bold; margin-bottom: 4px;"></div>
+<div class="symbol" style="font-size: 28px; font-weight: bold;"></div>
   <div class="name" style="font-size: 14px; margin-top: 2px;"></div>
   <div class="atomic-mass" style="font-size: 11px; margin-top: 2px; color: #444;"></div>
   <div class="valence" style="font-size: 11px; margin-top: 2px; color: #333; font-style: italic;"></div>
@@ -1544,8 +1536,9 @@ function exitFullscreen() {
   document.querySelectorAll('td').forEach(td => {
     const symbol = td.querySelector('.symbol')?.innerText.trim().toLowerCase();
     const name = td.querySelector('.name')?.innerText.trim().toLowerCase();
+    const atomic = td.querySelector('.atomic-number')?.innerText.trim().toLowerCase();
 
-    if (symbol === keyword || name === keyword) {
+    if (symbol === keyword || name === keyword || atomic === keyword) {
       found = true;
       matchedElement = td;
 
