@@ -1462,6 +1462,30 @@ function exitFullscreen() {
 <!-- Overlay -->
 <div id="overlay" class="overlay"></div>
 
+  <script>
+  // Hàm đọc văn bản bằng giọng nói
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      speechSynthesis.cancel(); // dừng nếu đang đọc cái trước
+      speechSynthesis.speak(utter);
+    }
+  }
+
+  // Gán sự kiện hover cho mỗi ô nguyên tố
+  document.querySelectorAll('td').forEach(td => {
+    const nameDiv = td.querySelector('.name');
+    if (nameDiv) {
+      const elementName = nameDiv.textContent.trim();
+
+      td.addEventListener('mouseenter', () => {
+        speak(elementName);
+      });
+    }
+  });
+</script>
+
 <!-- Menu -->
 <div id="sideMenu" class="side-menu">
 <a href="index.html">🏠 Trang chủ</a>
