@@ -206,18 +206,23 @@ button {
 }
 
   td {
-    border: 1px solid #999;
-    width: 50px;
-    height: 60px;
-font-size: 10px;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    background-color: #f0f0f0;
-    position: relative;
-    transition: transform 0.3s ease;
-    font-family: Arial, sans-serif;
-  }
+  position: relative;
+  overflow: hidden;
+  height: 80px;
+  vertical-align: top;
+  padding: 2px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+td .atomic-number {
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  margin-bottom: 2px;
+}
+
   .atomic-number { font-size: 9px; font-weight: bold; position: absolute; top: 4px; left: 6px; }
   .symbol { font-size: 16px; font-weight: bold; margin-top: 8px; }
   .name { font-size: 9px; margin-top: 6px; }
@@ -292,30 +297,29 @@ font-size: 10px;
       style="width: 150px; padding: 6px 10px; font-size: 13px; border-radius: 6px; border: 1px solid #aaa;" />
   </div>
 
-  <!-- Khung preview nhỏ gọn -->
-  <div id="preview-element" style="
-    width: 100px;
-    height: 100px;
-    background-color: #f0f0f0;
-    border: 2px solid #999;
-    border-radius: 6px;
-    padding: 6px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    box-shadow: 0 0 6px rgba(0,0,0,0.2);
-    cursor: default;
-  ">
-    <div class="atomic-number" style="font-size: 12px; font-weight: bold; text-align: center; width: 100%; margin-bottom: 4px;"></div>
-    <div class="symbol" style="font-size: 24px; font-weight: bold;"></div>
-    <div class="name" style="font-size: 13px;"></div>
-    <div class="atomic-mass" style="font-size: 11px; color: #444;"></div>
-    <div class="valence" style="font-size: 10px; color: #333; font-style: italic;"></div>
-  </div>
-
+  <!-- Khung preview -->
+<div id="preview-element" style="
+  width: 100px;
+  height: 100px;
+  background-color: #f0f0f0;
+  border: 2px solid #999;
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  cursor: default;
+">
+  <div class="atomic-number" style="font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 4px;"></div>
+  <div class="symbol" style="font-size: 24px; font-weight: bold;"></div>
+  <div class="name" style="font-size: 13px;"></div>
+  <div class="atomic-mass" style="font-size: 11px; color: #444;"></div>
+  <div class="valence" style="font-size: 10px; color: #333; font-style: italic;"></div>
+</div>
 </div>
 
 
@@ -1527,48 +1531,49 @@ function exitFullscreen() {
   const preview = document.getElementById('preview-element');
   let matchedElement = null;
 
-  // Không đọc ngay khi nhập, chỉ lưu kết quả tìm được
   input.addEventListener('input', () => {
-  const keyword = input.value.trim().toLowerCase();
-  let found = false;
-  matchedElement = null;
+    const keyword = input.value.trim().toLowerCase();
+    let found = false;
+    matchedElement = null;
 
-  document.querySelectorAll('td').forEach(td => {
-    const symbol = td.querySelector('.symbol')?.innerText.trim().toLowerCase();
-    const name = td.querySelector('.name')?.innerText.trim().toLowerCase();
-    const atomic = td.querySelector('.atomic-number')?.innerText.trim().toLowerCase();
+    document.querySelectorAll('td').forEach(td => {
+      const symbol = td.querySelector('.symbol')?.innerText.trim().toLowerCase();
+      const name = td.querySelector('.name')?.innerText.trim().toLowerCase();
+      const atomic = td.querySelector('.atomic-number')?.innerText.trim().toLowerCase();
 
-    if (symbol === keyword || name === keyword || atomic === keyword) {
-      found = true;
-      matchedElement = td;
+      if (symbol === keyword || name === keyword || atomic === keyword) {
+        found = true;
+        matchedElement = td;
 
-      const symbolText = td.querySelector('.symbol')?.innerText || '';
-      const nameText = td.querySelector('.name')?.innerText || '';
-      const numberText = td.querySelector('.atomic-number')?.innerText || '';
-      const massText = td.querySelector('.atomic-mass')?.innerText || '';
-      const valenceText = td.querySelector('.valence')?.innerText || '';
-      const bgColor = getComputedStyle(td).backgroundColor;
+        // Trích thông tin từ ô nguyên tố
+        const symbolText = td.querySelector('.symbol')?.innerText || '';
+        const nameText = td.querySelector('.name')?.innerText || '';
+        const numberText = td.querySelector('.atomic-number')?.innerText || '';
+        const massText = td.querySelector('.atomic-mass')?.innerText || '';
+        const valenceText = td.querySelector('.valence')?.innerText || '';
+        const bgColor = getComputedStyle(td).backgroundColor;
 
-      preview.querySelector('.symbol').innerText = symbolText;
-      preview.querySelector('.name').innerText = nameText;
-      preview.querySelector('.atomic-number').innerText = numberText;
-      preview.querySelector('.atomic-mass').innerText = massText;
-      preview.querySelector('.valence').innerText = valenceText;
-      preview.style.backgroundColor = bgColor;
+        // Đưa vào preview
+        preview.querySelector('.symbol').innerText = symbolText;
+        preview.querySelector('.name').innerText = nameText;
+        preview.querySelector('.atomic-number').innerText = numberText;
+        preview.querySelector('.atomic-mass').innerText = massText;
+        preview.querySelector('.valence').innerText = valenceText;
+        preview.style.backgroundColor = bgColor;
+      }
+    });
+
+    if (!found) {
+      preview.querySelector('.symbol').innerText = '?';
+      preview.querySelector('.name').innerText = '';
+      preview.querySelector('.atomic-number').innerText = '';
+      preview.querySelector('.atomic-mass').innerText = '';
+      preview.querySelector('.valence').innerText = '';
+      preview.style.backgroundColor = '#f0f0f0';
     }
   });
 
-  if (!found) {
-    preview.querySelector('.symbol').innerText = '?';
-    preview.querySelector('.name').innerText = '';
-    preview.querySelector('.atomic-number').innerText = '';
-    preview.querySelector('.atomic-mass').innerText = '';
-    preview.querySelector('.valence').innerText = '';
-    preview.style.backgroundColor = '#f0f0f0';
-  }
-});
-
-  // Đọc tên khi rê chuột vào preview (nếu có nguyên tố hợp lệ)
+  // Đọc tên nguyên tố khi rê chuột vào preview
   function speak(text) {
     if ('speechSynthesis' in window) {
       const utter = new SpeechSynthesisUtterance(text);
