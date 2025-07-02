@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script src="auth.js"></script>
+  <title>Quay Số May Mắn</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --box-bg: green;
+      --digit-color: white;
+      --border-color: gold;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #f0f0f0;
+      --box-bg: #004400;
+      --digit-color: #00ffcc;
+      --border-color: #f9a602;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .title {
+      margin-top: 20px;
+      font-size: 2em;
+      font-weight: bold;
+      background: #68aee2;
+      padding: 15px 30px;
+      border-radius: 10px;
+      color: white;
+      text-align: center;
+    }
+
+    .main-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      max-width: 1000px;
+      width: 100%;
+      margin-top: 20px;
+      gap: 30px;
+    }
+
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .label {
+      background-color: darkred;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    input[type="number"] {
+      width: 100px;
+      font-size: 20px;
+      padding: 5px;
+      text-align: center;
+      border-radius: 8px;
+      border: 2px solid red;
+    }
+
+    .error-msg {
+      color: red;
+      font-weight: bold;
+      margin-top: -5px;
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .spin-button {
+      background-color: #68aee2;
+      color: white;
+    }
+
+    .result-box {
+      width: 160px;
+      height: 250px;
+      resize: none;
+      font-family: monospace;
+      font-size: 18px;
+    }
+
+    .spin-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .digit-container {
+      display: flex;
+      background-color: #68aee2;
+      border: 5px solid var(--border-color);
+      padding: 10px 20px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .digit-box {
+      width: 80px;
+      height: 120px;
+      background-color: var(--box-bg);
+      color: var(--digit-color);
+      font-size: 80px;
+      margin: 0 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      transition: transform 0.2s;
+      font-weight: bold;
+    }
+
+    .flash {
+      animation: flash 0.1s steps(1) 20;
+    }
+
+    @keyframes flash {
+      50% { background-color: yellow; color: black; }
+    }
+
+    .sparkle {
+      box-shadow: 0 0 15px 5px gold;
+      animation: sparkleAnim 1s infinite;
+    }
+
+    @keyframes sparkleAnim {
+      0%, 100% { box-shadow: 0 0 10px 2px gold; }
+      50% { box-shadow: 0 0 20px 8px orange; }
+    }
+
+    .fixed-buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      border: 2px solid red;
+      color: red;
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 18px;
+    }
+
+    .toggle-mode {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
+    .toggle-mode input[type="checkbox"] {
+      transform: scale(1.5);
+      margin-right: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .digit-box {
+        width: 60px;
+        height: 100px;
+        font-size: 60px;
+      }
+
+      .result-box {
+        width: 90%;
+        height: 150px;
+      }
+
+      .button {
+        font-size: 16px;
+      }
+
+      .toggle-mode {
+        font-size: 1em;
+      }
+
+      .toggle-mode input[type="checkbox"] {
+        transform: scale(1.3);
+      }
+    }
+
+.footer-banner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #ffffff;
+  font-size: 12px;
+  text-align: center;
+  padding: 5px 10px;
+  z-index: 9999;
+}
+
+.footer-banner a {
+  color: blue;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+body.dark .footer-banner {
+  background: #121212;
+  color: #ffffff;
+}
+
+body.dark .footer-banner a {
+  color: #00ffff;
+}
+
+  </style>
+<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+  <div class="title">QUAY SỐ MAY MẮN</div>
+
+  <div class="main-container">
+    <div class="left-panel">
+      <div class="label">Số lượng (0–9999)</div>
+      <input id="max-number" type="number" min="1" max="9999" value="9999" oninput="checkLimit();" />
+      <div id="error" class="error-msg"></div>
+      <button class="spin-button" onclick="startSpin()">KẾT QUẢ LẦN QUAY</button>
+      <textarea class="result-box" id="resultLog" readonly></textarea>
+    </div>
+
+    <div class="spin-area">
+      <div class="digit-container" id="digitContainer"></div>
+      <button class="spin-button" onclick="startSpin()">QUAY</button>
+      <div class="fixed-buttons">
+        <button class="button" onclick="openFullscreen()">full</button>
+        <button class="button" onclick="closeFullscreen()">thoát full</button>
+        <button class="button" onclick="location.reload()">reset</button>
+      </div>
+      <div class="toggle-mode">
+  <label><input type="checkbox" onchange="toggleMode()"> Giao diện tối</label>
+  <label><input type="checkbox" id="musicToggle" onchange="toggleMusic()"> Nhạc nền</label>
+</div>
+
+    </div>
+  </div>
+
+  <audio id="audioXoso" src="https://raw.githubusercontent.com/MTCEduTech/MTCEduTech/main/xoso.mp3" loop></audio>
+<audio id="audioQuay" src="https://raw.githubusercontent.com/MTCEduTech/MTCEduTech/main/random_xs.mp3"></audio>
+<audio id="audioVotay" src="https://raw.githubusercontent.com/MTCEduTech/MTCEduTech/main/votay.mp3"></audio>
+
+
+  <script>
+    const digitContainer = document.getElementById('digitContainer');
+    const maxInput = document.getElementById('max-number');
+    const resultLog = document.getElementById('resultLog');
+    const errorMsg = document.getElementById('error');
+
+    const audioXoso = document.getElementById('audioXoso');
+    const audioQuay = document.getElementById('audioQuay');
+    const audioVotay = document.getElementById('audioVotay');
+
+audioVotay.onended = () => {
+  if (audioXoso.paused) {
+    audioXoso.play().catch(() => {});
+  }
+};
+
+
+    let results = [];
+    let spinning = false;
+
+    function checkLimit() {
+      const val = parseInt(maxInput.value);
+      if (val > 9999) {
+        maxInput.value = 9999;
+        errorMsg.textContent = "Giới hạn nhập: 9999";
+      } else {
+        errorMsg.textContent = "";
+      }
+      generateDigits();
+    }
+
+    function generateDigits() {
+      const max = parseInt(maxInput.value) || 0;
+      const length = max.toString().length;
+      digitContainer.innerHTML = '';
+      for (let i = 0; i < length; i++) {
+        const box = document.createElement('div');
+        box.className = 'digit-box';
+        box.textContent = '0';
+        digitContainer.appendChild(box);
+      }
+    }
+
+    async function startSpin() {
+      if (spinning) return;
+
+      generateDigits();
+
+      document.querySelectorAll('.digit-box').forEach(box => {
+        box.classList.remove('sparkle');
+      });
+
+      const max = parseInt(maxInput.value);
+      if (isNaN(max) || max < 1 || max > 9999) return;
+
+      spinning = true;
+      audioXoso.pause();
+      audioQuay.currentTime = 0;
+      audioQuay.play();
+
+      const boxes = document.querySelectorAll('.digit-box');
+
+      const resultNumber = Math.floor(Math.random() * (max + 1));
+      const padded = resultNumber.toString().padStart(boxes.length, '0');
+
+      for (let i = 0; i < boxes.length; i++) {
+        await spinDigit(boxes[i], parseInt(padded[i]));
+      }
+
+      results.unshift(padded);
+      resultLog.value = results.map((r, i) => {
+        const index = results.length - i;
+        const mark = isLuckyNumber(r) ? ' 💙' : '';
+        return `${index}: ${r}${mark}`;
+      }).join('\n');
+
+      flashDigits();
+      if (isLuckyNumber(padded)) sparkleDigits();
+
+      audioQuay.pause();
+      audioVotay.currentTime = 0;
+      audioVotay.play();
+      spinning = false;
+    }
+
+    function spinDigit(box, finalDigit) {
+      return new Promise(resolve => {
+        let count = 0;
+        const interval = setInterval(() => {
+          box.textContent = Math.floor(Math.random() * 10);
+          count++;
+          if (count >= 20) {
+            clearInterval(interval);
+            box.textContent = finalDigit;
+            resolve();
+          }
+        }, 60);
+      });
+    }
+
+    function flashDigits() {
+      const boxes = document.querySelectorAll('.digit-box');
+      boxes.forEach(box => {
+        box.classList.add('flash');
+        setTimeout(() => box.classList.remove('flash'), 2000);
+      });
+    }
+
+    function sparkleDigits() {
+      const boxes = document.querySelectorAll('.digit-box');
+      boxes.forEach(box => box.classList.add('sparkle'));
+    }
+
+    function isLuckyNumber(str) {
+      return ['39','79','83','86','68','00','11','22','33','44','55','66','77','88','99','000','111','222','333','444','555','666','777','888','999','3979','8386','2345','3456','5678','6789','7890','0123','9876','8765','7654','6543','5432','4321','3210','4416','5525','6636','7749','8864','9981','9090','1357','2468','6006','7007','1000','1001','2002','3003','4004','5005','8008','9009','7979','3939','123','234','345','456','567','678','789','890','113','114','115','1111','2222','3333','4444','5555','6666','7777','8888','9999','1234','6868','8686','0000'].includes(str);
+    }
+
+    function openFullscreen() {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    }
+
+    function closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    window.onload = generateDigits;
+function stopAllAudioExcept(exceptAudio) {
+  [audioXoso, audioQuay, audioVotay].forEach(aud => {
+    if (aud !== exceptAudio && !aud.paused) {
+      aud.pause();
+      aud.currentTime = 0;
+    }
+  });
+}
+
+audioXoso.addEventListener('play', () => stopAllAudioExcept(audioXoso));
+audioQuay.addEventListener('play', () => stopAllAudioExcept(audioQuay));
+audioVotay.addEventListener('play', () => stopAllAudioExcept(audioVotay));
+
+audioVotay.onended = () => {
+  const musicEnabled = document.getElementById("musicToggle").checked;
+  if (musicEnabled && audioXoso.paused) {
+    audioXoso.play().catch(() => {});
+  }
+};
+
+function toggleMusic() {
+  const musicEnabled = document.getElementById("musicToggle").checked;
+  if (musicEnabled) {
+    audioXoso.play().catch(() => {});
+  } else {
+    audioXoso.pause();
+    audioXoso.currentTime = 0;
+  }
+}
+
+  </script>
+<script>
+  // Phát nhạc nền sau click đầu tiên
+window.addEventListener("click", () => {
+  const bg = document.getElementById("audioXoso");
+  const musicEnabled = document.getElementById("musicToggle").checked;
+  if (bg && musicEnabled && bg.paused) {
+    bg.play().catch(() => {});
+  }
+}, { once: true });
+
+</script>
+
+<div class="footer-banner">
+  Tham khảo thêm bộ công cụ dành cho giáo viên
+  <a href="https://is.gd/UJWUpt" target="_blank">TẠI ĐÂY</a>.
+</div>
+<!-- Nút cố định có thể kéo -->
+<button class="menu-toggle draggable"><img src="TC.png" alt="Menu" class="menu-icon"></button>
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+<!-- Menu -->
+<div id="sideMenu" class="side-menu">
+<a href="index.html">🏠 Trang chủ</a>
+  <a href="vong_quay_so.html">🎯 Vòng quay số</a>
+  <a href="vong_quay_ten.html">👥 Vòng quay tên</a>
+  <a href="Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
+  <a href="O_Chu_bi_mat.html">🧩 Tìm Ô chữ bí mật</a>
+  <a href="O_Chu_tron_tim.html">🔍 Tinh mắt tìm từ</a>
+<a href="doan_tu.html">🔤 Game suy đoán từ</a>
+  <a href="soan_cau_hoi.html">📝 Soạn đề TN Tick chọn + chấm điểm</a>
+<a href="sukienVN.html">📖 Theo dòng sự kiện - lịch sử VN</a> 
+  <a href="fx-570VN%20Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
+  <a href="Caro.html">🎮 Game Caro + Music</a>
+  <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
+
+</div>
+<div style="
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+    <button onclick="window.location.href='index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+  ">
+    🏠 VỀ TRANG CHỦ
+  </button>
+</div>
+<script src="menu.js"></script>
+<script src="chao_name.js"></script>
+</body>
+</html>
