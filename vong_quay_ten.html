@@ -561,12 +561,27 @@ function showInstructions() {
 </center>
 
 <div style="position: fixed; bottom: 2px; right: 20px; z-index: 1001;">
+    <label style="
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 10px;
+  background-color: #FFD700;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-sizing: border-box;
+">
+  <input type="checkbox" id="bgMusicToggle" style="width: 18px; height: 18px; margin-right: 6px;" />
+  NHẠC NỀN XỔ SỐ
+</label>
+
   <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
     THOÁT - VỀ TRANG CHỦ
   </button>
 </div>
-
-
 
 
 <!-- Nút toàn màn hình cố định -->
@@ -598,24 +613,7 @@ function showInstructions() {
     color: white;
     cursor: pointer;
   ">❌ Thoát Full màn hình</button>
-     <label style="
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 38px;
-  padding: 0 10px;
-  background-color: #FFD700;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  box-sizing: border-box;
-">
-  <input type="checkbox" id="bgMusicToggle" style="width: 18px; height: 18px; margin-right: 6px;" />
-  NHẠC NỀN XỔ SỐ
-</label>
-
-</div>
+     </div>
 <audio id="bgMusic" loop src="xoso.mp3"></audio>
 <script>
   const bgMusicToggle = document.getElementById("bgMusicToggle");
