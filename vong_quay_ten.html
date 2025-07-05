@@ -209,7 +209,53 @@ button.info {
 
 <div class="container">
 <div class="left-column">
+<!-- Khối lời chào đặt ngay trên dòng nhập tên -->
+<div id="loiChao" style="width: 450px; padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; text-align: center; font-family: Times New Roman;">
+  <div id="dongHoHienTai" style="font-size: 18px; color: green; font-weight: bold; margin-top: 5px;"></div>
+  <script>
+    function capNhatDongHo() {
+      const dongHo = document.getElementById("dongHoHienTai");
+      const now = new Date();
+      const gio = String(now.getHours()).padStart(2, '0');
+      const phut = String(now.getMinutes()).padStart(2, '0');
+      const giay = String(now.getSeconds()).padStart(2, '0');
+      dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
+    }
+    setInterval(capNhatDongHo, 1000);
+    capNhatDongHo();
+  </script>
+  <center>
+    <script type="text/javascript">
+      var mydate=new Date();
+      var year=mydate.getYear();
+      if (year < 1000) year+=1900;
+      var day=mydate.getDay();
+      var month=mydate.getMonth();
+      var daym=mydate.getDate();
+      if (daym<10) daym="0"+daym;
+      var dayarray=new Array("CHỦ NHẬT","THỨ HAI","THỨ BA","THỨ TƯ","THỨ NĂM","THỨ SÁU","THỨ BẢY");
+      var montharray=new Array("01","02","03","04","05","06","07","08","09","10","11","12");
+      document.write("<font color='red' face='Arial' size='2'><b>"+dayarray[day]+",  "+daym+"/"+montharray[month]+"/"+year+"</b></font>");
+    </script>
+    <script>
+      var d = new Date();
+      var hourValue = d.getHours();
+      var greeting = "", greeting1 = "";
+      if (hourValue < 6) { greeting = "Chào ngày mới!"; greeting1 = "Chúc các bạn một ngày mới an lành!"; }
+      else if (hourValue < 9) { greeting = "Chào buổi sáng!"; greeting1 = "Chúc các bạn một buổi sáng tốt lành!"; }
+      else if (hourValue < 11) { greeting = "Sắp trưa rồi!"; greeting1 = "Chúc các bạn có một ngày thành công và hạnh phúc!"; }
+      else if (hourValue < 13) { greeting = "Đã buổi trưa rồi đó!"; greeting1 = "Chúc các bạn có bữa trưa thật ngon miệng!"; }
+      else if (hourValue < 17) { greeting = "Đã buổi chiều!"; greeting1 = "Hãy cố gắng hoàn thành công việc trong ngày!"; }
+      else if (hourValue < 18) { greeting = "Sắp tối rồi!"; greeting1 = "Chúc các bạn có bữa tối thật ngon miệng bên người thân!"; }
+      else if (hourValue <= 21) { greeting = "Chào buổi tối!"; greeting1 = "Chúc các bạn có bữa tối thật vui vẻ và hạnh phúc bên người thân!"; }
+      else { greeting = "Khuya rồi đấy!"; greeting1 = "Hãy đi ngủ thôi! Chúc các bạn có một giấc ngủ thật ngon!"; }
+      document.write("<h3 style='color:#2a2a2a;'>" + greeting + "</h3><p style='font-size:16px; color:blue;'>" + greeting1 + "</p>");
+    </script>
+  </center>
+</div>
+
 <h3 style="color: yellow;">Nhập danh sách tên người chơi<br/>(mỗi tên một dòng):</h3>
+
 <textarea id="nameInput" placeholder="Mai Thiện Chánh
 Nguyễn Thị Hồng Liên
 Mai Đăng Khôi
@@ -262,52 +308,6 @@ Bé cún Nâu Nâu</textarea><br/>
 <table id="resultTable">
 <tr><th>Lần quay</th><th>Tên người may mắn</th></tr>
 </table><br/>
-<div id="loiChao" style="width: 450px; padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px; text-align: center; font-family: Times New Roman;">
-<div id="dongHoHienTai" style="font-size: 18px; color: green; font-weight: bold; margin-top: 5px;"></div>
-<script>
-  function capNhatDongHo() {
-    const dongHo = document.getElementById("dongHoHienTai");
-    const now = new Date();
-    const gio = String(now.getHours()).padStart(2, '0');
-    const phut = String(now.getMinutes()).padStart(2, '0');
-    const giay = String(now.getSeconds()).padStart(2, '0');
-    dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
-  }
-
-  setInterval(capNhatDongHo, 1000);
-  capNhatDongHo(); // gọi ngay khi trang load
-</script>
-
-      <center>
-        <script type="text/javascript">
-          var mydate=new Date();
-          var year=mydate.getYear();
-          if (year < 1000) year+=1900;
-          var day=mydate.getDay();
-          var month=mydate.getMonth();
-          var daym=mydate.getDate();
-          if (daym<10) daym="0"+daym;
-          var dayarray=new Array("CHỦ NHẬT","THỨ HAI","THỨ BA","THỨ TƯ","THỨ NĂM","THỨ SÁU","THỨ BẢY");
-          var montharray=new Array("01","02","03","04","05","06","07","08","09","10","11","12");
-          document.write("<font color='red' face='Arial' size='2'><b>"+dayarray[day]+",  "+daym+"/"+montharray[month]+"/"+year+"</b></font>");
-        </script>
-        <script>
-          var d = new Date();
-          var hourValue = d.getHours();
-          var greeting = "", greeting1 = "";
-          if (hourValue < 6) { greeting = "Chào ngày mới!"; greeting1 = "Chúc các bạn một ngày mới an lành!"; }
-          else if (hourValue < 9) { greeting = "Chào buổi sáng!"; greeting1 = "Chúc các bạn một buổi sáng tốt lành!"; }
-          else if (hourValue < 11) { greeting = "Sắp trưa rồi!"; greeting1 = "Chúc các bạn có một ngày thành công và hạnh phúc!"; }
-          else if (hourValue < 13) { greeting = "Đã buổi trưa rồi đó!"; greeting1 = "Chúc các bạn có bữa trưa thật ngon miệng!"; }
-          else if (hourValue < 17) { greeting = "Đã buổi chiều!"; greeting1 = "Hãy cố gắng hoàn thành công việc trong ngày!"; }
-          else if (hourValue < 18) { greeting = "Sắp tối rồi!"; greeting1 = "Chúc các bạn có bữa tối thật ngon miệng bên người thân!"; }
-          else if (hourValue <= 21) { greeting = "Chào buổi tối!"; greeting1 = "Chúc các bạn có bữa tối thật vui vẻ và hạnh phúc bên người thân!"; }
-          else { greeting = "Khuya rồi đấy!"; greeting1 = "Hãy đi ngủ thôi! Chúc các bạn có một giấc ngủ thật ngon!"; }
-          document.write("<h3 style='color:#2a2a2a;'>" + greeting + "</h3><p style='font-size:16px; color:blue;'>" + greeting1 + "</p>");
-        </script>
-      </center>
-    </div>
-
 </div>
 
 </div>
