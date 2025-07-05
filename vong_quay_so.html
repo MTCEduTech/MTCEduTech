@@ -703,8 +703,37 @@ function spinWheel() {
     color: white;
     cursor: pointer;
   ">❌ Thoát Full màn hình</button>
+  
+  <label style="
+  padding: 10px 16px;
+  font-size: 14px;
+  background: #FFD700;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+">
+  <input type="checkbox" id="bgMusicToggle" style="width: 20px; height: 20px; margin-right: 8px;" />
+  NHẠC NỀN XỔ SỐ
+</label>
 </div>
+<audio id="bgMusic" loop src="music/random_xs.mp3"></audio>
+<script>
+  const bgMusicToggle = document.getElementById("bgMusicToggle");
+  const bgMusic = document.getElementById("bgMusic");
 
+  bgMusic.volume = 0.5; // chỉnh âm lượng nền tại đây
+
+  bgMusicToggle.addEventListener("change", () => {
+    if (bgMusicToggle.checked) {
+      bgMusic.play();
+    } else {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }
+  });
+</script>
 
 <script>
 function openFullscreen() {
