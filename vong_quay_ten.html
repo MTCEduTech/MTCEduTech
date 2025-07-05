@@ -598,8 +598,40 @@ function showInstructions() {
     color: white;
     cursor: pointer;
   ">❌ Thoát Full màn hình</button>
-</div>
+     <label style="
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 10px;
+  background-color: #FFD700;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  box-sizing: border-box;
+">
+  <input type="checkbox" id="bgMusicToggle" style="width: 18px; height: 18px; margin-right: 6px;" />
+  NHẠC NỀN XỔ SỐ
+</label>
 
+</div>
+<audio id="bgMusic" loop src="xoso.mp3"></audio>
+<script>
+  const bgMusicToggle = document.getElementById("bgMusicToggle");
+  const bgMusic = document.getElementById("bgMusic");
+
+  bgMusic.volume = 0.5; // chỉnh âm lượng nền tại đây
+
+  bgMusicToggle.addEventListener("change", () => {
+    if (bgMusicToggle.checked) {
+      bgMusic.play();
+    } else {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }
+  });
+</script>
 
 <script>
 function openFullscreen() {
