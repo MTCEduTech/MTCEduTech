@@ -560,26 +560,34 @@ function showInstructions() {
 <!-- Kết thúc đồng hồ đếm ngược dạng ngang -->
 </center>
 
-<div style="position: fixed; bottom: 2px; right: 20px; z-index: 1001;">
-    <label style="
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 38px;
-  padding: 0 10px;
-  background-color: #FFD700;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  box-sizing: border-box;
-">
-  <input type="checkbox" id="bgMusicToggle" style="width: 18px; height: 18px; margin-right: 6px;" />
-  NHẠC NỀN XỔ SỐ
-</label>
+<div style="position: fixed; bottom: 2px; right: 20px; z-index: 1001; display: flex; align-items: center; gap: 10px;">
+  <label style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 10px;
+    background-color: #FFD700;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-sizing: border-box;
+  ">
+    <input type="checkbox" id="bgMusicToggle" style="width: 18px; height: 18px; margin-right: 6px;" />
+    NHẠC NỀN XỔ SỐ
+  </label>
 
-  <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-    THOÁT - VỀ TRANG CHỦ
+  <button id="homeButton" onclick="window.location.href='index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  ">
+    🏠 VỀ TRANG CHỦ
   </button>
 </div>
 
