@@ -3,41 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Cân bằng phương trình hóa học</title>
-  <script src="https://unpkg.com/algebrite"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
   <style>
-    body {
-      font-family: Arial;
-      background: #f4f4fc;
-      text-align: center;
-      padding: 40px;
-    }
-    input {
-      width: 420px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    button {
-      padding: 5px 10px;
-      margin: 2px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .subscript-bar {
-      margin-bottom: 10px;
-    }
+    body { font-family: Arial; padding: 20px; text-align: center; background: #eef4fa; }
+    input { width: 460px; padding: 10px; font-size: 16px; }
+    button { padding: 5px 10px; margin: 2px; font-size: 16px; cursor: pointer; }
+    #result { margin-top: 20px; font-size: 18px; font-weight: bold; white-space: pre-wrap; }
   </style>
 </head>
 <body>
-
-  <h1>Cân bằng phương trình hóa học</h1>
-
-  <!-- Thanh biểu tượng -->
-  <div class="subscript-bar">
+  <h2>Cân bằng phương trình hóa học</h2>
+  
+  <!-- Thanh phím -->
+  <div>
     <span>Chèn: </span>
     <button onclick="insertSub('₁')">₁</button>
     <button onclick="insertSub('₂')">₂</button>
@@ -54,17 +32,14 @@
     <button onclick="insertSub(' → ')">→</button>
   </div>
 
-  <!-- Ô nhập -->
-  <input type="text" id="equationInput" placeholder="Ví dụ: Fe(OH)₃ + H₂SO₄ → Fe₂(SO₄)₃ + H₂O">
+  <input id="inputEq" placeholder="VD: Fe₂(SO₄)₃ + BaCl₂ → FeCl₃ + BaSO₄" />
   <br>
-  <button onclick="balanceEquation()">Cân bằng</button>
-
-  <!-- Kết quả -->
+  <button onclick="balance()">Cân bằng</button>
   <div id="result"></div>
 
   <script>
     function insertSub(symbol) {
-      const input = document.getElementById("equationInput");
+      const input = document.getElementById("inputEq");
       const start = input.selectionStart;
       const end = input.selectionEnd;
       const text = input.value;
@@ -73,109 +48,91 @@
       input.selectionStart = input.selectionEnd = start + symbol.length;
     }
 
-    // Chuyển chỉ số dưới về số thường
     function normalizeFormula(formula) {
       const subDigits = { '₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9' };
       return formula.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, m => subDigits[m]);
     }
 
-    // Hàm phân tích phân tử, xử lý cả ngoặc đơn
-    function parseMolecule(formula) {
+    function parseFormula(formula) {
       formula = normalizeFormula(formula);
+      const tokens = formula.match(/([A-Z][a-z]?|\(|\)|\d+)/g);
       const stack = [{}];
-      const re = /([A-Z][a-z]?)(\d*)|(\()|(\))(\d*)/g;
-      let match;
-
-      while ((match = re.exec(formula)) !== null) {
-        if (match[1]) {
-          // Nguyên tố
-          const el = match[1];
-          const count = parseInt(match[2] || '1');
-          const top = stack[stack.length - 1];
-          top[el] = (top[el] || 0) + count;
-        } else if (match[3]) {
-          // Mở ngoặc
+      let i = 0;
+      while (i < tokens.length) {
+        const t = tokens[i];
+        if (t === '(') {
           stack.push({});
-        } else if (match[4]) {
-          // Đóng ngoặc
+          i++;
+        } else if (t === ')') {
           const group = stack.pop();
-          const multiplier = parseInt(match[5] || '1');
-          const top = stack[stack.length - 1];
+          i++;
+          const mul = /^\d+$/.test(tokens[i]) ? parseInt(tokens[i++]) : 1;
           for (const el in group) {
-            top[el] = (top[el] || 0) + group[el] * multiplier;
+            stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + group[el] * mul;
           }
+        } else if (/^[A-Z][a-z]?$/.test(t)) {
+          const el = t;
+          const count = /^\d+$/.test(tokens[i + 1]) ? parseInt(tokens[++i]) : 1;
+          i++;
+          stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + count;
+        } else {
+          i++;
         }
       }
       return stack[0];
     }
 
-    function balanceEquation() {
-      const input = document.getElementById("equationInput").value.trim();
-      const [lhs, rhs] = input.replace(/→/g, "=").split('=').map(s => s.trim());
+    function gcd(a, b) {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+
+    function lcm(a, b) {
+      return Math.abs(a * b) / gcd(a, b);
+    }
+
+    function lcmArray(arr) {
+      return arr.reduce((acc, val) => lcm(acc, val), 1);
+    }
+
+    function balance() {
+      const input = document.getElementById("inputEq").value.trim();
+      const [lhs, rhs] = input.replace(/→|=>/g, '=').split('=').map(s => s.trim());
 
       if (!lhs || !rhs) {
-        document.getElementById("result").innerText = "Vui lòng nhập đúng định dạng: A + B → C + D";
+        document.getElementById("result").innerText = "Vui lòng nhập phương trình đúng định dạng!";
         return;
       }
 
-      const leftCompounds = lhs.split('+').map(s => s.trim());
-      const rightCompounds = rhs.split('+').map(s => s.trim());
-      const allCompounds = leftCompounds.concat(rightCompounds);
-      const elementSet = new Set();
-      const matrix = [];
-
-      allCompounds.forEach(comp => {
-        const atoms = parseMolecule(comp);
-        Object.keys(atoms).forEach(el => elementSet.add(el));
-      });
-
-      const elements = [...elementSet];
-      elements.forEach(el => {
-        const row = [];
-        leftCompounds.forEach(comp => row.push(parseMolecule(comp)[el] || 0));
-        rightCompounds.forEach(comp => row.push(-(parseMolecule(comp)[el] || 0)));
-        matrix.push(row);
-      });
-
-      const vars = allCompounds.map((_, i) => 'x' + i);
-      const equations = matrix.map(row =>
-        row.map((coef, i) => `${coef !== 0 ? coef + "*" + vars[i] : ""}`).join(" + ") + " = 0"
+      const left = lhs.split('+').map(s => s.trim());
+      const right = rhs.split('+').map(s => s.trim());
+      const all = [...left, ...right];
+      const elements = Array.from(new Set(all.flatMap(m => Object.keys(parseFormula(m)))));
+      
+      const matrix = elements.map(el =>
+        all.map((mol, i) => {
+          const atomCount = parseFormula(mol)[el] || 0;
+          return i < left.length ? atomCount : -atomCount;
+        })
       );
 
-      try {
-        const result = Algebrite.run(`solve([${equations.join(",")}], [${vars.join(",")}])`);
-        const matches = result.match(/x\d+\s*=\s*[^,{}\]]+/g);
-        const coefficients = Array(allCompounds.length).fill(1);
-        matches.forEach(m => {
-          const [_, index, value] = m.match(/x(\d+)\s*=\s*([^,{}\]]+)/);
-          coefficients[parseInt(index)] = eval(Algebrite.run(`float(${value})`));
-        });
+      const A = numeric.transpose(matrix);
+      const svd = numeric.svd(A);
+      const nullSpaceVec = svd.V[svd.V.length - 1];
+      const scale = lcmArray(nullSpaceVec.map(v => {
+        const decimals = (v.toString().split('.')[1] || '').length;
+        return Math.pow(10, decimals);
+      }));
 
-        const lcm = (a, b) => !b ? a : lcm(b, a % b);
-        function decimalPlaces(n) {
-  if (Number.isInteger(n)) return 1;
-  const str = n.toString();
-  if (str.includes('.')) {
-    return Math.pow(10, str.split('.')[1].length);
-  }
-  return 1;
-}
-const scale = coefficients.reduce((acc, val) => lcm(acc, decimalPlaces(val)), 1);
-        const final = coefficients.map(x => Math.round(x * scale));
+      let coeffs = nullSpaceVec.map(v => Math.round(v * scale));
+      const gcdAll = coeffs.reduce((a, b) => gcd(a, b));
+      coeffs = coeffs.map(v => v / gcdAll);
+      if (coeffs.some(c => c < 0)) coeffs = coeffs.map(c => -c);
 
-        const balanced = [
-          ...leftCompounds.map((c, i) => `${final[i]}${c}`),
-          ...rightCompounds.map((c, i) => `${final[i + leftCompounds.length]}${c}`)
-        ];
+      const leftStr = coeffs.slice(0, left.length).map((c, i) => (c === 1 ? '' : c) + left[i]).join(' + ');
+      const rightStr = coeffs.slice(left.length).map((c, i) => (c === 1 ? '' : c) + right[i]).join(' + ');
 
-        document.getElementById("result").innerText =
-          balanced.slice(0, leftCompounds.length).join(" + ") + " → " +
-          balanced.slice(leftCompounds.length).join(" + ");
-      } catch (e) {
-        document.getElementById("result").innerText = "Không thể cân bằng phương trình!";
-      }
+      document.getElementById("result").innerText = leftStr + ' → ' + rightStr;
     }
   </script>
-
 </body>
 </html>
