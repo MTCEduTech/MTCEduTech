@@ -28,14 +28,12 @@
       font-weight: bold;
     }
   </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js"></script>
 </head>
 <body>
 
 <h2>Cân bằng phương trình hóa học</h2>
 
-<!-- Nút chèn ký tự -->
 <div>
   <button onclick="insert('₁')">₁</button><button onclick="insert('₂')">₂</button><button onclick="insert('₃')">₃</button>
   <button onclick="insert('₄')">₄</button><button onclick="insert('₅')">₅</button><button onclick="insert('₆')">₆</button>
@@ -47,12 +45,9 @@
   <button onclick="insert(')')">)</button>
 </div>
 
-<!-- Ô nhập phương trình -->
 <input id="inputEq" placeholder="Ví dụ: Fe₂(SO₄)₃ + BaCl₂ → FeCl₃ + BaSO₄" />
 <br>
 <button onclick="balance()">Cân bằng</button>
-
-<!-- Kết quả -->
 <div id="result"></div>
 
 <script>
@@ -69,9 +64,8 @@ function normalize(s) {
   return s.replace(/[₀-₉]/g, c => map[c]);
 }
 
-function parseFormula(f) {
-  f = normalize(f);
-  const tokens = f.match(/([A-Z][a-z]?|\d+|\(|\))/g);
+function parseFormula(formula) {
+  const tokens = normalize(formula).match(/([A-Z][a-z]?|\d+|\(|\))/g);
   const stack = [{}];
   for (let i = 0; i < tokens.length;) {
     const t = tokens[i];
@@ -81,16 +75,19 @@ function parseFormula(f) {
     } else if (t === ')') {
       const group = stack.pop();
       i++;
-      const mul = i < tokens.length && /^\d+$/.test(tokens[i]) ? +tokens[i++] : 1;
+      let multiplier = 1;
+      if (i < tokens.length && /^\d+$/.test(tokens[i])) multiplier = parseInt(tokens[i++]);
       const top = stack[stack.length - 1];
-      for (let k in group) top[k] = (top[k] || 0) + group[k] * mul;
+      for (let el in group) top[el] = (top[el] || 0) + group[el] * multiplier;
     } else if (/^[A-Z]/.test(t)) {
-      const el = t;
-      let cnt = 1;
-      if (i + 1 < tokens.length && /^\d+$/.test(tokens[i + 1])) cnt = +tokens[++i];
-      stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + cnt;
+      let el = t;
+      let count = 1;
+      if (i + 1 < tokens.length && /^\d+$/.test(tokens[i + 1])) count = parseInt(tokens[++i]);
+      stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + count;
       i++;
-    } else i++;
+    } else {
+      i++;
+    }
   }
   return stack[0];
 }
@@ -99,12 +96,8 @@ function gcd(a, b) {
   return b ? gcd(b, a % b) : Math.abs(a);
 }
 
-function lcm(a, b) {
-  return Math.abs(a * b / gcd(a, b));
-}
-
 function lcmArray(arr) {
-  return arr.reduce((a, b) => lcm(a, b));
+  return arr.reduce((a, b) => Math.abs(a * b / gcd(a, b)));
 }
 
 function balance() {
@@ -119,66 +112,72 @@ function balance() {
   const left = lhs.split('+').map(s => s.trim());
   const right = rhs.split('+').map(s => s.trim());
   const all = [...left, ...right];
-  const elements = Array.from(new Set(all.flatMap(c => Object.keys(parseFormula(c)))));
+  const compounds = all.map(parseFormula);
+  const elements = Array.from(new Set(compounds.flatMap(c => Object.keys(c))));
 
+  // Tạo ma trận hệ số
   const matrix = elements.map(el =>
-    all.map((compound, idx) => {
-      const parsed = parseFormula(compound);
-      const val = parsed[el] || 0;
-      return idx < left.length ? val : -val;
+    compounds.map((compound, idx) => {
+      const count = compound[el] || 0;
+      return idx < left.length ? count : -count;
     })
   );
 
   const rows = matrix.length;
   const cols = matrix[0].length;
-  let A = matrix.map(row => row.map(v => v));
-  let res = Array(cols).fill(0);
-  res[res.length - 1] = 1;
 
-  // Gauss-Jordan loại bỏ để giải hệ
+  // Giải hệ phương trình tuyến tính đồng nhất bằng Gauss-Jordan
+  const A = matrix.map(row => row.map(val => val));
+  const solution = Array(cols).fill(0);
+  solution[cols - 1] = 1; // Đặt hệ số cuối là 1 (ẩn tự do)
+
   for (let i = 0; i < rows; i++) {
-    let pivot = -1;
-    for (let j = i; j < cols; j++) {
-      if (A[i][j] !== 0) {
-        pivot = j;
-        break;
+    let pivotRow = i;
+    for (let j = i + 1; j < rows; j++) {
+      if (Math.abs(A[j][i]) > Math.abs(A[pivotRow][i])) {
+        pivotRow = j;
       }
     }
-    if (pivot === -1) continue;
-    for (let k = 0; k < rows; k++) {
-      if (k !== i && A[k][pivot] !== 0) {
-        const factor = A[k][pivot] / A[i][pivot];
-        for (let j = pivot; j < cols; j++) {
-          A[k][j] -= factor * A[i][j];
+    if (A[pivotRow][i] === 0) continue;
+    [A[i], A[pivotRow]] = [A[pivotRow], A[i]];
+
+    const pivot = A[i][i];
+    for (let j = i; j < cols; j++) {
+      A[i][j] /= pivot;
+    }
+
+    for (let j = 0; j < rows; j++) {
+      if (j !== i && A[j][i] !== 0) {
+        const factor = A[j][i];
+        for (let k = i; k < cols; k++) {
+          A[j][k] -= factor * A[i][k];
         }
       }
     }
   }
 
-  // Đặt biến tự do = 1 và giải ngược
   for (let i = rows - 1; i >= 0; i--) {
-    let pivot = A[i].findIndex(x => x !== 0);
-    if (pivot === -1 || pivot === cols - 1) continue;
-    let s = 0;
-    for (let j = pivot + 1; j < cols; j++) {
-      s += A[i][j] * res[j];
+    let pivotCol = A[i].findIndex(x => Math.abs(x) > 1e-10);
+    if (pivotCol === -1 || pivotCol === cols - 1) continue;
+    let sum = 0;
+    for (let j = pivotCol + 1; j < cols; j++) {
+      sum += A[i][j] * solution[j];
     }
-    res[pivot] = -s / A[i][pivot];
+    solution[pivotCol] = -sum;
   }
 
   // Quy về số nguyên
-  const denominators = res.map(x => {
-    const str = x.toString();
-    if (str.includes(".")) return Math.pow(10, str.split(".")[1].length);
-    return 1;
+  const denominators = solution.map(x => {
+    const frac = math.fraction(x);
+    return frac.d;
   });
-  const multiple = lcmArray(denominators);
-  const scaled = res.map(x => Math.round(x * multiple));
+  const lcmAll = lcmArray(denominators);
+  const scaled = solution.map(x => math.number(math.multiply(x, lcmAll)));
   const gcdAll = scaled.reduce(gcd);
   const final = scaled.map(x => x / gcdAll);
 
-  function formatFormula(formula) {
-    return formula.replace(/\d/g, d => `<sub>${d}</sub>`);
+  function formatFormula(f) {
+    return f.replace(/\d/g, d => `<sub>${d}</sub>`);
   }
 
   const leftRes = left.map((c, i) => (final[i] > 1 ? final[i] + formatFormula(c) : formatFormula(c))).join(' + ');
@@ -186,8 +185,8 @@ function balance() {
 
   document.getElementById("result").innerHTML = `${leftRes} → ${rightRes}`;
 }
-</script>
 
+</script>
 
 </body>
 </html>
