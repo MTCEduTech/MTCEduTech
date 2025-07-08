@@ -5,134 +5,161 @@
   <title>Cân bằng phương trình hóa học</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
   <style>
-    body { font-family: Arial; padding: 20px; text-align: center; background: #eef4fa; }
-    input { width: 460px; padding: 10px; font-size: 16px; }
-    button { padding: 5px 10px; margin: 2px; font-size: 16px; cursor: pointer; }
-    #result { margin-top: 20px; font-size: 18px; font-weight: bold; white-space: pre-wrap; }
+    body {
+      font-family: Arial;
+      background: #eef4fa;
+      text-align: center;
+      padding: 30px;
+    }
+    input {
+      width: 460px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 6px 10px;
+      margin: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      white-space: pre-wrap;
+    }
+    .toolbar {
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
-  <h2>Cân bằng phương trình hóa học</h2>
-  
-  <!-- Thanh phím -->
-  <div>
-    <span>Chèn: </span>
-    <button onclick="insertSub('₁')">₁</button>
-    <button onclick="insertSub('₂')">₂</button>
-    <button onclick="insertSub('₃')">₃</button>
-    <button onclick="insertSub('₄')">₄</button>
-    <button onclick="insertSub('₅')">₅</button>
-    <button onclick="insertSub('₆')">₆</button>
-    <button onclick="insertSub('₇')">₇</button>
-    <button onclick="insertSub('₈')">₈</button>
-    <button onclick="insertSub('₉')">₉</button>
-    <button onclick="insertSub('₀')">₀</button>
-    <button onclick="insertSub('(')">(</button>
-    <button onclick="insertSub(')')">)</button>
-    <button onclick="insertSub(' → ')">→</button>
-  </div>
 
-  <input id="inputEq" placeholder="VD: Fe₂(SO₄)₃ + BaCl₂ → FeCl₃ + BaSO₄" />
-  <br>
-  <button onclick="balance()">Cân bằng</button>
-  <div id="result"></div>
+<h2>Cân bằng phương trình hóa học</h2>
 
-  <script>
-    function insertSub(symbol) {
-      const input = document.getElementById("inputEq");
-      const start = input.selectionStart;
-      const end = input.selectionEnd;
-      const text = input.value;
-      input.value = text.slice(0, start) + symbol + text.slice(end);
-      input.focus();
-      input.selectionStart = input.selectionEnd = start + symbol.length;
-    }
+<div class="toolbar">
+  <span>Chèn: </span>
+  <button onclick="insert('₁')">₁</button>
+  <button onclick="insert('₂')">₂</button>
+  <button onclick="insert('₃')">₃</button>
+  <button onclick="insert('₄')">₄</button>
+  <button onclick="insert('₅')">₅</button>
+  <button onclick="insert('₆')">₆</button>
+  <button onclick="insert('₇')">₇</button>
+  <button onclick="insert('₈')">₈</button>
+  <button onclick="insert('₉')">₉</button>
+  <button onclick="insert('₀')">₀</button>
+  <button onclick="insert('(')">(</button>
+  <button onclick="insert(')')">)</button>
+  <button onclick="insert(' + ')">+</button>
+  <button onclick="insert(' → ')">→</button>
+</div>
 
-    function normalizeFormula(formula) {
-      const subDigits = { '₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9' };
-      return formula.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, m => subDigits[m]);
-    }
+<input id="inputEq" placeholder="Ví dụ: Fe₂(SO₄)₃ + BaCl₂ → FeCl₃ + BaSO₄">
+<br>
+<button onclick="balance()">Cân bằng</button>
 
-    function parseFormula(formula) {
-      formula = normalizeFormula(formula);
-      const tokens = formula.match(/([A-Z][a-z]?|\(|\)|\d+)/g);
-      const stack = [{}];
-      let i = 0;
-      while (i < tokens.length) {
-        const t = tokens[i];
-        if (t === '(') {
-          stack.push({});
-          i++;
-        } else if (t === ')') {
-          const group = stack.pop();
-          i++;
-          const mul = /^\d+$/.test(tokens[i]) ? parseInt(tokens[i++]) : 1;
-          for (const el in group) {
-            stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + group[el] * mul;
-          }
-        } else if (/^[A-Z][a-z]?$/.test(t)) {
-          const el = t;
-          const count = /^\d+$/.test(tokens[i + 1]) ? parseInt(tokens[++i]) : 1;
-          i++;
-          stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + count;
-        } else {
-          i++;
+<div id="result"></div>
+
+<script>
+  function insert(char) {
+    const input = document.getElementById("inputEq");
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    input.value = input.value.slice(0, start) + char + input.value.slice(end);
+    input.focus();
+    input.selectionStart = input.selectionEnd = start + char.length;
+  }
+
+  function normalizeFormula(str) {
+    const sub = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+    return str.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, c => sub[c]);
+  }
+
+  function parseFormula(formula) {
+    formula = normalizeFormula(formula);
+    const stack = [{}];
+    const tokens = formula.match(/([A-Z][a-z]?|\(|\)|\d+)/g);
+    let i = 0;
+    while (i < tokens.length) {
+      const token = tokens[i];
+      if (token === '(') {
+        stack.push({});
+        i++;
+      } else if (token === ')') {
+        const group = stack.pop();
+        i++;
+        const multiplier = i < tokens.length && /^\d+$/.test(tokens[i]) ? parseInt(tokens[i++]) : 1;
+        for (const el in group) {
+          stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + group[el] * multiplier;
         }
+      } else if (/^[A-Z][a-z]?$/.test(token)) {
+        const el = token;
+        const count = i + 1 < tokens.length && /^\d+$/.test(tokens[i + 1]) ? parseInt(tokens[++i]) : 1;
+        stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + count;
+        i++;
+      } else {
+        i++;
       }
-      return stack[0];
+    }
+    return stack[0];
+  }
+
+  function gcd(a, b) {
+    return b ? gcd(b, a % b) : a;
+  }
+
+  function lcm(a, b) {
+    return a * b / gcd(a, b);
+  }
+
+  function lcmArray(arr) {
+    return arr.reduce((a, b) => lcm(a, b));
+  }
+
+  function balance() {
+    const input = document.getElementById("inputEq").value.trim();
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerText = "";
+
+    if (!input.includes("→") && !input.includes("=>")) {
+      resultDiv.innerText = "Phản ứng phải có dấu → hoặc =";
+      return;
     }
 
-    function gcd(a, b) {
-      return b === 0 ? a : gcd(b, a % b);
-    }
+    const [lhs, rhs] = input.replace(/=>/g, "→").split("→").map(s => s.trim());
+    const left = lhs.split('+').map(s => s.trim());
+    const right = rhs.split('+').map(s => s.trim());
+    const all = [...left, ...right];
 
-    function lcm(a, b) {
-      return Math.abs(a * b) / gcd(a, b);
-    }
+    const elements = Array.from(new Set(all.flatMap(f => Object.keys(parseFormula(f)))));
+    const matrix = elements.map(el =>
+      all.map((mol, i) => {
+        const parsed = parseFormula(mol);
+        const count = parsed[el] || 0;
+        return i < left.length ? count : -count;
+      })
+    );
 
-    function lcmArray(arr) {
-      return arr.reduce((acc, val) => lcm(acc, val), 1);
-    }
+    const A = numeric.transpose(matrix);
+    const svd = numeric.svd(A);
+    const nullspace = svd.V.map(row => row[svd.V[0].length - 1]);
 
-    function balance() {
-      const input = document.getElementById("inputEq").value.trim();
-      const [lhs, rhs] = input.replace(/→|=>/g, '=').split('=').map(s => s.trim());
+    const denoms = nullspace.map(x => {
+      const frac = x.toString().split('.');
+      return frac.length === 2 ? Math.pow(10, frac[1].length) : 1;
+    });
+    const lcmDenom = lcmArray(denoms);
+    const ints = nullspace.map(x => Math.round(x * lcmDenom));
+    const min = Math.min(...ints.filter(x => x > 0));
+    const coeffs = ints.map(x => x * (x < 0 ? -1 : 1));
 
-      if (!lhs || !rhs) {
-        document.getElementById("result").innerText = "Vui lòng nhập phương trình đúng định dạng!";
-        return;
-      }
+    const leftStr = left.map((mol, i) => (coeffs[i] === 1 ? mol : coeffs[i] + mol)).join(" + ");
+    const rightStr = right.map((mol, i) => (coeffs[i + left.length] === 1 ? mol : coeffs[i + left.length] + mol)).join(" + ");
 
-      const left = lhs.split('+').map(s => s.trim());
-      const right = rhs.split('+').map(s => s.trim());
-      const all = [...left, ...right];
-      const elements = Array.from(new Set(all.flatMap(m => Object.keys(parseFormula(m)))));
-      
-      const matrix = elements.map(el =>
-        all.map((mol, i) => {
-          const atomCount = parseFormula(mol)[el] || 0;
-          return i < left.length ? atomCount : -atomCount;
-        })
-      );
+    resultDiv.innerText = `${leftStr} → ${rightStr}`;
+  }
+</script>
 
-      const A = numeric.transpose(matrix);
-      const svd = numeric.svd(A);
-      const nullSpaceVec = svd.V[svd.V.length - 1];
-      const scale = lcmArray(nullSpaceVec.map(v => {
-        const decimals = (v.toString().split('.')[1] || '').length;
-        return Math.pow(10, decimals);
-      }));
-
-      let coeffs = nullSpaceVec.map(v => Math.round(v * scale));
-      const gcdAll = coeffs.reduce((a, b) => gcd(a, b));
-      coeffs = coeffs.map(v => v / gcdAll);
-      if (coeffs.some(c => c < 0)) coeffs = coeffs.map(c => -c);
-
-      const leftStr = coeffs.slice(0, left.length).map((c, i) => (c === 1 ? '' : c) + left[i]).join(' + ');
-      const rightStr = coeffs.slice(left.length).map((c, i) => (c === 1 ? '' : c) + right[i]).join(' + ');
-
-      document.getElementById("result").innerText = leftStr + ' → ' + rightStr;
-    }
-  </script>
 </body>
 </html>
