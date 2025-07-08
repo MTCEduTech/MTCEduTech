@@ -28,7 +28,7 @@
       font-weight: bold;
     }
   </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js"></script>
 
 </head>
 <body>
@@ -120,8 +120,7 @@ function balance() {
   const right = rhs.split('+').map(s => s.trim());
   const all = [...left, ...right];
   const elements = Array.from(new Set(all.flatMap(c => Object.keys(parseFormula(c)))));
-  
-  // Tạo ma trận hệ số
+
   const matrix = elements.map(el =>
     all.map((compound, idx) => {
       const parsed = parseFormula(compound);
@@ -130,20 +129,53 @@ function balance() {
     })
   );
 
-  const A = math.matrix(matrix);
-  const nullspace = math.nullSpace(A);
-  if (nullspace._size[1] < 1) {
-    document.getElementById("result").innerText = "Không thể cân bằng.";
-    return;
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+  let A = matrix.map(row => row.map(v => v));
+  let res = Array(cols).fill(0);
+  res[res.length - 1] = 1;
+
+  // Gauss-Jordan loại bỏ để giải hệ
+  for (let i = 0; i < rows; i++) {
+    let pivot = -1;
+    for (let j = i; j < cols; j++) {
+      if (A[i][j] !== 0) {
+        pivot = j;
+        break;
+      }
+    }
+    if (pivot === -1) continue;
+    for (let k = 0; k < rows; k++) {
+      if (k !== i && A[k][pivot] !== 0) {
+        const factor = A[k][pivot] / A[i][pivot];
+        for (let j = pivot; j < cols; j++) {
+          A[k][j] -= factor * A[i][j];
+        }
+      }
+    }
   }
 
-  // Lấy nghiệm đầu tiên và chuyển thành hệ số nguyên
-  let raw = nullspace._data.map(x => x[0]);
-  const denominators = raw.map(f => math.fraction(f).d);
+  // Đặt biến tự do = 1 và giải ngược
+  for (let i = rows - 1; i >= 0; i--) {
+    let pivot = A[i].findIndex(x => x !== 0);
+    if (pivot === -1 || pivot === cols - 1) continue;
+    let s = 0;
+    for (let j = pivot + 1; j < cols; j++) {
+      s += A[i][j] * res[j];
+    }
+    res[pivot] = -s / A[i][pivot];
+  }
+
+  // Quy về số nguyên
+  const denominators = res.map(x => {
+    const str = x.toString();
+    if (str.includes(".")) return Math.pow(10, str.split(".")[1].length);
+    return 1;
+  });
   const multiple = lcmArray(denominators);
-  const ints = raw.map(x => math.multiply(x, multiple));
-  const gcdAll = ints.reduce((a, b) => gcd(a, b));
-  const final = ints.map(x => math.number(math.divide(x, gcdAll)));
+  const scaled = res.map(x => Math.round(x * multiple));
+  const gcdAll = scaled.reduce(gcd);
+  const final = scaled.map(x => x / gcdAll);
 
   function formatFormula(formula) {
     return formula.replace(/\d/g, d => `<sub>${d}</sub>`);
