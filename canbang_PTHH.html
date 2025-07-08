@@ -28,6 +28,8 @@
       font-weight: bold;
     }
   </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+
 </head>
 <body>
 
@@ -93,8 +95,17 @@ function parseFormula(f) {
   return stack[0];
 }
 
-function gcd(a, b) { return b ? gcd(b, a % b) : a; }
-function lcm(a, b) { return a * b / gcd(a, b); }
+function gcd(a, b) {
+  return b ? gcd(b, a % b) : Math.abs(a);
+}
+
+function lcm(a, b) {
+  return Math.abs(a * b / gcd(a, b));
+}
+
+function lcmArray(arr) {
+  return arr.reduce((a, b) => lcm(a, b));
+}
 
 function balance() {
   const inputRaw = document.getElementById("inputEq").value;
@@ -108,8 +119,9 @@ function balance() {
   const left = lhs.split('+').map(s => s.trim());
   const right = rhs.split('+').map(s => s.trim());
   const all = [...left, ...right];
-
   const elements = Array.from(new Set(all.flatMap(c => Object.keys(parseFormula(c)))));
+  
+  // Tạo ma trận hệ số
   const matrix = elements.map(el =>
     all.map((compound, idx) => {
       const parsed = parseFormula(compound);
@@ -118,45 +130,20 @@ function balance() {
     })
   );
 
-  const rows = matrix.length;
-  const cols = matrix[0].length;
-  const M = matrix.map(row => row.slice());
-
-  for (let i = 0; i < rows; i++) {
-    let pivot = i;
-    for (let j = i + 1; j < rows; j++) {
-      if (Math.abs(M[j][i]) > Math.abs(M[pivot][i])) pivot = j;
-    }
-    [M[i], M[pivot]] = [M[pivot], M[i]];
-    if (M[i][i] === 0) continue;
-
-    for (let j = i + 1; j < rows; j++) {
-      const f = M[j][i] / M[i][i];
-      for (let k = i; k < cols; k++) {
-        M[j][k] -= f * M[i][k];
-      }
-    }
+  const A = math.matrix(matrix);
+  const nullspace = math.nullSpace(A);
+  if (nullspace._size[1] < 1) {
+    document.getElementById("result").innerText = "Không thể cân bằng.";
+    return;
   }
 
-  const solution = Array(cols).fill(1);
-  for (let i = rows - 1; i >= 0; i--) {
-    let sum = 0;
-    for (let j = i + 1; j < cols; j++) {
-      sum += M[i][j] * solution[j];
-    }
-    if (M[i][i] !== 0)
-      solution[i] = -sum / M[i][i];
-  }
-
-  const denominators = solution.map(x => {
-    const s = x.toFixed(6);
-    return s.includes('.') ? Math.pow(10, s.split('.')[1].replace(/0+$/, '').length) : 1;
-  });
-
-  const factor = denominators.reduce(lcm, 1);
-  const coeffs = solution.map(x => Math.round(x * factor));
-  const gcdAll = coeffs.reduce(gcd);
-  const final = coeffs.map(x => Math.round(x / gcdAll));
+  // Lấy nghiệm đầu tiên và chuyển thành hệ số nguyên
+  let raw = nullspace._data.map(x => x[0]);
+  const denominators = raw.map(f => math.fraction(f).d);
+  const multiple = lcmArray(denominators);
+  const ints = raw.map(x => math.multiply(x, multiple));
+  const gcdAll = ints.reduce((a, b) => gcd(a, b));
+  const final = ints.map(x => math.number(math.divide(x, gcdAll)));
 
   function formatFormula(formula) {
     return formula.replace(/\d/g, d => `<sub>${d}</sub>`);
@@ -168,6 +155,7 @@ function balance() {
   document.getElementById("result").innerHTML = `${leftRes} → ${rightRes}`;
 }
 </script>
+
 
 </body>
 </html>
