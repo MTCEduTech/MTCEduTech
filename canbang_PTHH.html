@@ -1,284 +1,181 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cân bằng phương trình hóa học (numeric.js)</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Cân bằng phương trình hóa học</title>
+  <script src="https://unpkg.com/algebrite"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #eef4fa;
+      font-family: Arial;
+      background: #f4f4fc;
       text-align: center;
-      max-width: 600px;
-      margin: auto;
+      padding: 40px;
     }
-    #inputEq {
-      width: 100%;
-      font-size: 18px;
-      padding: 8px;
-      margin-bottom: 6px;
-      box-sizing: border-box;
+    input {
+      width: 420px;
+      padding: 10px;
+      font-size: 16px;
     }
     button {
-      padding: 8px 16px;
+      padding: 5px 10px;
+      margin: 2px;
       font-size: 16px;
-      margin-top: 8px;
       cursor: pointer;
     }
     #result {
       margin-top: 20px;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
-      color: #333;
-      white-space: pre-wrap;
     }
-    .toolbar {
-      margin-bottom: 6px;
-    }
-    .toolbar button {
-      margin: 2px;
-      font-size: 20px;
-      padding: 4px 8px;
-    }
-    /* Định dạng chỉ số dưới */
-    .formula span.sub {
-      vertical-align: sub;
-      font-size: 0.6em;
+    .subscript-bar {
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <h2>Cân bằng phương trình hóa học</h2>
 
-  <div class="toolbar" aria-label="Thanh công cụ nhập công thức">
-    <button type="button" onclick="insertAtCursor('(')">(</button>
-    <button type="button" onclick="insertAtCursor(')')">)</button>
-    <button type="button" onclick="insertAtCursor('[')">[</button>
-    <button type="button" onclick="insertAtCursor(']')">]</button>
-    <button type="button" onclick="insertAtCursor('→')">→</button>
-    <button type="button" onclick="insertAtCursor('1', true)">₁</button>
-    <button type="button" onclick="insertAtCursor('2', true)">₂</button>
-    <button type="button" onclick="insertAtCursor('3', true)">₃</button>
-    <button type="button" onclick="insertAtCursor('4', true)">₄</button>
-    <button type="button" onclick="insertAtCursor('5', true)">₅</button>
-    <button type="button" onclick="insertAtCursor('6', true)">₆</button>
-    <button type="button" onclick="insertAtCursor('7', true)">₇</button>
-    <button type="button" onclick="insertAtCursor('8', true)">₈</button>
-    <button type="button" onclick="insertAtCursor('9', true)">₉</button>
+  <h1>Cân bằng phương trình hóa học</h1>
+
+  <!-- Thanh biểu tượng -->
+  <div class="subscript-bar">
+    <span>Chèn: </span>
+    <button onclick="insertSub('₁')">₁</button>
+    <button onclick="insertSub('₂')">₂</button>
+    <button onclick="insertSub('₃')">₃</button>
+    <button onclick="insertSub('₄')">₄</button>
+    <button onclick="insertSub('₅')">₅</button>
+    <button onclick="insertSub('₆')">₆</button>
+    <button onclick="insertSub('₇')">₇</button>
+    <button onclick="insertSub('₈')">₈</button>
+    <button onclick="insertSub('₉')">₉</button>
+    <button onclick="insertSub('₀')">₀</button>
+    <button onclick="insertSub('(')">(</button>
+    <button onclick="insertSub(')')">)</button>
+    <button onclick="insertSub(' → ')">→</button>
   </div>
 
-  <input id="inputEq" placeholder="VD: Fe2(SO4)3 + BaCl2 → FeCl3 + BaSO4" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" />
+  <!-- Ô nhập -->
+  <input type="text" id="equationInput" placeholder="Ví dụ: Fe(OH)₃ + H₂SO₄ → Fe₂(SO₄)₃ + H₂O">
+  <br>
+  <button onclick="balanceEquation()">Cân bằng</button>
 
-  <br />
-  <button onclick="balance()">Cân bằng</button>
-
+  <!-- Kết quả -->
   <div id="result"></div>
 
-<script>
-  // Chèn ký tự hoặc chỉ số dưới tại vị trí con trỏ
-  function insertAtCursor(char, isSub = false) {
-    const input = document.getElementById('inputEq');
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    let insertChar = char;
-    if (isSub) {
-      // Dùng Unicode chỉ số dưới
-      const subMap = {
-        '0': '₀', '1': '₁', '2': '₂', '3': '₃',
-        '4': '₄', '5': '₅', '6': '₆', '7': '₇',
-        '8': '₈', '9': '₉'
-      };
-      insertChar = subMap[char] || char;
+  <script>
+    function insertSub(symbol) {
+      const input = document.getElementById("equationInput");
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const text = input.value;
+      input.value = text.slice(0, start) + symbol + text.slice(end);
+      input.focus();
+      input.selectionStart = input.selectionEnd = start + symbol.length;
     }
-    input.value = input.value.slice(0, start) + insertChar + input.value.slice(end);
-    input.selectionStart = input.selectionEnd = start + insertChar.length;
-    input.focus();
+
+    // Chuyển chỉ số dưới về số thường
+    function normalizeFormula(formula) {
+      const subDigits = { '₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9' };
+      return formula.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, m => subDigits[m]);
+    }
+
+    // Hàm phân tích phân tử, xử lý cả ngoặc đơn
+    function parseMolecule(formula) {
+      formula = normalizeFormula(formula);
+      const stack = [{}];
+      const re = /([A-Z][a-z]?)(\d*)|(\()|(\))(\d*)/g;
+      let match;
+
+      while ((match = re.exec(formula)) !== null) {
+        if (match[1]) {
+          // Nguyên tố
+          const el = match[1];
+          const count = parseInt(match[2] || '1');
+          const top = stack[stack.length - 1];
+          top[el] = (top[el] || 0) + count;
+        } else if (match[3]) {
+          // Mở ngoặc
+          stack.push({});
+        } else if (match[4]) {
+          // Đóng ngoặc
+          const group = stack.pop();
+          const multiplier = parseInt(match[5] || '1');
+          const top = stack[stack.length - 1];
+          for (const el in group) {
+            top[el] = (top[el] || 0) + group[el] * multiplier;
+          }
+        }
+      }
+      return stack[0];
+    }
+
+    function balanceEquation() {
+      const input = document.getElementById("equationInput").value.trim();
+      const [lhs, rhs] = input.replace(/→/g, "=").split('=').map(s => s.trim());
+
+      if (!lhs || !rhs) {
+        document.getElementById("result").innerText = "Vui lòng nhập đúng định dạng: A + B → C + D";
+        return;
+      }
+
+      const leftCompounds = lhs.split('+').map(s => s.trim());
+      const rightCompounds = rhs.split('+').map(s => s.trim());
+      const allCompounds = leftCompounds.concat(rightCompounds);
+      const elementSet = new Set();
+      const matrix = [];
+
+      allCompounds.forEach(comp => {
+        const atoms = parseMolecule(comp);
+        Object.keys(atoms).forEach(el => elementSet.add(el));
+      });
+
+      const elements = [...elementSet];
+      elements.forEach(el => {
+        const row = [];
+        leftCompounds.forEach(comp => row.push(parseMolecule(comp)[el] || 0));
+        rightCompounds.forEach(comp => row.push(-(parseMolecule(comp)[el] || 0)));
+        matrix.push(row);
+      });
+
+      const vars = allCompounds.map((_, i) => 'x' + i);
+      const equations = matrix.map(row =>
+        row.map((coef, i) => `${coef !== 0 ? coef + "*" + vars[i] : ""}`).join(" + ") + " = 0"
+      );
+
+      try {
+        const result = Algebrite.run(`solve([${equations.join(",")}], [${vars.join(",")}])`);
+        const matches = result.match(/x\d+\s*=\s*[^,{}\]]+/g);
+        const coefficients = Array(allCompounds.length).fill(1);
+        matches.forEach(m => {
+          const [_, index, value] = m.match(/x(\d+)\s*=\s*([^,{}\]]+)/);
+          coefficients[parseInt(index)] = eval(Algebrite.run(`float(${value})`));
+        });
+
+        const lcm = (a, b) => !b ? a : lcm(b, a % b);
+        function decimalPlaces(n) {
+  if (Number.isInteger(n)) return 1;
+  const str = n.toString();
+  if (str.includes('.')) {
+    return Math.pow(10, str.split('.')[1].length);
   }
+  return 1;
+}
+const scale = coefficients.reduce((acc, val) => lcm(acc, decimalPlaces(val)), 1);
+        const final = coefficients.map(x => Math.round(x * scale));
 
-  // Phân tích công thức hóa học thành {Nguyên tố: số lượng}
-  // Hỗ trợ các chỉ số dưới Unicode (₀-₉)
-  function parseFormula(formula) {
-    // Chuyển chỉ số dưới Unicode về số thường (vd: H₂O -> H2O)
-    formula = formula.replace(/₀/g, '0')
-                     .replace(/₁/g, '1')
-                     .replace(/₂/g, '2')
-                     .replace(/₃/g, '3')
-                     .replace(/₄/g, '4')
-                     .replace(/₅/g, '5')
-                     .replace(/₆/g, '6')
-                     .replace(/₇/g, '7')
-                     .replace(/₈/g, '8')
-                     .replace(/₉/g, '9');
+        const balanced = [
+          ...leftCompounds.map((c, i) => `${final[i]}${c}`),
+          ...rightCompounds.map((c, i) => `${final[i + leftCompounds.length]}${c}`)
+        ];
 
-    // Tách tokens: nguyên tố, dấu (), [], số
-    const tokens = formula.match(/([A-Z][a-z]?|\(|\)|\[|\]|\d+)/g);
-    if (!tokens) return {};
-    const stack = [{}];
-    let i = 0;
-
-    while (i < tokens.length) {
-      const t = tokens[i];
-      if (t === '(' || t === '[') {
-        stack.push({});
-        i++;
-      } else if (t === ')' || t === ']') {
-        const group = stack.pop();
-        i++;
-        let mul = 1;
-        if (i < tokens.length && /^\d+$/.test(tokens[i])) {
-          mul = parseInt(tokens[i]);
-          i++;
-        }
-        for (const el in group) {
-          stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + group[el] * mul;
-        }
-      } else if (/^[A-Z][a-z]?$/.test(t)) {
-        const el = t;
-        i++;
-        let count = 1;
-        if (i < tokens.length && /^\d+$/.test(tokens[i])) {
-          count = parseInt(tokens[i]);
-          i++;
-        }
-        stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + count;
-      } else {
-        // Số mà không đứng sau nguyên tố hoặc nhóm thì bỏ qua
-        i++;
+        document.getElementById("result").innerText =
+          balanced.slice(0, leftCompounds.length).join(" + ") + " → " +
+          balanced.slice(leftCompounds.length).join(" + ");
+      } catch (e) {
+        document.getElementById("result").innerText = "Không thể cân bằng phương trình!";
       }
     }
-    return stack[0];
-  }
+  </script>
 
-  // Tìm ƯCLN 2 số
-  function gcd(a, b) {
-    return b === 0 ? a : gcd(b, a % b);
-  }
-
-  // Tìm ƯCLN trong mảng
-  function gcdArr(arr) {
-    return arr.reduce((a, b) => gcd(a, b));
-  }
-
-  // Hiển thị công thức với chỉ số dưới chuẩn HTML
-  function formatFormula(mol) {
-    // Thay chỉ số số thường bằng <sub>
-    // Ví dụ: H2O -> H<sub>2</sub>O
-    return mol.replace(/([A-Z][a-z]?)(\d+)/g, (match, el, num) => {
-      return el + num.split('').map(d => `<span class="sub">${d}</span>`).join('');
-    });
-  }
-
-  // Hàm cân bằng phương trình hóa học
-  function balance() {
-    const input = document.getElementById('inputEq').value.trim();
-    const resultDiv = document.getElementById('result');
-    if (!input) {
-      resultDiv.innerText = "Vui lòng nhập phương trình.";
-      return;
-    }
-
-    // Thay dấu → hoặc => thành dấu =
-    const sides = input.replace(/→|=>/g, '=').split('=');
-    if (sides.length !== 2) {
-      resultDiv.innerText = "Sai cú pháp. Phải có một dấu → hoặc = giữa phản ứng.";
-      return;
-    }
-
-    const lhs = sides[0].trim();
-    const rhs = sides[1].trim();
-
-    if (!lhs || !rhs) {
-      resultDiv.innerText = "Thiếu phản ứng hoặc sản phẩm.";
-      return;
-    }
-
-    const left = lhs.split('+').map(x => x.trim());
-    const right = rhs.split('+').map(x => x.trim());
-    const allMols = [...left, ...right];
-
-    // Lấy danh sách nguyên tố duy nhất
-    const elements = Array.from(new Set(allMols.flatMap(m => Object.keys(parseFormula(m)))));
-    if (elements.length === 0) {
-      resultDiv.innerText = "Không tìm thấy nguyên tố hợp lệ.";
-      return;
-    }
-
-    // Tạo ma trận hệ số
-    // Mỗi hàng là 1 nguyên tố
-    // Mỗi cột là 1 phân tử (trái dương, phải âm)
-    const matrix = elements.map(el =>
-      allMols.map((mol, i) => (i < left.length ? parseFormula(mol)[el] || 0 : -(parseFormula(mol)[el] || 0)))
-    );
-
-    // Dùng numeric để tìm nullspace
-    // numeric.svd returns {U,S,V} và nullspace là cột của V ứng với giá trị nhỏ (gần 0) trong S
-    const svd = numeric.svd(matrix);
-    const tol = 1e-10;
-    const singularValues = svd.S;
-    let nullspaceIndex = -1;
-    for (let i = singularValues.length - 1; i >= 0; i--) {
-      if (singularValues[i] < tol) {
-        nullspaceIndex = i;
-        break;
-      }
-    }
-    if (nullspaceIndex === -1) {
-      resultDiv.innerText = "Không thể cân bằng phương trình (nullspace trống).";
-      return;
-    }
-    const nullspaceVector = svd.V.map(row => row[nullspaceIndex]);
-
-    // Chuyển sang số nguyên hợp lệ
-    // Tìm mẫu chung (dùng phân số gần đúng)
-    // numeric không có fraction, nên làm thủ công:
-
-    function approxFraction(x, maxDen = 1000) {
-      // Dùng thuật toán phân số liên tiếp (Continued fraction)
-      let n = 1, d = 0, a = Math.floor(x);
-      let n1 = 0, d1 = 1;
-      let x1 = x - a;
-      if (x1 < 1e-12) return [a, 1];
-      let iter = 0;
-      while (iter < 20) {
-        iter++;
-        x1 = 1 / x1;
-        let ai = Math.floor(x1);
-        let n2 = ai * n + n1;
-        let d2 = ai * d + d1;
-        let val = n2 / d2;
-        if (Math.abs(val - x) < 1e-10 || d2 > maxDen) break;
-        n1 = n; d1 = d;
-        n = n2; d = d2;
-        x1 -= ai;
-      }
-      return [n, d];
-    }
-
-    // Chuyển nullspaceVector thành phân số
-    const fracs = nullspaceVector.map(x => approxFraction(Math.abs(x)));
-
-    // Tìm mẫu chung
-    const denoms = fracs.map(f => f[1]);
-    let commonDenom = denoms.reduce((a, b) => a * b / gcd(a, b));
-
-    let ints = fracs.map(([n, d], i) => Math.round(n * (commonDenom / d)));
-
-    // Rút gọn các hệ số
-    const gcdAll = gcdArr(ints);
-    ints = ints.map(x => x / gcdAll);
-
-    // Đảm bảo hệ số dương
-    if (ints.some(x => x < 0)) {
-      ints = ints.map(x => -x);
-    }
-
-    // Hiển thị kết quả với chỉ số dưới HTML
-    const leftStr = ints.slice(0, left.length).map((c, i) => (c === 1 ? formatFormula(left[i]) : c + formatFormula(left[i]))).join(' + ');
-    const rightStr = ints.slice(left.length).map((c, i) => (c === 1 ? formatFormula(right[i]) : c + formatFormula(right[i]))).join(' + ');
-
-    resultDiv.innerHTML = `${leftStr} → ${rightStr}`;
-  }
-</script>
 </body>
 </html>
