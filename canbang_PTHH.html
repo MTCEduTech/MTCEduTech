@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cân bằng phương trình hóa học</title>
+  <!-- Sử dụng math.js bản đầy đủ -->
+  <script src="https://unpkg.com/mathjs@11.11.1/lib/browser/math.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #eef4fa; text-align: center; }
+    input { width: 450px; padding: 10px; font-size: 16px; }
+    button { padding: 8px 20px; margin-top: 10px; font-size: 16px; }
+    #result { margin-top: 20px; font-size: 18px; font-weight: bold; color: #333; }
+  </style>
+</head>
+<body>
+  <h2>Cân bằng phương trình hóa học</h2>
+  <input id="inputEq" placeholder="VD: Fe2(SO4)3 + BaCl2 → FeCl3 + BaSO4">
+  <br>
+  <button onclick="balance()">Cân bằng</button>
+  <div id="result"></div>
+
+<script>
+function parseFormula(formula) {
+  const stack = [{}];
+  const tokens = formula.match(/([A-Z][a-z]?|\(|\)|\d+)/g);
+  let i = 0;
+  while (i < tokens.length) {
+    const token = tokens[i];
+    if (token === '(') {
+      stack.push({});
+      i++;
+    } else if (token === ')') {
+      const group = stack.pop();
+      i++;
+      const multiplier = /^\d+$/.test(tokens[i]) ? parseInt(tokens[i]) : 1;
+      if (/^\d+$/.test(tokens[i])) i++;
+      for (const el in group) {
+        stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + group[el] * multiplier;
+      }
+    } else if (/^[A-Z][a-z]?$/.test(token)) {
+      const el = token;
+      i++;
+      const count = /^\d+$/.test(tokens[i]) ? parseInt(tokens[i]) : 1;
+      if (/^\d+$/.test(tokens[i])) i++;
+      stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + count;
+    } else i++;
+  }
+  return stack[0];
+}
+
+function gcd(a, b) {
+  return b ? gcd(b, a % b) : Math.abs(a);
+}
+
+function lcm(a, b) {
+  return Math.abs(a * b) / gcd(a, b);
+}
+
+function lcmArr(arr) {
+  return arr.reduce((a, b) => lcm(a, b));
+}
+
+function balance() {
+  const input = document.getElementById("inputEq").value.trim();
+  const [lhs, rhs] = input.replace(/→|=>/g, '=').split("=").map(s => s.trim());
+  if (!lhs || !rhs) return document.getElementById("result").innerText = "Sai cú pháp.";
+
+  const left = lhs.split('+').map(s => s.trim());
+  const right = rhs.split('+').map(s => s.trim());
+  const all = [...left, ...right];
+  const matrix = [];
+  const elements = Array.from(new Set(all.flatMap(m => Object.keys(parseFormula(m)))));
+
+  for (const el of elements) {
+    const row = all.map((mol, i) => {
+      const count = parseFormula(mol)[el] || 0;
+      return i < left.length ? count : -count;
+    });
+    matrix.push(row);
+  }
+
+  const A = math.matrix(matrix);
+  const nullspace = math.nullSpace(A);
+
+  if (nullspace._size[1] === 0) {
+    document.getElementById("result").innerText = "Không thể cân bằng.";
+    return;
+  }
+
+  let sol = nullspace._data.map(row => row[0]);
+  const denoms = sol.map(x => math.fraction(x).d);
+  const multiplier = lcmArr(denoms);
+  let coeffs = sol.map(x => math.multiply(x, multiplier)).map(x => math.number(x));
+
+  const leftStr = coeffs.slice(0, left.length).map((c, i) => `${c}${left[i]}`).join(" + ");
+  const rightStr = coeffs.slice(left.length).map((c, i) => `${c}${right[i]}`).join(" + ");
+
+  document.getElementById("result").innerText = `${leftStr} → ${rightStr}`;
+}
+</script>
+</body>
+</html>
