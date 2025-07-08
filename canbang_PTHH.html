@@ -2,94 +2,172 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Cân bằng PTHH – numeric.js</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+  <title>Cân bằng phương trình hóa học</title>
   <style>
-    body { font-family: Arial; padding: 20px; background: #eef4fa; text-align: center; }
-    input { width: 460px; padding: 8px; font-size: 16px; }
-    button { margin: 4px; font-size: 16px; padding: 6px 10px; cursor: pointer; }
-    #result { margin-top: 20px; font-size: 18px; font-weight: bold; white-space: pre-wrap; }
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #eef4fa;
+      text-align: center;
+    }
+    input {
+      width: 90%;
+      max-width: 500px;
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      margin: 4px;
+      font-size: 16px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
 <h2>Cân bằng phương trình hóa học</h2>
+
+<!-- Nút chèn ký tự -->
 <div>
   <button onclick="insert('₁')">₁</button><button onclick="insert('₂')">₂</button><button onclick="insert('₃')">₃</button>
   <button onclick="insert('₄')">₄</button><button onclick="insert('₅')">₅</button><button onclick="insert('₆')">₆</button>
   <button onclick="insert('₇')">₇</button><button onclick="insert('₈')">₈</button><button onclick="insert('₉')">₉</button>
-  <button onclick="insert('₀')">₀</button><button onclick="insert('(')">(</button><button onclick="insert(')')">)</button>
-  <button onclick="insert(' + ')">+</button><button onclick="insert(' → ')">→</button>
+  <button onclick="insert('₀')">₀</button><br>
+  <button onclick="insert(' + ')">+</button>
+  <button onclick="insert(' → ')">→</button>
+  <button onclick="insert('(')">(</button>
+  <button onclick="insert(')')">)</button>
 </div>
 
+<!-- Ô nhập phương trình -->
 <input id="inputEq" placeholder="Ví dụ: Fe₂(SO₄)₃ + BaCl₂ → FeCl₃ + BaSO₄" />
 <br>
 <button onclick="balance()">Cân bằng</button>
 
+<!-- Kết quả -->
 <div id="result"></div>
 
 <script>
 function insert(txt){
-  const i = document.getElementById('inputEq');
-  const s=i.selectionStart, e=i.selectionEnd;
-  i.value = i.value.slice(0,s)+txt+i.value.slice(e);
-  i.selectionStart=i.selectionEnd=s+txt.length;
-  i.focus();
+  const input = document.getElementById('inputEq');
+  const s = input.selectionStart, e = input.selectionEnd;
+  input.value = input.value.slice(0, s) + txt + input.value.slice(e);
+  input.selectionStart = input.selectionEnd = s + txt.length;
+  input.focus();
 }
-function normalize(s){
-  const map={'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
-  return s.replace(/[₀-₉]/g,c=>map[c]);
+
+function normalize(s) {
+  const map = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9'};
+  return s.replace(/[₀-₉]/g, c => map[c]);
 }
-function parseFormula(f){
-  f=normalize(f);
-  const tokens=f.match(/([A-Z][a-z]?|\d+|\(|\))/g);
-  const stack=[{}];
-  for(let i=0;i<tokens.length;){
-    const t=tokens[i];
-    if(t==='('){stack.push({});i++;}
-    else if(t===')'){
-      const g=stack.pop();i++;
-      const mul=i<tokens.length&&/^\d+$/.test(tokens[i])?+tokens[i]++:1;
-      const top=stack[stack.length-1];
-      for(let k in g) top[k]=(top[k]||0)+g[k]*mul;
-    } else if(/^[A-Z]/.test(t)){
-      const el=t;
-      let cnt=1;
-      if(i+1<tokens.length&&/^\d+$/.test(tokens[i+1])) cnt=+tokens[++i];
-      stack[stack.length-1][el]=(stack[stack.length-1][el]||0)+cnt;
+
+function parseFormula(f) {
+  f = normalize(f);
+  const tokens = f.match(/([A-Z][a-z]?|\d+|\(|\))/g);
+  const stack = [{}];
+  for (let i = 0; i < tokens.length;) {
+    const t = tokens[i];
+    if (t === '(') {
+      stack.push({});
+      i++;
+    } else if (t === ')') {
+      const group = stack.pop();
+      i++;
+      const mul = i < tokens.length && /^\d+$/.test(tokens[i]) ? +tokens[i++] : 1;
+      const top = stack[stack.length - 1];
+      for (let k in group) top[k] = (top[k] || 0) + group[k] * mul;
+    } else if (/^[A-Z]/.test(t)) {
+      const el = t;
+      let cnt = 1;
+      if (i + 1 < tokens.length && /^\d+$/.test(tokens[i + 1])) cnt = +tokens[++i];
+      stack[stack.length - 1][el] = (stack[stack.length - 1][el] || 0) + cnt;
       i++;
     } else i++;
   }
   return stack[0];
 }
-function gcd(a,b){return b?gcd(b,a%b):a;}
-function lcm(a,b){return a*b/gcd(a,b);}
-function balance(){
-  const inp=document.getElementById('inputEq').value;
-  if(!/(→|=>|=)/.test(inp)){document.getElementById('result').innerText='Thiếu dấu →'; return;}
-  const [L,R]=inp.replace(/=>/g,'→').split(/→|=/).map(s=>s.trim());
-  const left=L.split('+').map(s=>s.trim()), right=R.split('+').map(s=>s.trim());
-  const all=[...left,...right];
-  const elems=Array.from(new Set(all.flatMap(m=>Object.keys(parseFormula(m)))));
-  const mat = elems.map(el =>
-  all.map((m, i) =>
-    (parseFormula(m)[el] || 0) * (i < left.length ? 1 : -1)
-  )
-);
 
-  const A=numeric.transpose(mat);
-  const svd=numeric.svd(A);
-  const ns=svd.V[svd.V.length-1];
-  const dens=ns.map(x=>Math.pow(10,(x.toString().split('.')[1]||'').length));
-  const scale=dens.reduce((a,b)=>lcm(a,b),1);
-  let coeffs=ns.map(x=>Math.round(x*scale));
-  const g=coeffs.reduce((a,b)=>gcd(a,b));
-  coeffs=coeffs.map(v=>v/g);
-  if(coeffs.some(v=>v<0)) coeffs=coeffs.map(v=>-v);
-  const leftRes=left.map((m,i)=>coeffs[i]>1?coeffs[i]+m:m).join(' + ');
-  const rightRes=right.map((m,i)=>coeffs[i+left.length]>1?coeffs[i+left.length]+m:m).join(' + ');
-  document.getElementById('result').innerText=leftRes+' → '+rightRes;
+function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+function lcm(a, b) { return a * b / gcd(a, b); }
+
+function balance() {
+  const inputRaw = document.getElementById("inputEq").value;
+  const input = normalize(inputRaw.replace(/→|=>/g, "->"));
+  if (!input.includes("->")) {
+    document.getElementById("result").innerText = "Thiếu dấu →";
+    return;
+  }
+
+  const [lhs, rhs] = input.split("->").map(s => s.trim());
+  const left = lhs.split('+').map(s => s.trim());
+  const right = rhs.split('+').map(s => s.trim());
+  const all = [...left, ...right];
+
+  const elements = Array.from(new Set(all.flatMap(c => Object.keys(parseFormula(c)))));
+  const matrix = elements.map(el =>
+    all.map((compound, idx) => {
+      const parsed = parseFormula(compound);
+      const val = parsed[el] || 0;
+      return idx < left.length ? val : -val;
+    })
+  );
+
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+  const M = matrix.map(row => row.slice());
+
+  for (let i = 0; i < rows; i++) {
+    let pivot = i;
+    for (let j = i + 1; j < rows; j++) {
+      if (Math.abs(M[j][i]) > Math.abs(M[pivot][i])) pivot = j;
+    }
+    [M[i], M[pivot]] = [M[pivot], M[i]];
+    if (M[i][i] === 0) continue;
+
+    for (let j = i + 1; j < rows; j++) {
+      const f = M[j][i] / M[i][i];
+      for (let k = i; k < cols; k++) {
+        M[j][k] -= f * M[i][k];
+      }
+    }
+  }
+
+  const solution = Array(cols).fill(1);
+  for (let i = rows - 1; i >= 0; i--) {
+    let sum = 0;
+    for (let j = i + 1; j < cols; j++) {
+      sum += M[i][j] * solution[j];
+    }
+    if (M[i][i] !== 0)
+      solution[i] = -sum / M[i][i];
+  }
+
+  const denominators = solution.map(x => {
+    const s = x.toFixed(6);
+    return s.includes('.') ? Math.pow(10, s.split('.')[1].replace(/0+$/, '').length) : 1;
+  });
+
+  const factor = denominators.reduce(lcm, 1);
+  const coeffs = solution.map(x => Math.round(x * factor));
+  const gcdAll = coeffs.reduce(gcd);
+  const final = coeffs.map(x => Math.round(x / gcdAll));
+
+  function formatFormula(formula) {
+    return formula.replace(/\d/g, d => `<sub>${d}</sub>`);
+  }
+
+  const leftRes = left.map((c, i) => (final[i] > 1 ? final[i] + formatFormula(c) : formatFormula(c))).join(' + ');
+  const rightRes = right.map((c, i) => (final[i + left.length] > 1 ? final[i + left.length] + formatFormula(c) : formatFormula(c))).join(' + ');
+
+  document.getElementById("result").innerHTML = `${leftRes} → ${rightRes}`;
 }
 </script>
+
 </body>
 </html>
