@@ -71,7 +71,12 @@ function balance(){
   const left=L.split('+').map(s=>s.trim()), right=R.split('+').map(s=>s.trim());
   const all=[...left,...right];
   const elems=Array.from(new Set(all.flatMap(m=>Object.keys(parseFormula(m)))));
-  const mat=elems.map(el=>all.map((m,i)=>parseFormula(m)[el]||(0))*((i<left.length)?1:-1));
+  const mat = elems.map(el =>
+  all.map((m, i) =>
+    (parseFormula(m)[el] || 0) * (i < left.length ? 1 : -1)
+  )
+);
+
   const A=numeric.transpose(mat);
   const svd=numeric.svd(A);
   const ns=svd.V[svd.V.length-1];
