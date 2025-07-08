@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Cân bằng phương trình hóa học</title>
-  <!-- Sử dụng math.js bản đầy đủ -->
+  <!-- Tải các thư viện theo đúng thứ tự -->
+  <script src="https://unpkg.com/nerdamer/nerdamer.core.js"></script>
+  <script src="https://unpkg.com/nerdamer/Algebra.js"></script>
+  <script src="https://unpkg.com/nerdamer/Solve.js"></script>
   <script src="https://unpkg.com/mathjs@11.11.1/lib/browser/math.js"></script>
   <style>
     body { font-family: Arial; padding: 20px; background: #eef4fa; text-align: center; }
@@ -98,5 +101,93 @@ function balance() {
   document.getElementById("result").innerText = `${leftStr} → ${rightStr}`;
 }
 </script>
+
+<script>
+  // Hàm rút gọn các hệ số về dạng nguyên tố nhỏ nhất
+  function reduceCoeffs(arr) {
+    function gcdTwo(a, b) {
+      return b === 0 ? a : gcdTwo(b, a % b);
+    }
+    let g = 0;
+    for (const v of arr) {
+      if (v !== 0) g = g === 0 ? Math.abs(v) : gcdTwo(g, Math.abs(v));
+    }
+    if (g === 0) g = 1;
+    return arr.map(x => x / g);
+  }
+
+  function balance() {
+    const input = document.getElementById("inputEq").value.trim();
+    if (!input) {
+      document.getElementById("result").innerText = "Vui lòng nhập phương trình.";
+      return;
+    }
+
+    // Chuẩn hóa dấu mũi tên
+    const sides = input.replace(/→|=>/g, '=').split('=');
+    if (sides.length !== 2) {
+      document.getElementById("result").innerText = "Sai cú pháp. Phải có một dấu → hoặc = giữa phản ứng.";
+      return;
+    }
+    const lhs = sides[0].trim();
+    const rhs = sides[1].trim();
+    if (!lhs || !rhs) {
+      document.getElementById("result").innerText = "Thiếu phản ứng hoặc sản phẩm.";
+      return;
+    }
+
+    const left = lhs.split('+').map(x => x.trim());
+    const right = rhs.split('+').map(x => x.trim());
+    const allMols = [...left, ...right];
+
+    // Lấy danh sách nguyên tố
+    const elements = Array.from(new Set(allMols.flatMap(m => Object.keys(parseFormula(m)))));
+    if (elements.length === 0) {
+      document.getElementById("result").innerText = "Không tìm thấy nguyên tố hợp lệ.";
+      return;
+    }
+
+    // Tạo ma trận hệ số nguyên tố
+    const matrix = elements.map(el =>
+      allMols.map((mol, i) => (i < left.length ? parseFormula(mol)[el] || 0 : -(parseFormula(mol)[el] || 0)))
+    );
+
+    const A = math.matrix(matrix);
+
+    // Tính không gian null (nghiệm tự do)
+    const ns = math.nullSpace(A);
+    if (ns._size[1] === 0) {
+      document.getElementById("result").innerText = "Không thể cân bằng phương trình.";
+      return;
+    }
+
+    // Lấy nghiệm (cột đầu tiên của nullspace)
+    let solution = ns._data.map(row => row[0]);
+
+    // Tìm bội chung nhỏ nhất để chuyển về số nguyên
+    const denominators = solution.map(x => math.fraction(x).d);
+    const commonDenom = denominators.reduce((a, b) => (b === 0 ? a : (a * b) / gcd(a, b)));
+
+    let coeffs = solution.map(x => Math.round(x * commonDenom));
+
+    // Rút gọn các hệ số
+    coeffs = reduceCoeffs(coeffs);
+
+    // Chuẩn bị kết quả hiển thị
+    const leftCoeffs = coeffs.slice(0, left.length);
+    const rightCoeffs = coeffs.slice(left.length);
+
+    // Hiển thị dạng chuẩn: 1 không hiện, >1 hiện rõ
+    const leftStr = leftCoeffs
+      .map((c, i) => (c === 1 ? left[i] : c + left[i]))
+      .join(' + ');
+    const rightStr = rightCoeffs
+      .map((c, i) => (c === 1 ? right[i] : c + right[i]))
+      .join(' + ');
+
+    document.getElementById("result").innerText = `${leftStr} → ${rightStr}`;
+  }
+</script>
 </body>
 </html>
+
