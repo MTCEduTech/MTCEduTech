@@ -896,24 +896,31 @@ async function handleLogin() {
     const found = accountData.find(acc => acc.username === nickname && acc.password === password);
 
     if (found) {
-  alert("✅ Đăng nhập thành công!");
-  localStorage.setItem("authenticated", "true");
-localStorage.setItem("nickname", found.username);
-localStorage.setItem("username", found.username);
-localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
-	    localStorage.setItem("name", found.name); // ✅ thêm dòng này để chỉ cho admin truy cập quản lý tài khoản
-	    updateAdminButton();  // Gọi lại để hiển thị nút admin ngay
-  closeIntroPopup();
+      alert("✅ Đăng nhập thành công!");
+      localStorage.setItem("authenticated", "true");
+      localStorage.setItem("nickname", found.username);
+      localStorage.setItem("username", found.username);
+      localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
+      localStorage.setItem("name", found.name); // để xác định admin
 
-  // 👉 Hiển thị lời chào ngay
-  const greetingBox = document.getElementById('greeting-box');
-  const greetingEl = document.getElementById('greeting');
-  greetingEl.textContent = '👋 Xin chào ' + found.name;
-  setTimeout(() => {
-    greetingBox.style.opacity = '1';
-    greetingBox.style.transform = 'translateY(0)';
-  }, 100);
-} else {
+      // ✅ Nếu là tài khoản demo thì đánh dấu đã đăng nhập lại
+      if (found.username === "demo") {
+        localStorage.setItem("demo_relogin", "true");
+      }
+
+      updateAdminButton();  // Hiển thị nút admin nếu cần
+      closeIntroPopup();
+
+      // 👉 Hiển thị lời chào
+      const greetingBox = document.getElementById('greeting-box');
+      const greetingEl = document.getElementById('greeting');
+      greetingEl.textContent = '👋 Xin chào ' + found.name;
+      setTimeout(() => {
+        greetingBox.style.opacity = '1';
+        greetingBox.style.transform = 'translateY(0)';
+      }, 100);
+
+    } else {
       alert("❌ Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
 
@@ -923,6 +930,7 @@ localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
   }
 }
 </script>
+
 <script>
   function logout() {
     localStorage.removeItem("authenticated");
