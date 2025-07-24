@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô phỏng Thấu kính hội tụ</title>
+    <link rel="stylesheet" href="thaukinh_KHTN9.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MÔ PHỎNG SỰ TẠO ẢNH QUA THẤU KÍNH HỘI TỤ</h1>
+
+        <div class="simulation-controls">
+            <div class="sliders">
+                <div>
+                    <label for="objectDistance">Khoảng cách vật (d): <span id="objectDistanceValue">50</span> cm</label>
+                    <input type="range" id="objectDistance" min="10" max="300" value="50">
+                </div>
+                <div>
+                    <label for="objectHeight">Chiều cao vật (h): <span id="objectHeightValue">50</span> cm</label>
+                    <input type="range" id="objectHeight" min="5" max="100" value="50">
+                </div>
+                <div>
+                    <label for="focalLength">Tiêu cự (f): <span id="focalLengthValue">30</span> cm</label>
+                    <input type="range" id="focalLength" min="10" max="150" value="30">
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button id="showImageInfoButton" class="action-button">Thông tin ảnh</button>
+                <button id="showQuizButton" class="action-button">Câu hỏi hiểu bài</button>
+                <button id="exportDocxButton" class="action-button" style="background-color: #f44336;">Xuất đề bài và lời giải</button>
+            </div>
+        </div>
+
+        <div class="simulation-area">
+            <svg id="opticalBench" width="1000" height="400" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet">
+                <line x1="0" y1="200" x2="1000" y2="200" stroke="#555" stroke-width="2"/>
+
+                <line x1="500" y1="50" x2="500" y2="350" stroke="#4CAF50" stroke-width="4"/>
+                <polyline points="490,60 500,50 510,60" stroke="#4CAF50" stroke-width="3" fill="none"/>
+                <polyline points="490,340 500,350 510,340" stroke="#4CAF50" stroke-width="3" fill="none"/>
+                <circle id="opticalCenter" cx="500" cy="200" r="5" fill="#FFD700" />
+                <circle id="focalPoint1" cx="400" cy="200" r="5" fill="#FFD700"/>
+                <text id="fLabel1" x="390" y="190" fill="#FFD700" font-size="14">F</text>
+                <circle id="focalPoint2" cx="600" cy="200" r="5" fill="#FFD700"/>
+                <text id="fLabel2" x="610" y="190" fill="#FFD700" font-size="14">F'</text>
+                
+                <circle id="twoFocalPoint1" cx="300" cy="200" r="5" fill="#FFD700"/>
+                <text id="twoFLabel1" x="290" y="190" fill="#FFD700" font-size="14">2F</text>
+                <circle id="twoFocalPoint2" cx="700" cy="200" r="5" fill="#FFD700"/>
+                <text id="twoFLabel2" x="710" y="190" fill="#FFD700" font-size="14">2F'</text>
+
+                <line id="object" x1="50" y1="200" x2="50" y2="150" stroke="#00BFFF" stroke-width="3"/>
+                <polygon points="45,150 55,150 50,140" fill="#00BFFF"/>
+
+                <line id="image" x1="0" y1="0" x2="0" y2="0" stroke="#FFA500" stroke-width="3"/>
+                <polygon id="imageArrow" points="0,0 0,0 0,0" fill="#FFA500"/>
+
+                <line id="ray1-incident" x1="0" y1="0" x2="0" y2="0" stroke="#FF00FF" stroke-width="1.5" stroke-dasharray="5,5"/>
+                <line id="ray1-refracted" x1="0" y1="0" x2="0" y2="0" stroke="#FF00FF" stroke-width="1.5" stroke-dasharray="5,5"/>
+
+                <line id="ray2-incident" x1="0" y1="0" x2="0" y2="0" stroke="#FFFF00" stroke-width="1.5" stroke-dasharray="5,5"/>
+                <line id="ray2-refracted" x1="0" y1="0" x2="0" y2="0" stroke="#FFFF00" stroke-width="1.5" stroke-dasharray="5,5"/>
+
+                <line id="ray3-incident" x1="0" y1="0" x2="0" y2="0" stroke="#00FF00" stroke-width="1.5" stroke-dasharray="5,5"/>
+                <line id="ray3-refracted" x1="0" y1="0" x2="0" y2="0" stroke="#00FF00" stroke-width="1.5" stroke-dasharray="5,5"/>
+
+            </svg>
+        </div>
+
+        <div id="imageInfoSection" class="image-info-section">
+            <h2>Thông tin ảnh tạo thành:</h2>
+            <p id="initialNote" style="font-style: italic; color: #aaa;">Hãy thay đổi các thanh trượt hoặc nhấn "Thông tin ảnh" để xem kết quả.</p>
+            <div id="imageInfoContent" style="display:none;">
+                <p>Khoảng cách từ ảnh đến thấu kính (d'): <span id="imageDistance">Đang tính...</span> cm</p>
+                <p>Kích thước ảnh (h'): <span id="imageHeight">Đang tính...</span> cm</p>
+                <p>Đặc điểm ảnh: <span id="imageCharacteristics">Đang tính...</span></p>
+            </div>
+            <button id="showSolutionButton" class="solution-button">Hiển thị lời giải</button>
+        </div>
+
+        <div id="quizSection" class="quiz-section" style="display:none;">
+            <h2>Kiểm tra sự hiểu bài</h2>
+            
+            <button id="updateQuizButton" class="quiz-button">Cập nhật câu hỏi</button>
+
+            <div id="quizQuestions">
+                </div>
+
+            <button onclick="checkQuiz()">Kiểm tra</button>
+            <p id="quizResult" style="margin-top: 15px; font-weight: bold;"></p>
+        </div>
+
+    </div>
+
+    <div id="solutionModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Lời giải chi tiết</h2>
+            <div id="solutionContent"></div>
+        </div>
+    </div>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="thaukinh_KHTN9.js"></script>
+</body>
+</html>
