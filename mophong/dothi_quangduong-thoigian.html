@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>ĐỒ THỊ QUÃNG ĐƯỜNG - THỜI GIAN</title>
+  <link rel="stylesheet" href="dothi_quangduong-thoigian.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="flex-layout">
+      <!-- CỘT TRÁI: BẢNG NHẬP LIỆU -->
+      <div class="input-panel">
+<h3 class="panel-title">BẢNG SỐ LIỆU QUÃNG ĐƯỜNG - THỜI GIAN</h3>
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th>
+                Thời gian<br>
+                <select id="timeUnit">
+                  <option value="1">giây</option>
+                  <option value="60">phút</option>
+                  <option value="3600" selected>giờ</option>
+                </select>
+              </th>
+              <th>
+                Quãng đường<br>
+                <select id="distanceUnit">
+                  <option value="0.001" selected>km</option>
+                  <option value="1">m</option>
+                  <option value="100">cm</option>
+                  <option value="1000">mm</option>
+                </select>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><input type="number" class="time-input" value="0" step="0.1"></td><td><input type="number" class="distance-input" value="0" step="1"></td><td><button class="remove-row">🗑</button></td></tr>
+            <tr><td><input type="number" class="time-input" value="0.5" step="0.1"></td><td><input type="number" class="distance-input" value="15" step="1"></td><td><button class="remove-row">🗑</button></td></tr>
+            <tr><td><input type="number" class="time-input" value="1" step="0.1"></td><td><input type="number" class="distance-input" value="30" step="1"></td><td><button class="remove-row">🗑</button></td></tr>
+            <tr><td><input type="number" class="time-input" value="1.5" step="0.1"></td><td><input type="number" class="distance-input" value="45" step="1"></td><td><button class="remove-row">🗑</button></td></tr>
+            <tr><td><input type="number" class="time-input" value="2" step="0.1"></td><td><input type="number" class="distance-input" value="60" step="1"></td><td><button class="remove-row">🗑</button></td></tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top: 8px;">
+          <button id="addRowBtn">Thêm dòng</button>
+          <button id="drawGraphBtn">Vẽ đồ thị</button>
+          <button id="analyzeBtn">Phân tích đồ thị</button>
+        </div>
+      </div>
+
+      <!-- CỘT PHẢI: BIỂU ĐỒ -->
+      <div class="chart-panel">
+<h3 class="panel-title">ĐỒ THỊ QUÃNG ĐƯỜNG - THỜI GIAN</h3>
+        <canvas id="myChart"></canvas>
+<!-- PHÂN TÍCH ĐỒ THỊ -->
+  <div id="analysisContainer" class="analysis-box" style="display: none;">
+  <span class="close-analysis">×</span>
+  <h3>Phân tích đồ thị</h3>
+  <div id="analysisResult">Đang phân tích...</div>
+</div>
+
+    </div>
+  </div>
+ 
+  </div>
+
+  <script src="chart.umd.min.js"></script>
+  <script src="dothi_quangduong-thoigian.js"></script>
+  <script>
+  const analysisBox = document.getElementById('analysisContainer');
+const closeBtn = document.querySelector('.close-analysis');
+
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  const resultBox = document.getElementById('analysisResult');
+
+  analyzeBtn.onclick = function () {
+    const timeInputs = Array.from(document.querySelectorAll('.time-input'));
+    const distanceInputs = Array.from(document.querySelectorAll('.distance-input'));
+    const timeUnitLabel = document.getElementById('timeUnit').selectedOptions[0].textContent.trim();
+    const distanceUnitLabel = document.getElementById('distanceUnit').selectedOptions[0].textContent.trim();
+
+    const times = timeInputs.map(input => parseFloat(input.value));
+    const distances = distanceInputs.map(input => parseFloat(input.value));
+
+    let content = '';
+
+    if (times.length < 2) {
+      content = '<strong>Cần ít nhất hai điểm dữ liệu để phân tích.</strong>';
+    } else {
+      let isUniform = true;
+      const speeds = [];
+
+      for (let i = 1; i < times.length; i++) {
+        const dt = times[i] - times[i - 1];
+        const ds = distances[i] - distances[i - 1];
+        const v = dt !== 0 ? ds / dt : 0;
+        speeds.push(v);
+        if (i > 1 && Math.abs(v - speeds[i - 2]) > 0.1) isUniform = false;
+      }
+
+      const summary = isUniform
+        ? '✅ <strong>Vật chuyển động đều</strong> vì vận tốc giữa các khoảng thời gian là không đổi.'
+        : '⚠️ <strong>Vật chuyển động không đều</strong> vì vận tốc thay đổi giữa các khoảng thời gian.';
+
+      content += `<p>${summary}</p>`;
+      content += '<br><strong>Chi tiết các khoảng:</strong><ul style="list-style: disc; padding-left: 18px;">';
+
+      for (let i = 1; i < times.length; i++) {
+        const t1 = times[i - 1], t2 = times[i];
+        const s1 = distances[i - 1], s2 = distances[i];
+        const dtRaw = t2 - t1;
+        const dsRaw = s2 - s1;
+        const vRaw = dtRaw !== 0 ? dsRaw / dtRaw : 0;
+
+        const dt = parseFloat(dtRaw.toFixed(1));
+        const ds = parseFloat(dsRaw.toFixed(1));
+        const v = parseFloat(vRaw.toFixed(2));
+
+        const standingStill = Math.abs(v) < 0.0001;
+        const note = standingStill ? ' <strong>(Vật đứng yên)</strong>' : '';
+
+        const line = `Từ t=${t1} đến t=${t2} ${timeUnitLabel}, Δt=${dt} ${timeUnitLabel}, Δs=${s2} - ${s1} = ${ds} ${distanceUnitLabel}, v = Δs / Δt = ${ds} / ${dt} = <strong>${v.toFixed(2)}</strong> ${distanceUnitLabel}/${timeUnitLabel}${note}`;
+        content += `<li>${line}</li>`;
+      }
+
+      content += '</ul>';
+    }
+
+    resultBox.innerHTML = content;
+    analysisBox.style.display = 'block';
+
+  };
+
+  closeBtn.onclick = function () {
+    analysisBox.style.display = 'none';
+
+  };
+</script>
+
+</body>
+</html>

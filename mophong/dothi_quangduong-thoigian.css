@@ -1,0 +1,168 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f4f4f4;
+  color: #333;
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h2 {
+  color: #007BFF;
+  font-weight: bold;
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.flex-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.input-panel {
+  flex: 1;
+  max-width: 33%;
+}
+
+.chart-panel {
+  flex: 2;
+  max-width: 67%;
+  position: relative;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #007BFF;
+  text-transform: uppercase;
+}
+
+#dataTable {
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: auto;
+  width: 100%;
+}
+
+#dataTable th,
+#dataTable td {
+  border: 1px solid #ccc;
+  padding: 2px 4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.time-input,
+.distance-input {
+  width: 60px;
+  padding: 2px;
+  font-size: 12px;
+  text-align: center;
+}
+
+select {
+  padding: 2px 4px;
+  font-size: 12px;
+  width: 80px;
+}
+
+button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 2px;
+}
+
+#addRowBtn {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+}
+
+#drawGraphBtn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+}
+
+#analyzeBtn {
+  background-color: #ffc107;
+  color: black;
+  border: none;
+}
+
+.remove-row {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  color: #dc3545;
+  cursor: pointer;
+}
+
+.remove-row:hover {
+  color: #a71d2a;
+}
+
+.chart-panel canvas {
+  width: 100% !important;
+  height: 400px !important;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* PHÂN TÍCH ĐỒ THỊ - POPUP CỐ ĐỊNH */
+.analysis-box {
+  position: fixed;
+  bottom: 10;
+  right: 30;
+  margin-right: 20px; /* căn sát hoặc điều chỉnh lề */
+  width: 48.5%;          /* đúng bằng cột chart-panel */
+  max-width: 800px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-size: 14px;
+  z-index: 1000;
+  text-align: left;
+}
+
+.analysis-box h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.analysis-box .close-analysis {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #555;
+}
+
+.analysis-box ul {
+  list-style-position: inside;
+  padding-left: 0;
+  margin-left: 0;
+  text-align: left;
+}
+
+.analysis-box li {
+  margin-bottom: 4px;
+  padding-left: 0;
+  text-align: left;
+}
