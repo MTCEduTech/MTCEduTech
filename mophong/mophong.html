@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Công cụ mô phỏng trong dạy và học</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #b6d4f0;
+      text-align: center;
+    }
+
+    h1 {
+      color: blue;
+      font-size: 36px;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+
+    .dropdown-container {
+      margin-top: 30px;
+    }
+
+    select {
+      background-color: #ffbb00;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      margin: 10px 0;
+      width: 320px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg fill='blue' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 24px;
+    }
+
+    select:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>CÔNG CỤ MÔ PHỎNG TRONG DẠY VÀ HỌC</h1>
+
+  <div class="dropdown-container">
+    <select onchange="if(this.value) window.location.href=this.value">
+      <option selected disabled>MÔN KHOA HỌC TỰ NHIÊN</option>
+      <option value="https://mtcedutech.github.io/MTCEduTech/mophong/thaukinh_KHTN9.html">Tạo ảnh qua thấu kính hội tụ</option>
+      <option value="https://mtcedutech.github.io/MTCEduTech/mophong/dothi_quangduong-thoigian.html">Đồ thị quãng đường - Thời gian</option>
+    </select>
+
+    <select onchange="if(this.value) window.location.href=this.value">
+      <option selected disabled>MÔN ...</option>
+      <option value="https://example.com/mon1">Liên kết 1 - Môn ...</option>
+      <option value="https://example.com/mon2">Liên kết 2 - Môn ...</option>
+    </select>
+
+    <select onchange="if(this.value) window.location.href=this.value">
+      <option selected disabled>MÔN ...</option>
+      <option value="https://example.com/mon3">Liên kết 1 - Môn ...</option>
+      <option value="https://example.com/mon4">Liên kết 2 - Môn ...</option>
+    </select>
+
+    <select onchange="if(this.value) window.location.href=this.value">
+      <option selected disabled>MÔN ...</option>
+      <option value="https://example.com/mon5">Liên kết 1 - Môn ...</option>
+      <option value="https://example.com/mon6">Liên kết 2 - Môn ...</option>
+    </select>
+
+       </select>
+  </div>
+</body>
+</html>
