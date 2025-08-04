@@ -1026,12 +1026,12 @@ setTimeout(() => {
   });
 </script>
 
-<!-- Popup thống kê Firebase -->
+<!-- Popup thống kê truy cập -->
 <style>
   #visit-popup {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    top: 20px;
+    left: 20px;
     background: #fff;
     color: #333;
     padding: 15px 20px 10px;
@@ -1042,6 +1042,7 @@ setTimeout(() => {
     z-index: 9999;
     max-width: 200px;
   }
+
   #visit-popup .close-btn {
     position: absolute;
     top: 5px;
@@ -1054,11 +1055,12 @@ setTimeout(() => {
   }
 </style>
 
+
 <div id="visit-popup">
   <button class="close-btn" onclick="document.getElementById('visit-popup').style.display='none'">❌</button>
   <strong>📈 Thống kê truy cập</strong><br>
-  Tổng: <span id="totalVisits">...</span><br>
-  Hôm nay: <span id="todayVisits">...</span>
+  Tổng: <span id="totalVisits">0</span><br>
+  Hôm nay: <span id="todayVisits">0</span>
 </div>
 
 <!-- Firebase SDK -->
@@ -1066,6 +1068,8 @@ setTimeout(() => {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
 <script>
+  console.log("👉 Đang tải Firebase...");
+
   // Cấu hình Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyA-82b1D1t7uMNLj7JPKou9zCbozzBntMoI",
@@ -1077,43 +1081,38 @@ setTimeout(() => {
     appId: "1:1059485201084:web:4b9c59c1df144f6ac056b9"
   };
 
+  // Khởi tạo Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
+  console.log("✅ Firebase đã khởi tạo");
+
+  // Hàm lấy ngày hôm nay theo định dạng yyyy-mm-dd
   function getTodayKey() {
     const d = new Date();
-    return d.toISOString().split('T')[0]; // yyyy-mm-dd
+    return d.toISOString().split('T')[0];
   }
 
+  // Cập nhật lượt truy cập
   async function updateStats() {
-    const totalRef = db.ref("stats/total");
-    const todayRef = db.ref("stats/daily/" + getTodayKey());
-
-    console.log("📥 Bắt đầu ghi dữ liệu...");
-
     try {
-      await totalRef.transaction(current => {
-        console.log("📝 Ghi total:", current);
-        return (current || 0) + 1;
-      });
+      const totalRef = db.ref("stats/total");
+      const todayRef = db.ref("stats/daily/" + getTodayKey());
 
-      await todayRef.transaction(current => {
-        console.log("📝 Ghi today:", current);
-        return (current || 0) + 1;
-      });
+      // Tăng lượt
+      await totalRef.transaction(n => (n || 0) + 1);
+      await todayRef.transaction(n => (n || 0) + 1);
 
+      // Hiển thị dữ liệu
       totalRef.on("value", snap => {
-        console.log("📊 Tổng truy cập:", snap.val());
-        document.getElementById("totalVisits").textContent = snap.val();
+        document.getElementById("totalVisits").textContent = snap.val() || 0;
       });
 
       todayRef.on("value", snap => {
-        console.log("📊 Truy cập hôm nay:", snap.val());
-        document.getElementById("todayVisits").textContent = snap.val();
+        document.getElementById("todayVisits").textContent = snap.val() || 0;
       });
-
-    } catch (err) {
-      console.error("❌ Lỗi ghi Firebase:", err);
+    } catch (error) {
+      console.error("❌ Lỗi cập nhật thống kê:", error);
     }
   }
 
