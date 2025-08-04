@@ -1051,18 +1051,30 @@ setTimeout(() => {
 
   #visit-popup .close-btn {
     position: absolute;
-    top: -10px;   /* cao hơn chữ */
-    right: -10px; /* sát mép phải */
-    background: none;
-    border: none;
-    font-size: 18px;
-    color: #999;
+    top: -12px;
+    right: -12px;
+    width: 24px;
+    height: 24px;
+    background: #eee;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    font-size: 14px;
+    color: #444;
     cursor: pointer;
+    line-height: 22px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+  }
+
+  #visit-popup .close-btn:hover {
+    background: #f44336;
+    color: white;
   }
 </style>
 
 <div id="visit-popup">
-  <button class="close-btn" onclick="document.getElementById('visit-popup').style.display='none'"> X </button>
+  <button class="close-btn" onclick="document.getElementById('visit-popup').style.display='none'"> ❌ </button>
   <strong>📊 Thống kê truy cập</strong><br>
   👉 Tổng: <span id="totalVisits">0</span><br>
   👉 Hôm nay: <span id="todayVisits">0</span>
