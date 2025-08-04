@@ -1026,17 +1026,15 @@ setTimeout(() => {
   });
 </script>
 
-
-
-	  <!-- Popup thống kê Firebase -->
+<!-- Popup thống kê Firebase -->
 <style>
-  #visit-popup {
+  #popupContainer {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    top: 10px;
+    left: 10px;
     background: #fff;
     color: #333;
-    padding: 15px 20px 10px;
+    padding: 12px 16px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     font-family: Arial, sans-serif;
@@ -1045,10 +1043,10 @@ setTimeout(() => {
     max-width: 200px;
   }
 
-  #visit-popup .close-btn {
+  #popupContainer .close-btn {
     position: absolute;
     top: 5px;
-    right: 10px;
+    right: 8px;
     background: none;
     border: none;
     font-size: 16px;
@@ -1057,8 +1055,8 @@ setTimeout(() => {
   }
 </style>
 
-<div id="visit-popup">
-  <button class="close-btn" onclick="document.getElementById('visit-popup').style.display='none'">❌</button>
+<div id="popupContainer">
+  <button class="close-btn" onclick="document.getElementById('popupContainer').style.display='none'">❌</button>
   <strong>📈 Thống kê truy cập</strong><br>
   Tổng: <span id="totalVisits">0</span><br>
   Hôm nay: <span id="todayVisits">0</span>
