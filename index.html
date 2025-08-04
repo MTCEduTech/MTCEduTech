@@ -1095,24 +1095,35 @@ setTimeout(() => {
     }
 
     async function updateStats() {
-      try {
-        const totalRef = db.ref("stats/total");
-        const todayRef = db.ref("stats/daily/" + getTodayKey());
+  try {
+    console.log("⏳ Đang cố ghi thống kê...");
 
-        await totalRef.transaction(n => (n || 0) + 1);
-        await todayRef.transaction(n => (n || 0) + 1);
+    const totalRef = db.ref("stats/total");
+    const todayRef = db.ref("stats/daily/" + getTodayKey());
 
-        totalRef.on("value", snap => {
-          document.getElementById("totalVisits").textContent = snap.val() || 0;
-        });
+    await totalRef.transaction(n => (n || 0) + 1)
+      .then(() => console.log("✅ Ghi total thành công"))
+      .catch(err => console.error("❌ Ghi total lỗi:", err));
 
-        todayRef.on("value", snap => {
-          document.getElementById("todayVisits").textContent = snap.val() || 0;
-        });
-      } catch (e) {
-        console.error("❌ Lỗi cập nhật thống kê:", e);
-      }
-    }
+    await todayRef.transaction(n => (n || 0) + 1)
+      .then(() => console.log("✅ Ghi today thành công"))
+      .catch(err => console.error("❌ Ghi today lỗi:", err));
+
+    totalRef.on("value", snap => {
+      console.log("📊 totalRef on-value:", snap.val());
+      document.getElementById("totalVisits").textContent = snap.val() || 0;
+    });
+
+    todayRef.on("value", snap => {
+      console.log("📊 todayRef on-value:", snap.val());
+      document.getElementById("todayVisits").textContent = snap.val() || 0;
+    });
+
+  } catch (e) {
+    console.error("❌ Lỗi cập nhật thống kê:", e);
+  }
+}
+
 
     updateStats();
   }
