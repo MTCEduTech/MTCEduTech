@@ -1094,7 +1094,7 @@ setTimeout(() => {
     appId: "1:1059485201084:web:4b9c59c1df144f6ac056b9"
   };
 
-  // Đảm bảo firebase đã sẵn sàng
+  // Đảm bảo Firebase đã tải
   if (typeof firebase === 'undefined') {
     console.error("❌ Firebase chưa được tải!");
   } else {
@@ -1108,40 +1108,50 @@ setTimeout(() => {
     }
 
     async function updateStats() {
-  try {
-    console.log("⏳ Đang cố ghi thống kê...");
+      try {
+        // ✅ Chỉ đếm 1 lần trong 1 phiên (session)
+        if (sessionStorage.getItem("visited_this_session")) {
+          console.log("📌 Đã ghi trong session rồi – bỏ qua thống kê.");
+        } else {
+          console.log("⏳ Đang ghi thống kê truy cập...");
 
-    const totalRef = db.ref("stats/total");
-    const todayRef = db.ref("stats/daily/" + getTodayKey());
+          const totalRef = db.ref("stats/total");
+          const todayRef = db.ref("stats/daily/" + getTodayKey());
 
-    await totalRef.transaction(n => (n || 0) + 1)
-      .then(() => console.log("✅ Ghi total thành công"))
-      .catch(err => console.error("❌ Ghi total lỗi:", err));
+          await totalRef.transaction(n => (n || 0) + 1)
+            .then(() => console.log("✅ Ghi total thành công"))
+            .catch(err => console.error("❌ Ghi total lỗi:", err));
 
-    await todayRef.transaction(n => (n || 0) + 1)
-      .then(() => console.log("✅ Ghi today thành công"))
-      .catch(err => console.error("❌ Ghi today lỗi:", err));
+          await todayRef.transaction(n => (n || 0) + 1)
+            .then(() => console.log("✅ Ghi today thành công"))
+            .catch(err => console.error("❌ Ghi today lỗi:", err));
 
-    totalRef.on("value", snap => {
-      console.log("📊 totalRef on-value:", snap.val());
-      document.getElementById("totalVisits").textContent = snap.val() || 0;
-    });
+          sessionStorage.setItem("visited_this_session", "true");
+        }
 
-    todayRef.on("value", snap => {
-      console.log("📊 todayRef on-value:", snap.val());
-      document.getElementById("todayVisits").textContent = snap.val() || 0;
-    });
+        // 🟢 Luôn cập nhật hiển thị thống kê từ Firebase
+        const totalRef = db.ref("stats/total");
+        const todayRef = db.ref("stats/daily/" + getTodayKey());
 
-  } catch (e) {
-    console.error("❌ Lỗi cập nhật thống kê:", e);
-  }
-}
+        totalRef.on("value", snap => {
+          console.log("📊 totalRef on-value:", snap.val());
+          document.getElementById("totalVisits").textContent = snap.val() || 0;
+        });
 
+        todayRef.on("value", snap => {
+          console.log("📊 todayRef on-value:", snap.val());
+          document.getElementById("todayVisits").textContent = snap.val() || 0;
+        });
 
+      } catch (e) {
+        console.error("❌ Lỗi cập nhật thống kê:", e);
+      }
+    }
+
+    // ✅ Gọi hàm thống kê
     updateStats();
   }
 </script>
-
 
 </body>
 </html>
