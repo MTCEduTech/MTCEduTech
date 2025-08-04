@@ -1036,7 +1036,7 @@ setTimeout(() => {
 <style>
   #visit-popup {
     position: fixed;
-    bottom: 70px; /* Cách nút bên dưới một chút */
+    bottom: 70px;
     left: 20px;
     background: #fff;
     color: #333;
@@ -1051,22 +1051,21 @@ setTimeout(() => {
 
   #visit-popup .close-btn {
     position: absolute;
-    top: 2px;
-    right: 12px;
+    top: -10px;   /* cao hơn chữ */
+    right: -10px; /* sát mép phải */
     background: none;
     border: none;
-    font-size: 16px;
-    color: #666;
+    font-size: 18px;
+    color: #999;
     cursor: pointer;
   }
 </style>
 
-
 <div id="visit-popup">
-  <button class="close-btn" onclick="document.getElementById('visit-popup').style.display='none'">❌</button>
-  <strong>📈 Thống kê truy cập</strong><br>
-  Tổng: <span id="totalVisits">0</span><br>
-  Hôm nay: <span id="todayVisits">0</span>
+  <button class="close-btn" onclick="document.getElementById('visit-popup').style.display='none'"> X </button>
+  <strong>📊 Thống kê truy cập</strong><br>
+  👉 Tổng: <span id="totalVisits">0</span><br>
+  👉 Hôm nay: <span id="todayVisits">0</span>
 </div>
 
 <!-- Popup thống kê truy cập -->
