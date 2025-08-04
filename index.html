@@ -1025,5 +1025,77 @@ setTimeout(() => {
     }
   });
 </script>
+
+
+
+	  <!-- Popup thống kê Firebase -->
+<style>
+  #visit-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #fff;
+    color: #333;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    font-family: Arial;
+    font-size: 14px;
+    z-index: 9999;
+  }
+</style>
+
+<div id="visit-popup">
+  <strong>📈 Thống kê truy cập</strong><br>
+  Tổng: <span id="totalVisits">0</span><br>
+  Hôm nay: <span id="todayVisits">0</span>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+
+<script>
+  // Cấu hình Firebase của bạn
+  const firebaseConfig = {
+    apiKey: "AIzaSyA-82b1D1t7uMNLj7JPKou9zCbozzBntMoI",
+    authDomain: "mtcedutech-27414.firebaseapp.com",
+    databaseURL: "https://mtcedutech-27414-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "mtcedutech-27414",
+    storageBucket: "mtcedutech-27414.appspot.com",
+    messagingSenderId: "1059485201084",
+    appId: "1:1059485201084:web:4b9c59c1df144f6ac056b9",
+    measurementId: "G-QJGHKZ0HGY"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  function getTodayKey() {
+    const d = new Date();
+    return d.toISOString().split('T')[0]; // yyyy-mm-dd
+  }
+
+  async function updateStats() {
+    const totalRef = db.ref("stats/total");
+    const todayRef = db.ref("stats/daily/" + getTodayKey());
+
+    // Tăng truy cập
+    await totalRef.transaction(n => (n || 0) + 1);
+    await todayRef.transaction(n => (n || 0) + 1);
+
+    // Cập nhật UI
+    totalRef.on("value", snap => {
+      document.getElementById("totalVisits").textContent = snap.val();
+    });
+
+    todayRef.on("value", snap => {
+      document.getElementById("todayVisits").textContent = snap.val();
+    });
+  }
+
+  updateStats();
+</script>
+
 </body>
 </html>
