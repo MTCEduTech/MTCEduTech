@@ -1067,10 +1067,10 @@ setTimeout(() => {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
+<!-- Popup thống kê truy cập -->
 <script>
   console.log("👉 Đang tải Firebase...");
 
-  // Cấu hình Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyA-82b1D1t7uMNLj7JPKou9zCbozzBntMoI",
     authDomain: "mtcedutech-27414.firebaseapp.com",
@@ -1081,43 +1081,43 @@ setTimeout(() => {
     appId: "1:1059485201084:web:4b9c59c1df144f6ac056b9"
   };
 
-  // Khởi tạo Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+  // Đảm bảo firebase đã sẵn sàng
+  if (typeof firebase === 'undefined') {
+    console.error("❌ Firebase chưa được tải!");
+  } else {
+    console.log("✅ Firebase đã khởi tạo");
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-  console.log("✅ Firebase đã khởi tạo");
-
-  // Hàm lấy ngày hôm nay theo định dạng yyyy-mm-dd
-  function getTodayKey() {
-    const d = new Date();
-    return d.toISOString().split('T')[0];
-  }
-
-  // Cập nhật lượt truy cập
-  async function updateStats() {
-    try {
-      const totalRef = db.ref("stats/total");
-      const todayRef = db.ref("stats/daily/" + getTodayKey());
-
-      // Tăng lượt
-      await totalRef.transaction(n => (n || 0) + 1);
-      await todayRef.transaction(n => (n || 0) + 1);
-
-      // Hiển thị dữ liệu
-      totalRef.on("value", snap => {
-        document.getElementById("totalVisits").textContent = snap.val() || 0;
-      });
-
-      todayRef.on("value", snap => {
-        document.getElementById("todayVisits").textContent = snap.val() || 0;
-      });
-    } catch (error) {
-      console.error("❌ Lỗi cập nhật thống kê:", error);
+    function getTodayKey() {
+      const d = new Date();
+      return d.toISOString().split('T')[0];
     }
-  }
 
-  updateStats();
+    async function updateStats() {
+      try {
+        const totalRef = db.ref("stats/total");
+        const todayRef = db.ref("stats/daily/" + getTodayKey());
+
+        await totalRef.transaction(n => (n || 0) + 1);
+        await todayRef.transaction(n => (n || 0) + 1);
+
+        totalRef.on("value", snap => {
+          document.getElementById("totalVisits").textContent = snap.val() || 0;
+        });
+
+        todayRef.on("value", snap => {
+          document.getElementById("todayVisits").textContent = snap.val() || 0;
+        });
+      } catch (e) {
+        console.error("❌ Lỗi cập nhật thống kê:", e);
+      }
+    }
+
+    updateStats();
+  }
 </script>
+
 
 </body>
 </html>
