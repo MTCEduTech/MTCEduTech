@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Trang chủ - Bộ công cụ hỗ trợ giảng dạy dành cho giáo viên</title>
+	<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
+<script>window.firebase = firebase;</script>
+
   <style>
     body {
       margin: 0;
@@ -1045,7 +1049,7 @@ setTimeout(() => {
 
   #visit-popup .close-btn {
     position: absolute;
-    top: 5px;
+    top: 0px;
     right: 10px;
     background: none;
     border: none;
@@ -1062,11 +1066,6 @@ setTimeout(() => {
   Tổng: <span id="totalVisits">0</span><br>
   Hôm nay: <span id="todayVisits">0</span>
 </div>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js"></script>
-<script>window.firebase = firebase;</script>
 
 <!-- Popup thống kê truy cập -->
 <script>
