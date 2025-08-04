@@ -1036,16 +1036,29 @@ setTimeout(() => {
     right: 20px;
     background: #fff;
     color: #333;
-    padding: 15px 20px;
+    padding: 15px 20px 10px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-size: 14px;
     z-index: 9999;
+    max-width: 200px;
+  }
+
+  #visit-popup .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
   }
 </style>
 
 <div id="visit-popup">
+  <button class="close-btn" onclick="document.getElementById('visit-popup').style.display='none'">❌</button>
   <strong>📈 Thống kê truy cập</strong><br>
   Tổng: <span id="totalVisits">0</span><br>
   Hôm nay: <span id="todayVisits">0</span>
@@ -1056,7 +1069,7 @@ setTimeout(() => {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
 
 <script>
-  // Cấu hình Firebase của bạn
+  // Cấu hình Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyA-82b1D1t7uMNLj7JPKou9zCbozzBntMoI",
     authDomain: "mtcedutech-27414.firebaseapp.com",
@@ -1080,11 +1093,9 @@ setTimeout(() => {
     const totalRef = db.ref("stats/total");
     const todayRef = db.ref("stats/daily/" + getTodayKey());
 
-    // Tăng truy cập
     await totalRef.transaction(n => (n || 0) + 1);
     await todayRef.transaction(n => (n || 0) + 1);
 
-    // Cập nhật UI
     totalRef.on("value", snap => {
       document.getElementById("totalVisits").textContent = snap.val();
     });
@@ -1096,6 +1107,7 @@ setTimeout(() => {
 
   updateStats();
 </script>
+
 
 </body>
 </html>
