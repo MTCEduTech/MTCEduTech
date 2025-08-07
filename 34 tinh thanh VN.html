@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+<script src="auth.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tỉnh thành Việt Nam</title>
+    <style>
+        body {
+    font-family: 'Segoe UI', 'Inter', sans-serif;
+    text-align: center;
+    background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #005b96;
+    margin-bottom: 10px;
+    font-size: 2em;
+}
+
+p {
+    color: #333;
+    font-size: 1.1em;
+}
+
+.container {
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    margin: 20px auto;
+}
+
+
+.controls-panel label {
+    font-weight: 600;
+    color: #333;
+}
+
+
+.table-split-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.table-wrapper {
+    flex: 1 1 300px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+th, td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #e0f0ff;
+    cursor: pointer;
+}
+
+tbody tr.highlighted {
+    background-color: #b3e5fc;
+    font-weight: bold;
+}
+
+.info-display-area {
+    flex: 1 1 400px;
+  border: 3px solid #007BFF; /* Viền dày, màu xanh dương đậm */
+  border-radius: 12px;       /* Bo góc nhẹ cho thẩm mỹ */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng mềm */
+  padding: 20px;
+  background-color: #ffffff; /* Nền trắng rõ ràng */
+  transition: all 0.3s ease; /* Hiệu ứng nhẹ khi thay đổi */
+    text-align: left;
+}
+.info-display-area:hover {
+  border-color: #28a745;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.info-display-area h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #00796b;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+
+.info-display-content p {
+    margin: 10px 0;
+    color: #333;
+    line-height: 1.5;
+}
+
+.info-display-content strong {
+    display: inline-block;
+    min-width: 180px;
+    font-weight: 600;
+    color: #1a2a3a;
+}
+.header-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 2em;
+    color: #005b96;
+}
+
+.flag-icon {
+    width: 180px;
+    height: auto;
+}
+.top-header {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+.top-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 5px; /* thay vì quá nhiều khoảng cách */
+}
+
+.top-controls label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.top-controls select {
+    padding: 8px 14px;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    font-size: 1em;
+    background-color: #fefefe;
+    cursor: pointer;
+    width: 200px;
+}
+
+.top-header {
+width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px; /* thay vì margin-bottom lớn */
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+.top-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.main-heading {
+  color: #b71c1c; /* đỏ đậm */
+  font-size: 1.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.header-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0; /* loại bỏ khoảng cách dưới */
+}
+
+.controls-row {
+  margin-top: 0;
+}
+.table-wrapper.left, .table-wrapper.right {
+    max-height: 300px;
+    overflow-y: auto;
+overflow-x: hidden;
+}
+
+
+.title-and-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 320px;
+}
+
+#openMapBtn {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#openMapBtn:hover {
+  background-color: #0056b3;
+}
+
+/* === POPUP === */
+.map-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 30%;
+  height: 85%;
+  background-color: no;
+  border-left: no;
+  box-shadow: no;
+  z-index: 9999;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.map-popup-content {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.map-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #333;
+  z-index: 10000;
+}
+
+.map-scroll-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+#zoomableMapImage {
+  transform-origin: top left;
+  cursor: grab;
+  user-select: none;
+  height: auto;
+  max-width: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.styled-button {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.styled-button:hover {
+  background-color: #0056b3;
+}
+    </style>
+<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+       <div class="top-header">
+  <div class="top-header-row">
+    <div class="title-and-controls">
+      <div class="header-row">
+        <img alt="Cờ Việt Nam" class="flag-icon" src="vn.png"/>
+        <span class="main-heading">THÔNG TIN TỈNH THÀNH VIỆT NAM TỪ 01/7/2025</span>
+      </div>
+
+      <div class="controls-row">
+        <div class="top-controls">
+          <div class="control-group">
+            <label for="oldProvinceSelect">Tìm tỉnh cũ:</label>
+            <select id="oldProvinceSelect">
+              <option value="">-- Chọn tỉnh --</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="sortOrderSelect">Sắp xếp và Lọc:</label>
+            <select id="sortOrderSelect">
+              <option value="default">Mặc định (A-Z)</option>
+              <option value="population">Theo dân số (giảm dần)</option>
+              <option value="area">Theo diện tích (giảm dần)</option>
+              <option value="nonMerged">Không sáp nhập</option>
+              <option value="cities">Thành phố</option>
+              <option value="reset">Đặt lại</option>
+            </select>
+<button id="openMapBtn" class="styled-button">🗺️ Xem bản đồ</button>
+<button id="downloadMapBtn" class="styled-button">💾 Tải bản đồ size lớn .pdf</button>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+    <div class="container">
+  <div class="table-split-container">
+
+    <!-- BẢNG TRÁI -->
+    <div class="table-wrapper left">
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên tỉnh</th>
+          </tr>
+        </thead>
+        <tbody id="provinceTableBodyLeft">
+          <!-- Province data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- VÙNG THÔNG TIN CHI TIẾT -->
+    <div class="info-display-area">
+      <h2>THÔNG TIN</h2>
+      <div id="info-display-content">
+        <p>Chọn một tỉnh từ danh sách hoặc từ dropdown "Tìm tỉnh cũ" để xem thông tin chi tiết tại đây.</p>
+      </div>
+    </div>
+
+    <!-- BẢNG PHẢI -->
+    <div class="table-wrapper right">
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên tỉnh</th>
+          </tr>
+        </thead>
+        <tbody id="provinceTableBodyRight">
+          <!-- Province data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+Trích dữ liệu từ: https://laodong.vn/thoi-su/ten-34-tinh-thanh-cua-viet-nam-tu-1262025-1522395.ldo
+
+    <script>
+        const oldProvinceSelect = document.getElementById('oldProvinceSelect');
+        const sortOrderSelect = document.getElementById('sortOrderSelect');
+        const provinceTableBodyLeft = document.getElementById('provinceTableBodyLeft');
+        const provinceTableBodyRight = document.getElementById('provinceTableBodyRight');
+        const infoDisplayArea = document.getElementById('info-display-area');
+        const infoDisplayContent = document.getElementById('info-display-content');
+
+        let provinceData = {};
+        let provinceNameMap = {};
+        let currentFilteredProvinces = [];
+
+        function parseNumber(str) {
+            if (typeof str !== 'string') return parseFloat(str);
+            return parseFloat(str.replace(/\./g, '').replace(/,/g, '.'));
+        }
+
+        const finalProvincesList = [ 
+  { name: 'Tuyên Quang', merger: 'Hợp nhất tỉnh Tuyên Quang và tỉnh Hà Giang', capital: 'Tuyên Quang', area: '13.795,50', population: '1.865.270', type: 'Tỉnh' },
+  { name: 'Lào Cai', merger: 'Hợp nhất tỉnh Lào Cai và tỉnh Yên Bái', capital: 'Lào Cai', area: '13.256,92', population: '1.778.785', type: 'Tỉnh' },
+  { name: 'Thái Nguyên', merger: 'Hợp nhất tỉnh Thái Nguyên và tỉnh Bắc Kạn', capital: 'Thái Nguyên', area: '8.375,21', population: '1.799.489', type: 'Tỉnh' },
+  { name: 'Phú Thọ', merger: 'Hợp nhất tỉnh Hòa Bình, tỉnh Vĩnh Phúc và tỉnh Phú Thọ', capital: 'Phú Thọ', area: '9.361,38', population: '4.022.638', type: 'Tỉnh' },
+  { name: 'Bắc Ninh', merger: 'Hợp nhất tỉnh Bắc Ninh và tỉnh Bắc Giang', capital: 'Bắc Ninh', area: '4.718,60', population: '3.619.433', type: 'Tỉnh' },
+  { name: 'Hưng Yên', merger: 'Hợp nhất tỉnh Hưng Yên và tỉnh Thái Bình', capital: 'Hưng Yên', area: '2.514,81', population: '3.567.943', type: 'Tỉnh' },
+  { name: 'Hải Phòng', merger: 'Hợp nhất thành phố Hải Phòng và tỉnh Hải Dương', capital: 'Hải Phòng', area: '3.194,72', population: '4.664.124', type: 'Thành phố' },
+  { name: 'Ninh Bình', merger: 'Hợp nhất tỉnh Hà Nam, tỉnh Nam Định và tỉnh Ninh Bình', capital: 'Ninh Bình', area: '3.942,62', population: '4.412.264', type: 'Tỉnh' },
+  { name: 'Quảng Trị', merger: 'Hợp nhất tỉnh Quảng Bình và tỉnh Quảng Trị', capital: 'Quảng Trị', area: '12.700,00', population: '1.870.845', type: 'Tỉnh' },
+  { name: 'Đà Nẵng', merger: 'Hợp nhất tỉnh Quảng Nam và thành phố Đà Nẵng', capital: 'Đà Nẵng', area: '11.859,59', population: '3.065.628', type: 'Thành phố' },
+  { name: 'Quảng Ngãi', merger: 'Hợp nhất tỉnh Kon Tum và tỉnh Quảng Ngãi', capital: 'Quảng Ngãi', area: '14.832,55', population: '2.161.755', type: 'Tỉnh' },
+  { name: 'Gia Lai', merger: 'Hợp nhất tỉnh Gia Lai và tỉnh Bình Định', capital: 'Gia Lai', area: '21.576,53', population: '3.583.693', type: 'Tỉnh' },
+  { name: 'Khánh Hòa', merger: 'Hợp nhất tỉnh Ninh Thuận và tỉnh Khánh Hòa', capital: 'Khánh Hòa', area: '8.555,86', population: '2.243.554', type: 'Tỉnh' },
+  { name: 'Lâm Đồng', merger: 'Hợp nhất tỉnh Đắk Nông, tỉnh Bình Thuận và tỉnh Lâm Đồng', capital: 'Lâm Đồng', area: '24.233,07', population: '3.872.999', type: 'Tỉnh' },
+  { name: 'Đắk Lắk', merger: 'Hợp nhất tỉnh Phú Yên và tỉnh Đắk Lắk', capital: 'Đắk Lắk', area: '18.096,40', population: '3.346.853', type: 'Tỉnh' },
+  { name: 'TP. Hồ Chí Minh', merger: 'Hợp nhất tỉnh Bà Rịa - Vũng Tàu, tỉnh Bình Dương và Thành phố Hồ Chí Minh', capital: 'TP. Hồ Chí Minh', area: '6.772,59', population: '14.002.598', type: 'Thành phố' },
+  { name: 'Đồng Nai', merger: 'Hợp nhất tỉnh Bình Phước và tỉnh Đồng Nai', capital: 'Đồng Nai', area: '12.737,18', population: '4.491.408', type: 'Tỉnh' },
+  { name: 'Tây Ninh', merger: 'Hợp nhất tỉnh Tây Ninh và tỉnh Long An', capital: 'Tây Ninh', area: '8.536,44', population: '3.254.170', type: 'Tỉnh' },
+  { name: 'Cần Thơ', merger: 'Hợp nhất thành phố Cần Thơ, tỉnh Sóc Trăng và tỉnh Hậu Giang', capital: 'Cần Thơ', area: '6.360,83', population: '4.199.824', type: 'Thành phố' },
+  { name: 'Vĩnh Long', merger: 'Hợp nhất tỉnh Bến Tre, tỉnh Vĩnh Long và tỉnh Trà Vinh', capital: 'Vĩnh Long', area: '6.296,20', population: '4.257.581', type: 'Tỉnh' },
+  { name: 'Đồng Tháp', merger: 'Hợp nhất tỉnh Tiền Giang và tỉnh Đồng Tháp', capital: 'Đồng Tháp', area: '5.938,64', population: '4.370.046', type: 'Tỉnh' },
+  { name: 'Cà Mau', merger: 'Hợp nhất tỉnh Bạc Liêu và tỉnh Cà Mau', capital: 'Cà Mau', area: '7.942,39', population: '2.606.672', type: 'Tỉnh' },
+  { name: 'An Giang', merger: 'Hợp nhất tỉnh Kiên Giang và tỉnh An Giang', capital: 'An Giang', area: '9.888,91', population: '4.952.238', type: 'Tỉnh' },
+  { name: 'Hà Nội', merger: 'Không sáp nhập', capital: 'Hà Nội', area: '3.359,82', population: '8.718.000', type: 'Thành phố' },
+  { name: 'Thừa Thiên Huế', merger: 'Không sáp nhập', capital: 'Huế', area: '4.947,10', population: '1.236.393', type: 'Thành phố' },
+  { name: 'Lai Châu', merger: 'Không sáp nhập', capital: 'Lai Châu', area: '9.068,70', population: '494.626', type: 'Tỉnh' },
+  { name: 'Điện Biên', merger: 'Không sáp nhập', capital: 'Điện Biên Phủ', area: '9.539,90', population: '653.422', type: 'Tỉnh' },
+  { name: 'Sơn La', merger: 'Không sáp nhập', capital: 'Sơn La', area: '14.109,80', population: '1.327.430', type: 'Tỉnh' },
+  { name: 'Lạng Sơn', merger: 'Không sáp nhập', capital: 'Lạng Sơn', area: '8.310,20', population: '813.978', type: 'Tỉnh' },
+  { name: 'Quảng Ninh', merger: 'Không sáp nhập', capital: 'Hạ Long', area: '6.207,90', population: '1.429.841', type: 'Tỉnh' },
+  { name: 'Thanh Hóa', merger: 'Không sáp nhập', capital: 'Thanh Hóa', area: '11.114,70', population: '3.760.650', type: 'Tỉnh' },
+  { name: 'Nghệ An', merger: 'Không sáp nhập', capital: 'Vinh', area: '16.493,70', population: '3.470.988', type: 'Tỉnh' },
+  { name: 'Hà Tĩnh', merger: 'Không sáp nhập', capital: 'Hà Tĩnh', area: '5.994,40', population: '1.622.901', type: 'Tỉnh' },
+  { name: 'Cao Bằng', merger: 'Không sáp nhập', capital: 'Cao Bằng', area: '6.700,40', population: '555.809', type: 'Tỉnh' },
+];
+
+
+        const allOldProvincesMapping = [
+            { oldName: 'An Giang', newName: 'An Giang' },
+            { oldName: 'Bà Rịa - Vũng Tàu', newName: 'TP. Hồ Chí Minh' },
+            { oldName: 'Bạc Liêu', newName: 'Cà Mau' },
+            { oldName: 'Bắc Kạn', newName: 'Thái Nguyên' },
+            { oldName: 'Bắc Giang', newName: 'Bắc Ninh' },
+            { oldName: 'Bắc Ninh', newName: 'Bắc Ninh' },
+            { oldName: 'Bến Tre', newName: 'Vĩnh Long' },
+            { oldName: 'Bình Dương', newName: 'TP. Hồ Chí Minh' },
+            { oldName: 'Bình Định', newName: 'Gia Lai' },
+            { oldName: 'Bình Phước', newName: 'Đồng Nai' },
+            { oldName: 'Bình Thuận', newName: 'Lâm Đồng' },
+            { oldName: 'Cà Mau', newName: 'Cà Mau' },
+            { oldName: 'Cao Bằng', newName: 'Cao Bằng' },
+            { oldName: 'Cần Thơ', newName: 'Cần Thơ' },
+            { oldName: 'Đà Nẵng', newName: 'Đà Nẵng' },
+            { oldName: 'Đắk Lắk', newName: 'Đắk Lắk' },
+            { oldName: 'Đắk Nông', newName: 'Lâm Đồng' },
+            { oldName: 'Điện Biên', newName: 'Điện Biên' },
+            { oldName: 'Đồng Nai', newName: 'Đồng Nai' },
+            { oldName: 'Đồng Tháp', newName: 'Đồng Tháp' },
+            { oldName: 'Gia Lai', newName: 'Gia Lai' },
+            { oldName: 'Hà Giang', newName: 'Tuyên Quang' },
+            { oldName: 'Hà Nam', newName: 'Ninh Bình' },
+            { oldName: 'Hà Nội', newName: 'Hà Nội' },
+            { oldName: 'Hà Tĩnh', newName: 'Hà Tĩnh' },
+            { oldName: 'Hải Dương', newName: 'Hải Phòng' },
+            { oldName: 'Hải Phòng', newName: 'Hải Phòng' },
+            { oldName: 'Hậu Giang', newName: 'Cần Thơ' },
+            { oldName: 'Hòa Bình', newName: 'Phú Thọ' },
+            { oldName: 'TP. Hồ Chí Minh', newName: 'TP. Hồ Chí Minh' },
+            { oldName: 'Hưng Yên', newName: 'Hưng Yên' },
+            { oldName: 'Khánh Hòa', newName: 'Khánh Hòa' },
+            { oldName: 'Kiên Giang', newName: 'An Giang' },
+            { oldName: 'Kon Tum', newName: 'Quảng Ngãi' },
+            { oldName: 'Lai Châu', newName: 'Lai Châu' },
+            { oldName: 'Lạng Sơn', newName: 'Lạng Sơn' },
+            { oldName: 'Lào Cai', newName: 'Lào Cai' },
+            { oldName: 'Lâm Đồng', newName: 'Lâm Đồng' },
+            { oldName: 'Long An', newName: 'Tây Ninh' },
+            { oldName: 'Nam Định', newName: 'Ninh Bình' },
+            { oldName: 'Nghệ An', newName: 'Nghệ An' },
+            { oldName: 'Ninh Bình', newName: 'Ninh Bình' },
+            { oldName: 'Ninh Thuận', newName: 'Khánh Hòa' },
+            { oldName: 'Phú Thọ', newName: 'Phú Thọ' },
+            { oldName: 'Phú Yên', newName: 'Đắk Lắk' },
+            { oldName: 'Quảng Bình', newName: 'Quảng Trị' },
+            { oldName: 'Quảng Nam', newName: 'Đà Nẵng' },
+            { oldName: 'Quảng Ngãi', newName: 'Quảng Ngãi' },
+            { oldName: 'Quảng Ninh', newName: 'Quảng Ninh' },
+            { oldName: 'Quảng Trị', newName: 'Quảng Trị' },
+            { oldName: 'Sóc Trăng', newName: 'Cần Thơ' },
+            { oldName: 'Sơn La', newName: 'Sơn La' },
+            { oldName: 'Tây Ninh', newName: 'Tây Ninh' },
+            { oldName: 'Thái Bình', newName: 'Hưng Yên' },
+            { oldName: 'Thái Nguyên', newName: 'Thái Nguyên' },
+            { oldName: 'Thanh Hóa', newName: 'Thanh Hóa' },
+            { oldName: 'Thừa Thiên Huế', newName: 'Thừa Thiên Huế' },
+            { oldName: 'Tiền Giang', newName: 'Đồng Tháp' },
+            { oldName: 'Trà Vinh', newName: 'Vĩnh Long' },
+            { oldName: 'Tuyên Quang', newName: 'Tuyên Quang' },
+            { oldName: 'Vĩnh Long', newName: 'Vĩnh Long' },
+            { oldName: 'Vĩnh Phúc', newName: 'Phú Thọ' },
+            { oldName: 'Yên Bái', newName: 'Lào Cai' }
+        ];
+
+        function normalizeString(str) {
+            return str.toLowerCase()
+                      .normalize("NFD")
+                      .replace(/[\u0300-\u036f]/g, "")
+                      .replace(/đ/g, "d")
+                      .replace(/ /g, "")
+                      .replace(/-/g, "");
+        }
+
+        let originalProvinceOrder = [];
+        let provinceCounter = 1;
+        finalProvincesList.sort((a, b) => a.name.localeCompare(b.name));
+        finalProvincesList.forEach(province => {
+            const data = {
+                number: provinceCounter,
+                ...province,
+                parsedPopulation: parseNumber(province.population),
+                parsedArea: parseNumber(province.area)
+            };
+            provinceData[provinceCounter] = data;
+            provinceCounter++;
+            provinceNameMap[normalizeString(province.name)] = data;
+            originalProvinceOrder.push(data);
+        });
+
+        currentFilteredProvinces = [...originalProvinceOrder];
+
+        function populateProvinceTable(provincesToDisplay) {
+            provinceTableBodyLeft.innerHTML = '';
+            provinceTableBodyRight.innerHTML = '';
+
+            const totalProvinces = provincesToDisplay.length;
+            // Calculate the number of provinces for the left column to ensure even distribution
+            const numLeft = Math.ceil(totalProvinces / 2); 
+
+            provincesToDisplay.forEach((province, index) => {
+                const row = document.createElement('tr');
+                row.dataset.originalProvinceNumber = province.number; 
+                
+                const numCell = document.createElement('td');
+                numCell.textContent = index + 1; // Display the new sequential number
+                
+                const nameCell = document.createElement('td');
+                nameCell.textContent = province.name;
+
+                row.appendChild(numCell);
+                row.appendChild(nameCell);
+
+                row.addEventListener('click', () => {
+                    highlightRow(row);
+                    displayProvinceInfo(province);
+                });
+
+                if (index < numLeft) {
+                    provinceTableBodyLeft.appendChild(row);
+                } else {
+                    provinceTableBodyRight.appendChild(row);
+                }
+            });
+        }
+
+        function populateOldProvinceSelect() {
+            allOldProvincesMapping.sort((a, b) => a.oldName.localeCompare(b.oldName));
+
+            allOldProvincesMapping.forEach(mapping => {
+                const option = document.createElement('option');
+                option.value = mapping.newName;
+                option.textContent = mapping.oldName;
+                oldProvinceSelect.appendChild(option);
+            });
+        }
+
+        function displayProvinceInfo(province) {
+            const data = province || {
+                name: 'Không tìm thấy',
+                merger: 'Không có thông tin',
+                capital: 'Không xác định',
+                area: 'Không xác định',
+                population: 'Không xác định'
+            };
+
+            infoDisplayContent.innerHTML = `
+                <h3>${data.name}</h3>
+                <p><strong>Sáp nhập từ:</strong> ${data.merger}</p>
+                <p><strong>Trung tâm hành chính:</strong> ${data.capital}</p>
+                <p><strong>Diện tích:</strong> ${data.area} km²</p>
+                <p><strong>Dân số:</strong> ${data.population}</p>
+            `;
+        }
+
+        function highlightRow(rowToHighlight) {
+            const allRowsLeft = provinceTableBodyLeft.querySelectorAll('tr');
+            const allRowsRight = provinceTableBodyRight.querySelectorAll('tr');
+            allRowsLeft.forEach(row => row.classList.remove('highlighted'));
+            allRowsRight.forEach(row => row.classList.remove('highlighted'));
+
+            if (rowToHighlight) {
+                rowToHighlight.classList.add('highlighted');
+                rowToHighlight.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function resetSelection() {
+            oldProvinceSelect.value = '';
+            sortOrderSelect.value = 'default';
+            currentFilteredProvinces = [...originalProvinceOrder];
+            populateProvinceTable(currentFilteredProvinces);
+            infoDisplayContent.innerHTML = '<p>Chọn một tỉnh từ danh sách hoặc từ dropdown "Tìm tỉnh cũ" để xem thông tin chi tiết tại đây.</p>';
+            highlightRow(null);
+        }
+
+        function applySortAndFilter() {
+            let filteredList = [...originalProvinceOrder];
+            const selectedOption = sortOrderSelect.value;
+
+            if (selectedOption === 'nonMerged') {
+                filteredList = filteredList.filter(p => p.merger === 'Không sáp nhập');
+            } else if (selectedOption === 'cities') {
+                filteredList = filteredList.filter(p => p.type === 'Thành phố');
+            } else if (selectedOption === 'reset') {
+                resetSelection();
+                return;
+            }
+
+            if (selectedOption === 'population') {
+                filteredList.sort((a, b) => b.parsedPopulation - a.parsedPopulation);
+            } else if (selectedOption === 'area') {
+                filteredList.sort((a, b) => b.parsedArea - a.parsedArea);
+            } else {
+                filteredList.sort((a, b) => a.name.localeCompare(b.name));
+            }
+            
+            currentFilteredProvinces = filteredList;
+            populateProvinceTable(currentFilteredProvinces);
+            highlightRow(null);
+            infoDisplayContent.innerHTML = '<p>Chọn một tỉnh từ danh sách hoặc từ dropdown "Tìm tỉnh cũ" để xem thông tin chi tiết tại đây.</p>';
+        }
+
+        oldProvinceSelect.addEventListener('change', () => {
+            const selectedNewProvinceName = oldProvinceSelect.value;
+            if (selectedNewProvinceName) {
+                const newProvinceInfo = provinceNameMap[normalizeString(selectedNewProvinceName)];
+                if (newProvinceInfo) {
+                    resetSelection(); 
+                    const rowAfterReset = document.querySelector(`tr[data-original-province-number="${newProvinceInfo.number}"]`);
+                    highlightRow(rowAfterReset);
+                    displayProvinceInfo(newProvinceInfo);
+                } else {
+                    alert(`Không tìm thấy thông tin cho tỉnh mới: ${selectedNewProvinceName}.`);
+                    resetSelection();
+                }
+            } else {
+                resetSelection();
+            }
+        });
+
+        sortOrderSelect.addEventListener('change', applySortAndFilter);
+
+        populateProvinceTable(currentFilteredProvinces);
+        populateOldProvinceSelect();
+    </script>
+
+<div id="mapPopup" class="map-popup">
+  <div class="map-popup-content">
+    <span id="closeMapBtn" class="map-close-btn">&times;</span>
+    <div class="map-scroll-container">
+      <img id="zoomableMapImage" src="34_vn.png" alt="Bản đồ Việt Nam" />
+    </div>
+  </div>
+</div>
+<script>
+  const openMapBtn = document.getElementById("openMapBtn");
+  const closeMapBtn = document.getElementById("closeMapBtn");
+  const mapPopup = document.getElementById("mapPopup");
+  const mapImage = document.getElementById("zoomableMapImage");
+
+  let scale = 1;
+  let translate = { x: 0, y: 0 };
+  let isDragging = false;
+  let start = { x: 0, y: 0 };
+
+  openMapBtn.addEventListener("click", () => {
+  mapPopup.style.display = "block";
+
+  const popupWidth = mapPopup.clientWidth;
+  const popupHeight = mapPopup.clientHeight;
+
+  const img = new Image();
+  img.src = mapImage.src;
+
+  img.onload = function () {
+    const imageWidth = img.width;
+    const imageHeight = img.height;
+
+    // Tính tỉ lệ để ảnh vừa khung popup
+    const scaleX = popupWidth / imageWidth;
+    const scaleY = popupHeight / imageHeight;
+
+    // Chọn scale nhỏ hơn để vừa cả chiều ngang lẫn dọc
+    scale = Math.min(scaleX, scaleY);
+
+    translate = { x: 0, y: 0 };
+    updateTransform();
+  };
+});
+
+
+  closeMapBtn.addEventListener("click", () => {
+    mapPopup.style.display = "none";
+  });
+
+  function updateTransform() {
+    mapImage.style.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale})`;
+  }
+
+  // Zoom bằng chuột
+  mapPopup.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const scaleAmount = 0.1;
+    scale += e.deltaY < 0 ? scaleAmount : -scaleAmount;
+    scale = Math.max(0.5, Math.min(5, scale));
+    updateTransform();
+  });
+
+  // Kéo ảnh
+  mapImage.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    mapImage.style.cursor = "grabbing";
+    start.x = e.clientX - translate.x;
+    start.y = e.clientY - translate.y;
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    translate.x = e.clientX - start.x;
+    translate.y = e.clientY - start.y;
+    updateTransform();
+  });
+
+  window.addEventListener("mouseup", () => {
+    isDragging = false;
+    mapImage.style.cursor = "grab";
+  });
+</script>
+
+<script>
+  document.getElementById("downloadMapBtn").addEventListener("click", function () {
+    const link = document.createElement("a");
+    link.href = "bandoVN.pdf";
+    link.download = "bandoVN.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+</script>
+
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+<script>
+  function openFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+      elem.msRequestFullscreen();
+    }
+  }
+
+  function exitFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+  }
+</script>
+
+<div style="
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+    <button onclick="window.location.href='index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+  ">
+    🏠 VỀ TRANG CHỦ
+  </button>
+</div>
+
+<!-- Nút cố định có thể kéo -->
+<button class="menu-toggle draggable"><img src="TC.png" alt="Menu" class="menu-icon"></button>
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+<!-- Menu -->
+<div id="sideMenu" class="side-menu">
+<a href="https://mtcedutech.github.io/MTCEduTech/index.html">🏠 Trang chủ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_so.html">🎯 Vòng quay số</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_ten.html">👥 Vòng quay tên</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/O_Chu_bi_mat.html">🧩 Tìm Ô chữ bí mật</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/O_Chu_tron_tim.html">🔍 Tinh mắt tìm từ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/doan_tu.html">🔤 Game suy đoán từ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/soan_cau_hoi.html">📝 Soạn đề TN Tick chọn + chấm điểm</a> 
+  <a href="https://mtcedutech.github.io/MTCEduTech/sukienVN.html">📖 Theo dòng sự kiện - lịch sử VN</a> 
+  <a href="https://mtcedutech.github.io/MTCEduTech/fx-570VN%20Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/Caro.html">🎮 Game Caro + Music</a>
+  <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
+
+</div>
+
+<script src="menu.js"></script>
+   
+<script src="chao_name.js"></script>
+</body>
+</html>
