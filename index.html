@@ -566,7 +566,7 @@ img {
   </script>
 <div style="
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   right: 20px;
   z-index: 9999;
   text-align: right;
@@ -620,28 +620,31 @@ img {
   </div>
 </div>
 <!-- Nút Music + Game Caro -->
-<a href="Caro.html" style="
-  display: inline-block;
-  width: 173px;
-  background-color: #6A5ACD;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-  position: fixed;
-  bottom: 45px; /* CÁCH RÕ RÀNG */
-  right: 20px;
-  z-index: 9999;
-">
-  🎵 Music & Game caro
+<a href="Caro.html"
+   style="
+     display: inline-block;
+     background-color: #6A5ACD;
+     color: white;
+     border: none;
+     padding: 10px 18px;
+     border-radius: 8px;
+     font-size: 14px;
+     font-weight: bold;
+     cursor: pointer;
+     text-align: center;
+     text-decoration: none;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+     position: fixed;
+     bottom: 50px;
+     right: 20px;
+     z-index: 9999;
+     transition: all 0.3s ease;
+   "
+   onmouseover="this.style.backgroundColor='#483D8B'; this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'"
+   onmouseout="this.style.backgroundColor='#6A5ACD'; this.style.transform='scale(1)'; this.style.filter='brightness(1)'"
+>
+  🎵 Music & Game Caro
 </a>
-
 
 <!-- Nút Thoát Hoàn Toàn -->
 <button id="exitApp" style="
