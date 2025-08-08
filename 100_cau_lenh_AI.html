@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>100 CÂU LỆNH CHUYÊN DÙNG CHO GIÁO VIÊN</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+        padding: 2rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    .category-button-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 2rem;
+    }
+    .category-button {
+        background-color: #333333;
+        color: #ffffff;
+        border: 1px solid #555555;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+    .category-button:hover,
+    .category-button.active {
+        background-color: #007bff;
+        border-color: #007bff;
+        box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+        transform: translateY(-2px);
+    }
+    .search-container {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+    #search-input {
+        background-color: #2c2c2c;
+        border: 1px solid #444;
+        color: #e0e0e0;
+        border-radius: 25px;
+        padding: 10px 20px;
+        transition: box-shadow 0.3s;
+    }
+    #search-input::placeholder {
+        color: #888;
+    }
+    #search-input:focus {
+        background-color: #383838;
+        border-color: #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    }
+    .command-list-container {
+        background-color: #2c2c2c;
+        border: 2px solid #444;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    .list-group-item {
+        cursor: pointer;
+        background-color: #383838;
+        color: #e0e0e0;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+        padding: 1rem;
+        transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+    .list-group-item:hover {
+        background-color: #444444;
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+    .list-group-item h5 {
+        color: #e0e0e0;
+    }
+    .command-subitem {
+        padding-left: 2rem;
+        color: #a0a0a0;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .command-subitem:hover {
+        color: #007bff;
+    }
+    .modal-content {
+        background-color: #2c2c2c;
+        color: #e0e0e0;
+        border: none;
+        border-radius: 15px;
+    }
+    .modal-header {
+        border-bottom: 1px solid #444;
+    }
+    .modal-title {
+        color: #ffffff;
+    }
+    .btn-close {
+        filter: invert(1);
+    }
+    .modal-body textarea {
+      width: 100%;
+      padding: 1rem;
+      background: #1a1a1a;
+      border: 1px solid #444;
+      border-radius: 10px;
+      resize: none;
+      font-family: 'Courier New', monospace;
+      color: #00ff00; /* Green text for code-like feel */
+      white-space: pre-wrap;
+    }
+    .btn-secondary {
+        background-color: #555;
+        border: none;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>100 CÂU LỆNH CHUYÊN DÙNG CHO GIÁO VIÊN</h1>
+
+  <div class="container">
+    <div class="category-button-container" id="category-buttons"></div>
+    <div class="row mt-3 search-container">
+        <div class="col-12">
+            <input type="text" id="search-input" class="form-control" placeholder="🔍 Tìm kiếm câu lệnh theo từ khóa..." oninput="searchCommands()">
+        </div>
+    </div>
+    <div class="command-list-container" id="command-list">
+      <p class="text-center text-muted mt-5">Chọn một nhóm chủ đề ở trên hoặc nhập từ khóa để tìm kiếm.</p>
+    </div>
+  </div>
+
+  <div class="modal fade" id="commandModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <textarea id="modalContent" rows="10"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-primary" onclick="copyContent()">Sao chép</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const commands = [
+      { id: 1, category: "Thiết kế & Tổ chức Giảng dạy", title: "Thiết kế bài giảng phù hợp với lớp học", sample: "Bạn là [giáo viên dạy môn gì], hãy thiết kế [loại bài giảng / hoạt động] cho lớp [khối lớp], phù hợp với [mục tiêu dạy học / đặc điểm học sinh].", example: "Bạn là giáo viên dạy Lịch sử, hãy thiết kế bài học tương tác cho lớp 8, phù hợp với học sinh thích hoạt động nhóm và tư duy phản biện." },
+      { id: 2, category: "Thiết kế & Tổ chức Giảng dạy", title: "Gợi ý trò chơi củng cố bài học", sample: "Bạn là [chuyên gia trò chơi giáo dục], gợi ý [số lượng] trò chơi giúp học sinh ôn tập bài [tên bài học] ở lớp [số lớp], có mô tả cách chơi và mục tiêu rõ ràng.", example: "Bạn là chuyên gia trò chơi giáo dục, gợi ý 3 trò chơi giúp học sinh ôn tập bài “Các dạng năng lượng”, lớp 6, có mô tả luật chơi và mục tiêu kỹ năng." },
+      { id: 3, category: "Phát triển Học sinh", title: "Xây dựng truyện/kịch bản rèn kỹ năng sống", sample: "Bạn là [giáo viên kỹ năng sống], viết [loại nội dung: truyện/kịch bản/tình huống] để rèn luyện kỹ năng [tên kỹ năng] cho học sinh [lớp mấy], độ dài khoảng [số từ].", example: "Bạn là giáo viên kỹ năng sống, viết một truyện ngắn để rèn kỹ năng giải quyết mâu thuẫn với bạn bè, cho học sinh lớp 7, độ dài 100 từ." },
+      { id: 4, category: "Đánh giá & Kiểm tra", title: "Tạo ma trận đề kiểm tra theo chuẩn đánh giá", sample: "Bạn là [vai trò phù hợp], hãy tạo [loại bảng: ma trận/bảng mô tả] đề kiểm tra môn [môn học], chủ đề [tên chủ đề], theo [chuẩn đánh giá / mức độ nhận thức].", example: "Bạn là giáo viên dạy Sinh học, hãy tạo ma trận đề kiểm tra môn Sinh học, chủ đề Cấu tạo tế bào, theo 3 mức độ: Nhận biết – Thông hiểu – Vận dụng." },
+      { id: 5, category: "Đánh giá & Kiểm tra", title: "Viết câu hỏi trắc nghiệm và đáp án", sample: "Bạn là [vai trò đánh giá], hãy tạo [số lượng] câu hỏi trắc nghiệm cho bài [tên bài], lớp [lớp mấy], mức độ [dễ/trung bình/khó], có kèm [đáp án và giải thích].", example: "Bạn là giáo viên luyện thi học sinh giỏi, hãy tạo 5 câu hỏi trắc nghiệm cho bài “Ôxi và không khí”, lớp 8, mức độ vận dụng, có kèm đáp án chi tiết." },
+      { id: 6, category: "Thiết kế & Tổ chức Giảng dạy", title: "Viết kịch bản video minh họa bài học", sample: "Bạn là [vai trò: nhà biên kịch giáo dục], viết [loại kịch bản: hoạt hình/kể chuyện] theo bài học [tên bài], lớp [số lớp], phong cách [vui nhộn/dễ hiểu/ngắn gọn].", example: "Bạn là nhà biên kịch giáo dục, viết kịch bản video hoạt hình cho bài học “Phép chia phân số”, lớp 6, phong cách vui nhộn, dễ hiểu." },
+      { id: 7, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết lời nhận xét cho học sinh", sample: "Bạn là [vai trò: giáo viên bộ môn / chủ nhiệm], viết [loại nhận xét] cho học sinh [môn học / kỹ năng], thể hiện [giọng văn: tích cực / khách quan / động viên], độ dài [bao nhiêu từ].", example: "Bạn là giáo viên bộ môn Toán, viết lời nhận xét học sinh cuối học kỳ, thể hiện giọng văn tích cực, định hướng khắc phục, độ dài 50 từ." },
+      { id: 8, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Hướng dẫn sử dụng công cụ số", sample: "Bạn là [người hướng dẫn công nghệ], hãy hướng dẫn [số bước] để giáo viên sử dụng [tên phần mềm] cho mục tiêu [tên hoạt động].", example: "Bạn là người hướng dẫn công nghệ, hãy hướng dẫn 5 bước sử dụng phần mềm Mapify.so để giáo viên tạo sơ đồ tư duy bài “Ôn tập Hóa học 8”." },
+      { id: 9, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết dàn ý cho một buổi tập huấn", sample: "Bạn là [người tổ chức tập huấn], viết dàn ý cho chuyên đề [tên chuyên đề], dành cho [giáo viên cấp / môn gì], thời lượng [số phút], kèm [hoạt động thực hành].", example: "Bạn là người tổ chức tập huấn, viết dàn ý cho chuyên đề “Tạo video dạy học bằng AI”, dành cho giáo viên THCS, thời lượng 90 phút, kèm thực hành với ChatGPT và Dreamina." },
+      { id: 10, category: "Thiết kế & Tổ chức Giảng dạy", title: "Thiết kế hoạt động nhóm trong lớp đông học sinh", sample: "Bạn là [trợ lý lớp học], thiết kế hoạt động [dạng hoạt động: nhóm, cặp đôi, cá nhân] cho bài [tên bài], phù hợp với [đặc điểm lớp học: đông học sinh, học sinh yếu…].", example: "Bạn là trợ lý lớp học, thiết kế hoạt động nhóm nhỏ cho bài “Phản ứng hóa học”, phù hợp với lớp 9 có 50 học sinh, học lực phân hóa mạnh." },
+      { id: 11, category: "Tư vấn & Định hướng", title: "Tóm tắt bài học chính cho học sinh có thời gian hạn hẹp", sample: "Bạn là [chuyên gia tóm tắt giáo dục], tóm tắt [tên bài học] cho học sinh lớp [khối lớp], chỉ ra [3-5 ý chính] và [mục tiêu cần đạt].", example: "Bạn là chuyên gia tóm tắt giáo dục, tóm tắt bài “Lịch sử phong trào Cần Vương” cho học sinh lớp 8, chỉ ra 3 ý chính và mục tiêu cần đạt." },
+      { id: 12, category: "Phát triển Học sinh", title: "Lập kế hoạch giảng dạy theo dự án", sample: "Bạn là [người lập kế hoạch giáo dục], hãy lập kế hoạch giảng dạy theo dự án cho [môn học], chủ đề [tên chủ đề], gồm [số bước]. Kế hoạch bao gồm các bước: lên ý tưởng, nghiên cứu, thực hiện và đánh giá.", example: "Bạn là người lập kế hoạch giáo dục, hãy lập kế hoạch giảng dạy theo dự án cho môn Địa lý, chủ đề “Bảo vệ môi trường biển”, gồm 4 bước: lên ý tưởng, nghiên cứu, thực hiện, và đánh giá." },
+      { id: 13, category: "Đánh giá & Kiểm tra", title: "Soạn bài kiểm tra đánh giá năng lực", sample: "Bạn là [chuyên gia đánh giá], hãy soạn bài kiểm tra đánh giá năng lực [môn học / kỹ năng] cho học sinh lớp [khối lớp], tập trung vào [kỹ năng cụ thể], và [thời gian làm bài].", example: "Bạn là chuyên gia đánh giá, hãy soạn bài kiểm tra đánh giá năng lực đọc hiểu cho học sinh lớp 5, tập trung vào kỹ năng phân tích nhân vật, thời gian 30 phút." },
+      { id: 14, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết kịch bản trò chuyện với phụ huynh", sample: "Bạn là [giáo viên chủ nhiệm], hãy viết kịch bản cuộc trò chuyện với phụ huynh của học sinh [tên học sinh], về vấn đề [tên vấn đề], với [mục tiêu cuộc trò chuyện].", example: "Bạn là giáo viên chủ nhiệm, hãy viết kịch bản cuộc trò chuyện với phụ huynh của học sinh Linh, về việc em chưa hoàn thành bài tập, với mục tiêu tìm hiểu nguyên nhân và đề xuất giải pháp." },
+      { id: 15, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo tài liệu học tập bổ sung", sample: "Bạn là [giáo viên bộ môn], hãy tạo tài liệu học tập bổ sung cho bài học [tên bài], dành cho học sinh [mục tiêu: học giỏi / yếu / trung bình], gồm các [dạng bài tập, lý thuyết, hình ảnh].", example: "Bạn là giáo viên Vật lý, hãy tạo tài liệu học tập bổ sung cho bài học “Lực ma sát”, dành cho học sinh giỏi, gồm các dạng bài tập nâng cao và ví dụ thực tế." },
+      { id: 16, category: "Đánh giá & Kiểm tra", title: "Thiết kế biểu mẫu đánh giá học sinh", sample: "Bạn là [người thiết kế biểu mẫu], hãy thiết kế biểu mẫu đánh giá học sinh lớp [khối lớp], về [môn học / kỹ năng]. Biểu mẫu có các tiêu chí đánh giá và thang điểm rõ ràng.", example: "Bạn là người thiết kế biểu mẫu, hãy thiết kế biểu mẫu đánh giá kỹ năng thuyết trình cho học sinh lớp 8, gồm các tiêu chí: nội dung, phong thái, tương tác và thang điểm 10." },
+      { id: 17, category: "Phát triển Học sinh", title: "Đề xuất hoạt động ngoại khóa", sample: "Bạn là [giáo viên tổng phụ trách], đề xuất [số lượng] hoạt động ngoại khóa cho học sinh [cấp học], chủ đề [tên chủ đề], có mô tả ngắn gọn và mục tiêu. ", example: "Bạn là giáo viên tổng phụ trách, đề xuất 3 hoạt động ngoại khóa cho học sinh THCS, chủ đề “Bảo vệ môi trường”, có mô tả ngắn gọn và mục tiêu." },
+      { id: 18, category: "Thiết kế & Tổ chức Giảng dạy", title: "Viết nội dung cho phiếu học tập", sample: "Bạn là [giáo viên bộ môn], hãy viết nội dung phiếu học tập cho bài [tên bài], lớp [khối lớp], gồm các [dạng câu hỏi: điền vào chỗ trống, trắc nghiệm, tự luận] giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên Hóa học, hãy viết nội dung phiếu học tập cho bài “Tính chất của muối”, lớp 9, gồm các câu hỏi điền vào chỗ trống và các bài tập ứng dụng giúp học sinh ghi nhớ kiến thức." },
+      { id: 19, category: "Đánh giá & Kiểm tra", title: "Phân loại câu hỏi theo mức độ tư duy", sample: "Bạn là [chuyên gia giáo dục], phân loại các câu hỏi dưới đây vào các mức độ [tên mức độ: Nhận biết, Thông hiểu, Vận dụng, Sáng tạo].", example: "Bạn là chuyên gia giáo dục, phân loại các câu hỏi sau vào các mức độ Nhận biết, Thông hiểu, Vận dụng, Sáng tạo: 1. Nêu định nghĩa về… 2. Vì sao… 3. Giải thích… 4. Sáng tạo một sản phẩm về…." },
+      { id: 20, category: "Thiết kế & Tổ chức Giảng dạy", title: "Thiết kế infographic minh họa bài học", sample: "Bạn là [người thiết kế đồ họa], hãy thiết kế infographic minh họa bài học [tên bài], với các [hình ảnh, biểu đồ, màu sắc], giúp học sinh dễ hình dung và ghi nhớ kiến thức.", example: "Bạn là người thiết kế đồ họa, hãy thiết kế infographic minh họa bài học “Vòng tuần hoàn của nước”, với các hình ảnh và biểu đồ màu sắc, giúp học sinh dễ hình dung và ghi nhớ." },
+      { id: 21, category: "Phát triển Học sinh", title: "Viết bài văn mẫu theo đề bài", sample: "Bạn là [giáo viên Văn], hãy viết bài văn mẫu nghị luận xã hội về đề tài [tên đề tài], dành cho học sinh [lớp mấy], độ dài [số từ].", example: "Bạn là giáo viên Văn, hãy viết bài văn mẫu nghị luận xã hội về đề tài “Vai trò của tình bạn trong cuộc sống”, dành cho học sinh lớp 9, độ dài 500 từ." },
+      { id: 22, category: "Phát triển Học sinh", title: "Đánh giá và sửa lỗi một đoạn văn", sample: "Bạn là [giáo viên Văn], hãy đánh giá và sửa lỗi ngữ pháp, chính tả, cách dùng từ, và cấu trúc câu cho đoạn văn sau. [chèn đoạn văn].", example: "Bạn là giáo viên Văn, hãy đánh giá và sửa lỗi ngữ pháp, chính tả, cách dùng từ, và cấu trúc câu cho đoạn văn sau: “Em là một học sinh rất chăm chỉ, luôn cố gắng để học tập tốt hơn. Tuy nhiên, em vẫn còn hay bị điểm kém môn Toán.”" },
+      { id: 23, category: "Phát triển Học sinh", title: "Tạo các đề tài nghiên cứu cho học sinh", sample: "Bạn là [giáo viên hướng dẫn nghiên cứu], hãy tạo [số lượng] đề tài nghiên cứu khoa học cho học sinh [lớp mấy], về lĩnh vực [tên lĩnh vực], có tính khả thi và phù hợp với độ tuổi.", example: "Bạn là giáo viên hướng dẫn nghiên cứu, hãy tạo 3 đề tài nghiên cứu khoa học cho học sinh lớp 11, về lĩnh vực Sinh học, có tính khả thi và phù hợp với độ tuổi." },
+      { id: 24, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết thư chúc mừng/động viên học sinh", sample: "Bạn là [giáo viên chủ nhiệm], hãy viết thư chúc mừng [tên học sinh] vì [thành tích cụ thể], với giọng văn [thân thiện, trang trọng, ấm áp].", example: "Bạn là giáo viên chủ nhiệm, hãy viết thư chúc mừng em Minh vì đã đạt giải nhất cuộc thi Tin học, với giọng văn ấm áp, động viên em cố gắng hơn nữa." },
+      { id: 25, category: "Thiết kế & Tổ chức Giảng dạy", title: "Lập kế hoạch chủ đề học tập cho tháng", sample: "Bạn là [giáo viên lập kế hoạch], hãy lập kế hoạch chủ đề học tập trong tháng [tên tháng] cho môn [môn học], lớp [khối lớp]. Kế hoạch bao gồm: chủ đề, hoạt động chính, và sản phẩm học tập.", example: "Bạn là giáo viên lập kế hoạch, hãy lập kế hoạch chủ đề học tập trong tháng 9 cho môn Ngữ văn, lớp 7. Kế hoạch bao gồm: chủ đề “Tình yêu quê hương”, hoạt động chính là đọc truyện và làm thơ, sản phẩm là bài thuyết trình." },
+      { id: 26, category: "Tư vấn & Định hướng", title: "Viết bài giảng cho học sinh có nhu cầu đặc biệt", sample: "Bạn là [chuyên gia giáo dục đặc biệt], hãy viết bài giảng [tên bài học] cho học sinh [nhu cầu đặc biệt: tự kỷ, khiếm thính], với [phương pháp dạy học phù hợp], gồm các hoạt động và công cụ hỗ trợ.", example: "Bạn là chuyên gia giáo dục đặc biệt, hãy viết bài giảng “Phép cộng” cho học sinh tự kỷ, với phương pháp trực quan, gồm các hoạt động với đồ vật cụ thể và công cụ hỗ trợ là bảng hình ảnh." },
+      { id: 27, category: "Phát triển Học sinh", title: "Tạo danh sách các câu hỏi mở", sample: "Bạn là [giáo viên phát triển tư duy], hãy tạo danh sách [số lượng] câu hỏi mở cho bài [tên bài], giúp học sinh [mục tiêu: tư duy phản biện, sáng tạo, giải quyết vấn đề].", example: "Bạn là giáo viên phát triển tư duy, hãy tạo danh sách 5 câu hỏi mở cho bài “Bảo vệ môi trường”, giúp học sinh tư duy phản biện, giải quyết vấn đề." },
+      { id: 28, category: "Phát triển Học sinh", title: "Viết kịch bản cho một buổi Debate", sample: "Bạn là [người điều phối tranh biện], hãy viết kịch bản cho một buổi debate về chủ đề [tên chủ đề], gồm [số đội], với [thời gian và quy tắc].", example: "Bạn là người điều phối tranh biện, hãy viết kịch bản cho một buổi debate về chủ đề “Sách giấy hay sách điện tử”, gồm 2 đội, với thời gian 60 phút và quy tắc rõ ràng." },
+      { id: 29, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết lời mời tham dự sự kiện", sample: "Bạn là [người tổ chức sự kiện], hãy viết lời mời phụ huynh tham dự sự kiện [tên sự kiện], với nội dung [thân thiện/trang trọng], và các thông tin cần thiết: [thời gian, địa điểm, mục đích].", example: "Bạn là người tổ chức sự kiện, hãy viết lời mời phụ huynh tham dự “Ngày hội thể thao của trường”, với nội dung thân thiện, thông tin về thời gian, địa điểm và mục đích của ngày hội." },
+      { id: 30, category: "Đánh giá & Kiểm tra", title: "Soạn bài tập về nhà theo chủ đề", sample: "Bạn là [giáo viên môn học], hãy soạn bài tập về nhà cho bài [tên bài], lớp [khối lớp], gồm [số lượng] dạng bài tập, từ [dễ đến khó], có [đáp án và hướng dẫn giải].", example: "Bạn là giáo viên Toán, hãy soạn bài tập về nhà cho bài “Phương trình bậc hai”, lớp 9, gồm 5 dạng bài tập, từ dễ đến khó, có đáp án và hướng dẫn giải chi tiết." },
+      { id: 31, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết lời dẫn cho một chương trình", sample: "Bạn là [người dẫn chương trình], hãy viết lời dẫn cho chương trình [tên chương trình], với [giọng văn: hài hước, trang trọng, lôi cuốn], thời lượng [số phút], bao gồm lời chào, giới thiệu và kết thúc.", example: "Bạn là người dẫn chương trình, hãy viết lời dẫn cho chương trình “Tọa đàm về giáo dục”, với giọng văn trang trọng, thời lượng 60 phút, bao gồm lời chào, giới thiệu khách mời và kết thúc." },
+      { id: 32, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo câu chuyện dựa trên kiến thức khoa học", sample: "Bạn là [nhà văn khoa học], hãy tạo một câu chuyện ngắn về [khái niệm khoa học], dành cho học sinh [lớp mấy], giúp các em dễ hình dung và ghi nhớ. ", example: "Bạn là nhà văn khoa học, hãy tạo một câu chuyện ngắn về “Lực hấp dẫn”, dành cho học sinh lớp 6, giúp các em dễ hình dung và ghi nhớ." },
+      { id: 33, category: "Tư vấn & Định hướng", title: "Lập kế hoạch phát triển bản thân cho học sinh", sample: "Bạn là [chuyên gia tư vấn học đường], hãy lập kế hoạch phát triển bản thân cho học sinh [tên học sinh], tập trung vào [mục tiêu cụ thể], gồm [số bước]. Kế hoạch bao gồm: xác định mục tiêu, hành động, và đánh giá.", example: "Bạn là chuyên gia tư vấn học đường, hãy lập kế hoạch phát triển bản thân cho học sinh An, tập trung vào mục tiêu “Cải thiện kỹ năng giao tiếp”, gồm 3 bước: xác định mục tiêu, hành động, và đánh giá." },
+      { id: 34, category: "Phát triển Học sinh", title: "Gợi ý các câu hỏi phản tư sau giờ học", sample: "Bạn là [giáo viên], hãy gợi ý [số lượng] câu hỏi phản tư cho học sinh sau giờ học [môn học], giúp các em [mục tiêu: nhận thức, tư duy phản biện, sáng tạo].", example: "Bạn là giáo viên, hãy gợi ý 3 câu hỏi phản tư cho học sinh sau giờ học Địa lý, giúp các em nhận thức về vai trò của bản thân trong việc bảo vệ môi trường." },
+      { id: 35, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo dàn ý chi tiết bài giảng", sample: "Bạn là [giáo viên môn gì], hãy xây dựng dàn ý chi tiết cho bài giảng [tên bài giảng], dành cho học sinh [lớp mấy], với [số mục chính]. Dàn ý bao gồm: thời gian, hoạt động, nội dung, và phương pháp đánh giá.", example: "Bạn là giáo viên Văn học, hãy xây dựng dàn ý chi tiết cho bài giảng “Truyện Kiều” dành cho học sinh lớp 10, với 5 mục chính. Dàn ý bao gồm: thời gian, hoạt động, nội dung, và phương pháp đánh giá." },
+      { id: 36, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Xây dựng kịch bản phỏng vấn giáo viên", sample: "Bạn là [người phỏng vấn], hãy xây dựng kịch bản phỏng vấn giáo viên [tên giáo viên], về chủ đề [tên chủ đề], gồm [số lượng] câu hỏi chính và câu hỏi mở rộng.", example: "Bạn là người phỏng vấn, hãy xây dựng kịch bản phỏng vấn giáo viên chủ nhiệm, về chủ đề “Vai trò của giáo viên trong việc định hướng nghề nghiệp cho học sinh”, gồm 5 câu hỏi chính và 2 câu hỏi mở rộng." },
+      { id: 37, category: "Phát triển Học sinh", title: "Soạn các bài tập tình huống", sample: "Bạn là [chuyên gia giáo dục], hãy soạn [số lượng] bài tập tình huống cho học sinh [lớp mấy], về vấn đề [tên vấn đề], giúp các em rèn luyện kỹ năng [tên kỹ năng].", example: "Bạn là chuyên gia giáo dục, hãy soạn 3 bài tập tình huống cho học sinh lớp 7, về vấn đề “bắt nạt học đường”, giúp các em rèn luyện kỹ năng giải quyết mâu thuẫn." },
+      { id: 38, category: "Thiết kế & Tổ chức Giảng dạy", title: "Viết lời dẫn truyện cuốn hút", sample: "Bạn là [nhà văn], viết lời dẫn truyện cuốn hút cho một bài học [tên bài học], dành cho học sinh [lớp mấy], giúp các em dễ hình dung và hứng thú với bài học.", example: "Bạn là nhà văn, viết lời dẫn truyện cuốn hút cho một bài học về “Động vật lưỡng cư”, dành cho học sinh lớp 4, giúp các em dễ hình dung và hứng thú với bài học." },
+      { id: 39, category: "Tư vấn & Định hướng", title: "Tạo danh sách các từ khóa chính", sample: "Bạn là [trợ lý dạy học], hãy tạo danh sách các từ khóa chính cho bài học [tên bài học], giúp học sinh dễ dàng tóm tắt và ghi nhớ kiến thức.", example: "Bạn là trợ lý dạy học, hãy tạo danh sách các từ khóa chính cho bài học “Sự ra đời của Đảng Cộng sản Việt Nam”, giúp học sinh dễ dàng tóm tắt và ghi nhớ kiến thức." },
+      { id: 40, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Đề xuất các phương pháp dạy học đổi mới", sample: "Bạn là [chuyên gia đổi mới giáo dục], hãy đề xuất các phương pháp dạy học đổi mới cho môn [môn học], giúp học sinh [mục tiêu cụ thể]. Phương pháp bao gồm: [tên phương pháp, cách thực hiện, ưu điểm].", example: "Bạn là chuyên gia đổi mới giáo dục, hãy đề xuất các phương pháp dạy học đổi mới cho môn Địa lý, giúp học sinh phát triển năng lực tư duy không gian. Phương pháp bao gồm: phương pháp bản đồ tư duy, cách thực hiện, ưu điểm." },
+      { id: 41, category: "Phát triển Học sinh", title: "Tạo các câu hỏi gợi mở cho học sinh", sample: "Bạn là [giáo viên phát triển tư duy], hãy tạo các câu hỏi gợi mở cho bài [tên bài], giúp học sinh [mục tiêu: tư duy phản biện, sáng tạo, giải quyết vấn đề].", example: "Bạn là giáo viên phát triển tư duy, hãy tạo các câu hỏi gợi mở cho bài “Bảo vệ môi trường”, giúp học sinh tư duy phản biện, giải quyết vấn đề." },
+      { id: 42, category: "Đánh giá & Kiểm tra", title: "Thiết kế biểu mẫu đánh giá hoạt động nhóm", sample: "Bạn là [người thiết kế biểu mẫu], hãy thiết kế biểu mẫu đánh giá hoạt động nhóm cho học sinh lớp [khối lớp], về [môn học / kỹ năng]. Biểu mẫu có các tiêu chí đánh giá và thang điểm rõ ràng.", example: "Bạn là người thiết kế biểu mẫu, hãy thiết kế biểu mẫu đánh giá hoạt động nhóm cho học sinh lớp 8, về kỹ năng làm việc nhóm. Biểu mẫu có các tiêu chí: hợp tác, phân công nhiệm vụ, đóng góp và thang điểm 10." },
+      { id: 43, category: "Thiết kế & Tổ chức Giảng dạy", title: "Viết kịch bản hoạt động đóng vai", sample: "Bạn là [người biên kịch giáo dục], viết kịch bản hoạt động đóng vai cho bài học [tên bài], lớp [khối lớp], giúp học sinh [mục tiêu: rèn kỹ năng giao tiếp, giải quyết vấn đề].", example: "Bạn là người biên kịch giáo dục, viết kịch bản hoạt động đóng vai cho bài học “Hòa giải mâu thuẫn”, lớp 7, giúp học sinh rèn kỹ năng giao tiếp và giải quyết vấn đề." },
+      { id: 44, category: "Thiết kế & Tổ chức Giảng dạy", title: "Gợi ý các hoạt động khởi động đầu giờ", sample: "Bạn là [giáo viên], hãy gợi ý [số lượng] hoạt động khởi động đầu giờ học [môn học], thời gian [số phút], giúp học sinh [mục tiêu: tập trung, hứng thú].", example: "Bạn là giáo viên, hãy gợi ý 3 hoạt động khởi động đầu giờ học Toán, thời gian 5 phút, giúp học sinh tập trung và hứng thú với bài học." },
+      { id: 45, category: "Phát triển Học sinh", title: "Tạo danh sách các câu hỏi tự đánh giá", sample: "Bạn là [giáo viên phát triển tư duy], hãy tạo danh sách [số lượng] câu hỏi tự đánh giá cho học sinh sau khi hoàn thành bài [tên bài], giúp các em [mục tiêu: nhận thức, tư duy phản biện, sáng tạo].", example: "Bạn là giáo viên phát triển tư duy, hãy tạo danh sách 5 câu hỏi tự đánh giá cho học sinh sau khi hoàn thành bài “Bảo vệ môi trường”, giúp các em nhận thức về vai trò của bản thân trong việc bảo vệ môi trường." },
+      { id: 46, category: "Thiết kế & Tổ chức Giảng dạy", title: "Viết lời dẫn cho một bài hát giáo dục", sample: "Bạn là [người sáng tác nhạc], hãy viết lời dẫn cho một bài hát giáo dục về chủ đề [tên chủ đề], dành cho học sinh [lớp mấy], với [giọng văn: vui nhộn, dễ nhớ].", example: "Bạn là người sáng tác nhạc, hãy viết lời dẫn cho một bài hát giáo dục về chủ đề “Bảng cửu chương”, dành cho học sinh lớp 2, với giọng văn vui nhộn, dễ nhớ." },
+      { id: 47, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các câu đố vui về bài học", sample: "Bạn là [chuyên gia trò chơi giáo dục], hãy tạo [số lượng] câu đố vui về bài [tên bài], giúp học sinh ôn tập kiến thức một cách hiệu quả.", example: "Bạn là chuyên gia trò chơi giáo dục, hãy tạo 5 câu đố vui về bài “Vòng tuần hoàn của nước”, giúp học sinh ôn tập kiến thức một cách hiệu quả." },
+      { id: 48, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết thư giới thiệu học sinh", sample: "Bạn là [giáo viên chủ nhiệm], hãy viết thư giới thiệu học sinh [tên học sinh] đến [đơn vị: trường, tổ chức], nêu bật [những thành tích, kỹ năng, phẩm chất nổi trội].", example: "Bạn là giáo viên chủ nhiệm, hãy viết thư giới thiệu học sinh Nguyễn Văn A đến trường cấp 3 chuyên, nêu bật những thành tích học tập và các kỹ năng nổi trội của em." },
+      { id: 49, category: "Thiết kế & Tổ chức Giảng dạy", title: "Lập kế hoạch giảng dạy tích hợp", sample: "Bạn là [giáo viên], hãy lập kế hoạch giảng dạy tích hợp môn [môn 1] và [môn 2], chủ đề [tên chủ đề], gồm các hoạt động và mục tiêu cụ thể.", example: "Bạn là giáo viên, hãy lập kế hoạch giảng dạy tích hợp môn Văn và Lịch sử, chủ đề “Các phong trào yêu nước”, gồm các hoạt động và mục tiêu cụ thể." },
+      { id: 50, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập thực hành trên máy tính", sample: "Bạn là [giáo viên Tin học], hãy tạo [số lượng] bài tập thực hành trên máy tính cho học sinh [lớp mấy], về chủ đề [tên chủ đề], có [đáp án và hướng dẫn giải].", example: "Bạn là giáo viên Tin học, hãy tạo 5 bài tập thực hành trên máy tính cho học sinh lớp 8, về chủ đề “Lập trình Python”, có đáp án và hướng dẫn giải chi tiết." },
+      { id: 51, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết lời nhắn nhủ trên mạng xã hội", sample: "Bạn là [giáo viên], hãy viết lời nhắn nhủ trên mạng xã hội về [vấn đề cụ thể], với giọng văn [thân thiện, gần gũi, chuyên nghiệp], phù hợp với học sinh và phụ huynh.", example: "Bạn là giáo viên, hãy viết lời nhắn nhủ trên mạng xã hội về việc học sinh cần chuẩn bị bài trước khi đến lớp, với giọng văn gần gũi, phù hợp với học sinh và phụ huynh." },
+      { id: 52, category: "Phát triển Học sinh", title: "Tạo các bài tập tình huống giả định", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập tình huống giả định cho học sinh [lớp mấy], về [vấn đề cụ thể], giúp các em rèn luyện kỹ năng [giải quyết vấn đề, tư duy phản biện].", example: "Bạn là giáo viên, hãy tạo 3 bài tập tình huống giả định cho học sinh lớp 7, về vấn đề “bắt nạt học đường”, giúp các em rèn luyện kỹ năng giải quyết vấn đề và tư duy phản biện." },
+      { id: 53, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về [vấn đề cụ thể], với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc chọn ngành học, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 54, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm trực quan", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm trực quan cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm trực quan cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 55, category: "Tư vấn & Định hướng", title: "Viết kịch bản cho một buổi tư vấn học đường", sample: "Bạn là [chuyên gia tư vấn học đường], hãy viết kịch bản cho một buổi tư vấn học đường về chủ đề [tên chủ đề], dành cho học sinh [lớp mấy], gồm [số lượng] câu hỏi chính và câu hỏi mở rộng.", example: "Bạn là chuyên gia tư vấn học đường, hãy viết kịch bản cho một buổi tư vấn học đường về chủ đề “Áp lực học đường”, dành cho học sinh lớp 9, gồm 5 câu hỏi chính và 2 câu hỏi mở rộng." },
+      { id: 56, category: "Đánh giá & Kiểm tra", title: "Tạo các bài tập trắc nghiệm trực tuyến", sample: "Bạn là [giáo viên Tin học], hãy tạo [số lượng] bài tập trắc nghiệm trực tuyến cho bài [tên bài], có [đáp án và hướng dẫn giải], giúp học sinh [mục tiêu: ôn tập kiến thức, kiểm tra, đánh giá].", example: "Bạn là giáo viên Tin học, hãy tạo 5 bài tập trắc nghiệm trực tuyến cho bài “Các dạng năng lượng”, có đáp án và hướng dẫn giải chi tiết, giúp học sinh ôn tập kiến thức một cách hiệu quả." },
+      { id: 57, category: "Phát triển Học sinh", title: "Tạo các bài tập tình huống thực tế", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập tình huống thực tế cho học sinh [lớp mấy], về [vấn đề cụ thể], giúp các em rèn luyện kỹ năng [giải quyết vấn đề, tư duy phản biện].", example: "Bạn là giáo viên, hãy tạo 3 bài tập tình huống thực tế cho học sinh lớp 7, về vấn đề “bắt nạt học đường”, giúp các em rèn luyện kỹ năng giải quyết vấn đề và tư duy phản biện." },
+      { id: 58, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho phụ huynh", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho phụ huynh về [vấn đề cụ thể], với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho phụ huynh về việc đồng hành cùng con trong học tập, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 59, category: "Đánh giá & Kiểm tra", title: "Tạo các bài tập trắc nghiệm tương tác", sample: "Bạn là [giáo viên Tin học], hãy tạo [số lượng] bài tập trắc nghiệm tương tác cho bài [tên bài], có [đáp án và hướng dẫn giải], giúp học sinh [mục tiêu: ôn tập kiến thức, kiểm tra, đánh giá].", example: "Bạn là giáo viên Tin học, hãy tạo 5 bài tập trắc nghiệm tương tác cho bài “Các dạng năng lượng”, có đáp án và hướng dẫn giải chi tiết, giúp học sinh ôn tập kiến thức một cách hiệu quả." },
+      { id: 60, category: "Hỗ trợ Chuyên môn & Kỹ năng Mềm", title: "Viết lời khuyên cho giáo viên", sample: "Bạn là [chuyên gia giáo dục], hãy viết lời khuyên cho giáo viên về [vấn đề cụ thể], với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là chuyên gia giáo dục, hãy viết lời khuyên cho giáo viên về việc quản lý lớp học, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 61, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có hình ảnh", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có hình ảnh cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có hình ảnh cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 62, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc chọn nghề", sample: "Bạn là [chuyên gia tư vấn học đường], hãy viết lời khuyên cho học sinh [lớp mấy] về việc chọn nghề, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là chuyên gia tư vấn học đường, hãy viết lời khuyên cho học sinh lớp 9 về việc chọn nghề, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 63, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có video", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có video cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có video cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 64, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc học tập", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc học tập, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc học tập, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 65, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có âm thanh", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có âm thanh cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có âm thanh cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 66, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc giao tiếp", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc giao tiếp, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc giao tiếp, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 67, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có trò chơi", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có trò chơi cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có trò chơi cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 68, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc tự học", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc tự học, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc tự học, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 69, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu đố", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu đố cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu đố cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 70, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc quản lý thời gian", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc quản lý thời gian, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc quản lý thời gian, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 71, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có hình ảnh 3D", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có hình ảnh 3D cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có hình ảnh 3D cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 72, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc đối phó với áp lực", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc đối phó với áp lực, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc đối phó với áp lực, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 73, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có thực tế ảo", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có thực tế ảo cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có thực tế ảo cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 74, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc xây dựng thói quen tốt", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc xây dựng thói quen tốt, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc xây dựng thói quen tốt, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 75, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có trò chơi mô phỏng", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có trò chơi mô phỏng cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có trò chơi mô phỏng cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 76, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc vượt qua thất bại", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc vượt qua thất bại, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc vượt qua thất bại, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 77, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi mở", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi mở cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi mở cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 78, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc học nhóm", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc học nhóm, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc học nhóm, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 79, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi khó", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi khó cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi khó cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 80, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện sức khỏe", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện sức khỏe, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện sức khỏe, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 81, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi nâng cao", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi nâng cao cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi nâng cao cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 82, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng mềm", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng mềm, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng mềm, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 83, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi tổng hợp", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi tổng hợp cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi tổng hợp cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 84, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng sống", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng sống, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng sống, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 85, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi phân tích", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi phân tích cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi phân tích cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 86, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng tư duy", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng tư duy, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng tư duy, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 87, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi sáng tạo", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi sáng tạo cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi sáng tạo cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 88, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng giải quyết vấn đề", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng giải quyết vấn đề, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng giải quyết vấn đề, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 89, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi thực hành", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi thực hành cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi thực hành cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 90, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng sáng tạo", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng sáng tạo, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng sáng tạo, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 91, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi ứng dụng", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi ứng dụng cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi ứng dụng cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 92, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng giao tiếp và thuyết trình", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng giao tiếp và thuyết trình, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng giao tiếp và thuyết trình, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 93, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi về môi trường", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi về môi trường cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi về môi trường cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 94, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng làm việc nhóm", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng làm việc nhóm, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng làm việc nhóm, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 95, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi về xã hội", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi về xã hội cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi về xã hội cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 96, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng quản lý thời gian", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng quản lý thời gian, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng quản lý thời gian, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 97, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi về khoa học", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi về khoa học cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi về khoa học cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 98, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng giải quyết vấn đề", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng giải quyết vấn đề, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng giải quyết vấn đề, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." },
+      { id: 99, category: "Thiết kế & Tổ chức Giảng dạy", title: "Tạo các bài tập trắc nghiệm có câu hỏi về văn hóa", sample: "Bạn là [giáo viên], hãy tạo [số lượng] bài tập trắc nghiệm có câu hỏi về văn hóa cho bài [tên bài], giúp học sinh [mục tiêu: ghi nhớ kiến thức, vận dụng…].", example: "Bạn là giáo viên, hãy tạo 5 bài tập trắc nghiệm có câu hỏi về văn hóa cho bài “Các loài động vật”, giúp học sinh ghi nhớ kiến thức một cách hiệu quả." },
+      { id: 100, category: "Tư vấn & Định hướng", title: "Viết lời khuyên cho học sinh về việc rèn luyện kỹ năng sáng tạo", sample: "Bạn là [giáo viên], hãy viết lời khuyên cho học sinh [lớp mấy] về việc rèn luyện kỹ năng sáng tạo, với giọng văn [thân thiện, gần gũi, chuyên nghiệp], giúp các em [mục tiêu: vượt qua khó khăn, phát triển bản thân].", example: "Bạn là giáo viên, hãy viết lời khuyên cho học sinh lớp 9 về việc rèn luyện kỹ năng sáng tạo, với giọng văn thân thiện, giúp các em vượt qua khó khăn và phát triển bản thân." }
+    ];
+
+    const categories = [
+        "Thiết kế & Tổ chức Giảng dạy",
+        "Đánh giá & Kiểm tra",
+        "Phát triển Học sinh",
+        "Hỗ trợ Chuyên môn & Kỹ năng Mềm",
+        "Tư vấn & Định hướng"
+    ];
+
+    const categoryButtonsContainer = document.getElementById('category-buttons');
+    const commandListContainer = document.getElementById('command-list');
+    
+    // Create category buttons
+    categories.forEach(categoryName => {
+        const button = document.createElement('button');
+        button.className = 'category-button';
+        button.textContent = categoryName;
+        button.addEventListener('click', () => {
+          showCommandsForCategory(categoryName);
+          // Remove active class from all buttons
+          document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
+          // Add active class to the clicked button
+          button.classList.add('active');
+        });
+        categoryButtonsContainer.appendChild(button);
+    });
+
+    function showCommandsForCategory(categoryName) {
+        commandListContainer.innerHTML = '';
+        const filteredCommands = commands.filter(cmd => cmd.category === categoryName);
+        
+        displayCommands(filteredCommands);
+    }
+    
+    function displayCommands(commandsToDisplay) {
+        commandListContainer.innerHTML = '';
+        if (commandsToDisplay.length === 0) {
+            commandListContainer.innerHTML = '<p class="text-center text-muted mt-5">Không tìm thấy câu lệnh nào.</p>';
+            return;
+        }
+
+        let counter = 1;
+        commandsToDisplay.forEach(cmd => {
+            const titleClean = cmd.title.replace(/✅\s*/, '');
+            const commandItem = document.createElement('div');
+            commandItem.className = 'list-group-item';
+            commandItem.innerHTML = `
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">${counter}. ${titleClean}</h5>
+                </div>
+                <small class="command-subitem" onclick="showModal(${cmd.id}, 'sample')">📄 Câu lệnh mẫu</small><br>
+                <small class="command-subitem" onclick="showModal(${cmd.id}, 'example')">💡 Ví dụ áp dụng</small>
+            `;
+            commandListContainer.appendChild(commandItem);
+            counter++;
+        });
+    }
+
+    function searchCommands() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        if (searchTerm.length === 0) {
+            commandListContainer.innerHTML = '<p class="text-center text-muted mt-5">Chọn một nhóm chủ đề ở trên hoặc nhập từ khóa để tìm kiếm.</p>';
+            // Clear active class from all category buttons
+            document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('active'));
+            return;
+        }
+        
+        const filteredCommands = commands.filter(cmd => 
+            cmd.title.toLowerCase().includes(searchTerm) ||
+            cmd.sample.toLowerCase().includes(searchTerm) ||
+            cmd.example.toLowerCase().includes(searchTerm)
+        );
+
+        displayCommands(filteredCommands);
+    }
+
+    function showModal(id, type) {
+      const cmd = commands.find(c => c.id === id);
+      const title = cmd.title;
+      const content = cmd[type];
+
+      document.getElementById('modalTitle').textContent = `${title.replace(/✅\s*/, '')} - ${type === 'sample' ? 'Câu lệnh mẫu' : 'Ví dụ áp dụng'}`;
+      const textarea = document.getElementById('modalContent');
+      textarea.value = content;
+      textarea.rows = content.split('\n').length + 1;
+
+      const modal = new bootstrap.Modal(document.getElementById('commandModal'));
+      modal.show();
+    }
+
+    function copyContent() {
+      const content = document.getElementById('modalContent');
+      content.select();
+      document.execCommand('copy');
+      alert("Đã copy nội dung!");
+    }
+  </script>
+</body>
+</html>
