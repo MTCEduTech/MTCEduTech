@@ -623,7 +623,7 @@ img {
 <a href="Caro.html" style="
   display: inline-block;
   width: 173px;
-  background-color: #6A5ACD; /* Màu tím khác biệt */
+  background-color: #6A5ACD;
   color: white;
   border: none;
   padding: 10px 18px;
@@ -635,17 +635,18 @@ img {
   text-decoration: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   position: fixed;
-  bottom: 45px;
+  bottom: 40px; /* CÁCH RÕ RÀNG */
   right: 20px;
   z-index: 9999;
 ">
-  🎵 MUSIC + GAME CARO
+  🎵 Mucsic & Game caro
 </a>
+
 
 <!-- Nút Thoát Hoàn Toàn -->
 <button id="exitApp" style="
   position: fixed;
-  bottom: 20px;
+  bottom: 10px; /* Tạo khoảng dưới */
   right: 20px;
   background-color: red;
   color: white;
@@ -658,7 +659,6 @@ img {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 ">
   THOÁT HOÀN TOÀN
-
 <script>
 document.getElementById('exitApp').addEventListener('click', () => {
   if (confirm("Cảm ơn bạn đã sử dụng ứng dụng của tác giả Mai Thiện Chánh\n\nBạn muốn thoát hoàn toàn?")) {
@@ -733,10 +733,6 @@ function exitFullscreen() {
     i = (i + 1) % fullTitle.length;
   }, 300);
 </script>
-
-
-
-
 
 <!-- Popup giới thiệu bộ công cụ -->
 <div id="introPopup" style="
