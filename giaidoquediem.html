@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Giải Đố Que Diêm</title>
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--muted:#2a2f3a;--accent:#ff8c00;--text:#e6e6e6;--good:#22c55e;--bad:#ef4444}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+  .sidebar{width:240px;background:var(--panel);padding:16px;overflow-y:auto}
+  .sidebar h2{font-size:18px;margin:8px 0 12px}
+  details summary{cursor:pointer;padding:8px 10px;background:var(--muted);border-radius:8px;margin:6px 0;font-weight:600}
+  .submenu{padding:6px 2px}
+  .submenu button{display:block;width:100%;padding:8px 10px;margin:4px 0;border:1px solid transparent;background:#222733;color:var(--text);border-radius:8px;cursor:pointer;text-align:left}
+  .submenu button:hover{background:#2c3443}
+  .submenu button.active{background:#ff8c00;color:#000;font-weight:700}
+  .main{flex:1;text-align:center;padding:20px;max-width:1400px;margin:0 auto}
+  h1{margin:6px 0 10px}
+  .status{margin:6px 0 14px;font-size:14px;opacity:.9}
+  .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#242b38;margin:2px;font-weight:600}
+  .puzzle{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin:20px auto;padding:22px;border-radius:12px;background:#0e131c;min-height:160px}
+  .digit{position:relative;width:80px;height:130px;margin:6px}
+  .segment{position:absolute;background:#1f2631;border-radius:10px;cursor:pointer;transition:all .12s ease}
+  .segment.on{background:var(--accent);box-shadow:0 0 10px var(--accent),0 0 22px #a55300}
+  .a{top:0;left:14px;width:52px;height:12px}
+  .b{top:12px;right:0;width:12px;height:50px}
+  .c{bottom:12px;right:0;width:12px;height:50px}
+  .d{bottom:0;left:14px;width:52px;height:12px}
+  .e{bottom:12px;left:0;width:12px;height:50px}
+  .f{top:12px;left:0;width:12px;height:50px}
+  .g{top:60px;left:14px;width:52px;height:12px}
+  .op{font-size:60px;line-height:1}
+  .controls button{margin:6px;padding:10px 16px;border:1px solid #2f3847;border-radius:10px;font-size:16px;cursor:pointer;background:#1d2330;color:var(--text)}
+  .controls button:hover{background:#252e40}
+  .toast{padding:8px 12px;border-radius:10px;display:inline-block;font-weight:600}
+  .toast.good{background:rgba(34,197,94,.15);border:1px solid var(--good)}
+  .toast.bad{background:rgba(239,68,68,.12);border:1px solid var(--bad)}
+  #answerBox{display:none;}
+  .timerControls{margin:12px 0}
+  #countdown{margin-left:10px;font-weight:bold}
+  #countdown.red{color:var(--bad);}
+
+/* ==== Responsive Sidebar cho Mobile ==== */
+.menu-toggle {
+  display:none;
+  font-size:26px;
+  cursor:pointer;
+  padding:10px 16px;
+  background:#171a21;
+  color:#fff;
+  border:none;
+}
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0; left: -260px; bottom: 0;
+    height: 100%;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .menu-toggle {
+    display:block;
+  }
+  body {
+    flex-direction: column;
+  }
+  .main {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+
+.overlay {
+  display:none;
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.5);
+  z-index: 900;
+}
+.overlay.show { display:block; }
+
+</style>
+</head>
+<body>
+  <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+  <div class="overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar">
+    <h2>Chọn dạng bài</h2>
+    <details open>
+      <summary>Phép tính + / -</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'addsub',10)">≤ 10</button>
+        <button onclick="setMode(this,'addsub',20)">≤ 20</button>
+        <button onclick="setMode(this,'addsub',50)">≤ 50</button>
+        <button onclick="setMode(this,'addsub',100)">≤ 100</button>
+      </div>
+    </details>
+    <details>
+      <summary>Bảng cửu chương</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'times',2)">Cửu chương 2</button>
+        <button onclick="setMode(this,'times',3)">Cửu chương 3</button>
+        <button onclick="setMode(this,'times',4)">Cửu chương 4</button>
+        <button onclick="setMode(this,'times',5)">Cửu chương 5</button>
+        <button onclick="setMode(this,'times',6)">Cửu chương 6</button>
+        <button onclick="setMode(this,'times',7)">Cửu chương 7</button>
+        <button onclick="setMode(this,'times',8)">Cửu chương 8</button>
+        <button onclick="setMode(this,'times',9)">Cửu chương 9</button>
+      </div>
+    </details>
+    <details>
+      <summary>Phép chia hết</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'div',10)">≤ 10</button>
+        <button onclick="setMode(this,'div',20)">≤ 20</button>
+        <button onclick="setMode(this,'div',30)">≤ 30</button>
+        <button onclick="setMode(this,'div',40)">≤ 40</button>
+        <button onclick="setMode(this,'div',50)">≤ 50</button>
+        <button onclick="setMode(this,'div',60)">≤ 60</button>
+        <button onclick="setMode(this,'div',70)">≤ 70</button>
+        <button onclick="setMode(this,'div',80)">≤ 80</button>
+        <button onclick="setMode(this,'div',90)">≤ 90</button>
+        <button onclick="setMode(this,'div',100)">≤ 100</button>
+      </div>
+    </details>
+    <details>
+      <summary>Phép nhân</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'multirange',10)">≤ 10</button>
+        <button onclick="setMode(this,'multirange',20)">≤ 20</button>
+        <button onclick="setMode(this,'multirange',30)">≤ 30</button>
+        <button onclick="setMode(this,'multirange',40)">≤ 40</button>
+        <button onclick="setMode(this,'multirange',50)">≤ 50</button>
+        <button onclick="setMode(this,'multirange',60)">≤ 60</button>
+        <button onclick="setMode(this,'multirange',70)">≤ 70</button>
+        <button onclick="setMode(this,'multirange',80)">≤ 80</button>
+        <button onclick="setMode(this,'multirange',90)">≤ 90</button>
+        <button onclick="setMode(this,'multirange',100)">≤ 100</button>
+      </div>
+    </details>
+  </div>
+
+  <div class="main">
+    <h1>TRÒ CHƠI HS TIỂU HỌC "GIẢI ĐỐ QUE DIÊM"</h1>
+    <div class="status">
+      <span class="badge">Yêu cầu: di chuyển đúng <b>1 que</b> (tức là <b>tắt 1</b> và <b>bật 1</b>)</span>
+      <span class="badge" id="moveBadge">Đã thay đổi: 0/2</span>
+    </div>
+
+    <div class="puzzle" id="puzzle" aria-live="polite"></div>
+
+    <div class="timerControls">
+      <input type="number" id="timeInput" value="15" />
+      <button onclick="startTimer()">Bắt đầu</button>
+      <span id="countdown"></span>
+    </div>
+
+    <div class="controls">
+      <button onclick="newPuzzle()">Câu đố mới</button>
+      <button onclick="check()">Kiểm tra</button>
+      <button onclick="resetPuzzle()">Reset</button>
+      <button id="btnAnswer" onclick="showAnswer()" style="display:none">Xem đáp án</button>
+      <span id="inlineAnswer" style="margin-left:12px; font-size:16px; color:#ff8c00;"></span>
+    </div>
+
+    <div id="toast" class="status"></div>
+    <div id="answerBox"></div>
+  </div>
+
+<script>
+/* ====== BẢN DỮ LIỆU & TIỆN ÍCH ====== */
+const digitSegments={0:["a","b","c","d","e","f"],1:["b","c"],2:["a","b","g","e","d"],3:["a","b","g","c","d"],
+4:["f","g","b","c"],5:["a","f","g","c","d"],6:["a","f","g","c","d","e"],7:["a","b","c"],8:["a","b","c","d","e","f","g"],9:["a","b","c","d","f","g"]};
+let mode="addsub",param=20,currentPuzzle=null,initialHTML=null;
+let timer=null,timeLeft=0;
+
+const $ = s => document.querySelector(s);
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+function randInt(n){return Math.floor(Math.random()*n)}
+
+/* ====== VẼ SỐ & PHÉP TOÁN ====== */
+function createDigit(num){
+  const digit=el("div","digit");
+  ["a","b","c","d","e","f","g"].forEach(seg=>{
+    const s=el("div","segment "+seg);
+    if(digitSegments[num]?.includes(seg)) s.classList.add("on");
+    s.addEventListener("click",()=>onToggle(s));
+    digit.appendChild(s);
+  });
+  return digit;
+}
+function renderPuzzle(expr){
+  const wrap=$("#puzzle"); wrap.innerHTML="";
+  expr.forEach(ch=>{
+    if(!isNaN(ch)) wrap.appendChild(createDigit(parseInt(ch,10)));
+    else wrap.appendChild(el("span","op",ch));
+  });
+  initialHTML=wrap.innerHTML;
+  updateMoveBadge();
+}
+
+/* ====== MENU ====== */
+function clearActiveButtons(){document.querySelectorAll(".submenu button").forEach(b=>b.classList.remove("active"))}
+function setMode(btn,m,p){clearActiveButtons();btn.classList.add("active");mode=m;param=p;newPuzzle();}
+
+/* ====== LOGIC “TẮT 1 + BẬT 1” ====== */
+function diffOneMove(fromDigit,toDigit){
+  const from=new Set(digitSegments[fromDigit]||[]), to=new Set(digitSegments[toDigit]||[]); let off=0,on=0;
+  [...new Set([...from,...to])].forEach(seg=>{
+    if(from.has(seg)&&!to.has(seg)) off++;
+    if(!from.has(seg)&&to.has(seg)) on++;
+  });
+  return off===1 && on===1;
+}
+function pickWrongDigit(correctDigit){
+  const choices=[]; for(let n=0;n<=9;n++) if(n!==correctDigit && diffOneMove(n,correctDigit)) choices.push(n);
+  return choices.length?choices[randInt(choices.length)]:null;
+}
+
+/* ====== SINH CÂU ĐỐ ====== */
+function newPuzzle(){
+  let a,b,res,newCorrect,newExpr;
+  while(true){
+    if(mode==="addsub"){
+      a=randInt(param)+1; b=randInt(param)+1;
+      const op=Math.random()>0.5?"+":"-";
+      res=op==="+"?a+b:a-b;
+      if(res<0||a>param||b>param||res>param) continue;
+      newCorrect=[...String(a),op,...String(b),"=",...String(res)];
+    }else if(mode==="times"){
+      a=param; b=randInt(9)+1; res=a*b;
+      newCorrect=[...String(a),"×",...String(b),"=",...String(res)];
+    }else if(mode==="div"){
+      b=randInt(8)+2; a=b*(randInt(Math.floor(param/b))+1); res=a/b;
+      if(a>param||res>param) continue;
+      newCorrect=[...String(a),"÷",...String(b),"=",...String(res)];
+    }else if(mode==="multirange"){
+      a=randInt(param)+1; b=randInt(param)+1; res=a*b;
+      if(res>param) continue;
+      newCorrect=[...String(a),"×",...String(b),"=",...String(res)];
+    }
+    const digitPositions=newCorrect.map((ch,i)=>!isNaN(ch)?i:null).filter(i=>i!=null);
+    const idx=digitPositions[randInt(digitPositions.length)];
+    const correctDigit=parseInt(newCorrect[idx],10);
+    const wrongDigit=pickWrongDigit(correctDigit);
+    if(wrongDigit==null) continue;
+    newExpr=[...newCorrect]; newExpr[idx]=String(wrongDigit); break;
+  }
+  currentPuzzle={expr:newExpr,correct:newCorrect};
+  renderPuzzle(currentPuzzle.expr);
+  toast(""); $("#answerBox").textContent="";
+  $("#btnAnswer").style.display="none";
+}
+
+/* ====== RESET/ĐÁP ÁN ====== */
+function resetPuzzle(){
+  const wrap=$("#puzzle"); wrap.innerHTML=initialHTML;
+  wrap.querySelectorAll('.segment').forEach(s=>s.addEventListener('click',()=>onToggle(s)));
+  updateMoveBadge(); toast(""); $("#answerBox").textContent="";
+}
+function showAnswer(){ 
+  if(currentPuzzle?.correct) {
+    $("#inlineAnswer").textContent = "Đáp án: " + currentPuzzle.correct.join('');
+  }
+}
+
+/* ====== TRẠNG THÁI & ĐẾM QUE ====== */
+function snapshotStates(){
+  const temp=document.createElement('div'); temp.innerHTML=initialHTML;
+  const init=[...temp.querySelectorAll('.segment')].map(s=>s.classList.contains('on'));
+  const now =[...document.querySelectorAll('#puzzle .segment')].map(s=>s.classList.contains('on'));
+  const initOn=init.filter(Boolean).length, nowOn=now.filter(Boolean).length;
+  let diff=0; for(let i=0;i<init.length;i++) if(init[i]!==now[i]) diff++;
+  return {diff,deltaOn:nowOn-initOn};
+}
+function updateMoveBadge(){
+  const {diff,deltaOn}=snapshotStates();
+  $("#moveBadge").textContent=`Đã thay đổi: ${diff}/2`+(deltaOn===0?"":` (lệch ${(deltaOn>0?"+":"")}${deltaOn})`);
+}
+function onToggle(seg){
+  seg.classList.toggle('on');
+  const {diff,deltaOn}=snapshotStates();
+  if(diff>2){ seg.classList.toggle('on'); toast('Bạn chỉ được thay đổi 2 đoạn (tắt 1, bật 1).',true); return; }
+  updateMoveBadge();
+  if(diff===2 && deltaOn!==0) toast('Đang lệch số que. Hãy tắt 1 và bật 1 để cân bằng.',true);
+  else toast('');
+}
+function toast(msg,isBad=false){const t=$("#toast"); if(!msg){t.innerHTML='';return;} t.innerHTML=`<span class="toast ${isBad?'bad':'good'}">${msg}</span>`;}
+
+/* ====== ĐỌC SỐ ====== */
+function getDigitFromDOM(digitDiv){
+  const active=[...digitDiv.querySelectorAll('.segment.on')].map(s=>s.classList[1]).sort();
+  for(let n=0;n<=9;n++){const target=[...digitSegments[n]].sort();
+    if(active.length===target.length&&active.every((v,i)=>v===target[i])) return n;}
+  return null;
+}
+function groupNumbers(tokens){
+  const out=[]; let acc="";
+  for(const t of tokens){ if(typeof t==="number"){acc+=String(t);} else{ if(acc!==""){out.push(Number(acc));acc="";} out.push(t);} }
+  if(acc!=="") out.push(Number(acc)); return out;
+}
+function parseExpressionFromDOM(){
+  const raw=[...$("#puzzle").childNodes].map(node=>{
+    if(node.classList&&node.classList.contains('digit')) return getDigitFromDOM(node);
+    return node.textContent.trim();
+  });
+  if(raw.includes(null)) return null;
+  const eqIndex=raw.indexOf("="); if(eqIndex===-1) return null;
+  const left=groupNumbers(raw.slice(0,eqIndex)), right=groupNumbers(raw.slice(eqIndex+1));
+  if(left.length!==3||typeof left[0]!=="number"||typeof left[2]!=="number") return null;
+  if(right.length!==1||typeof right[0]!=="number") return null;
+  let [A,op,B]=left, R=right[0]; if(op==="×")op="*"; if(op==="÷")op="/";
+  return {A,op,B,R};
+}
+
+/* ====== KIỂM TRA ====== */
+function check(){
+  const {diff,deltaOn}=snapshotStates();
+  if(diff!==2||deltaOn!==0){toast('❌ Bạn phải di chuyển đúng 1 que (tắt 1, bật 1).',true);return;}
+  const parsed=parseExpressionFromDOM(); if(!parsed){toast('Biểu thức không hợp lệ.',true);return;}
+  const {A,op,B,R}=parsed; let L;
+  switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
+  const ok=Math.abs(L-R)<1e-9; toast(ok?'🎉 Chính xác!':'❌ Sai rồi!',!ok);
+}
+
+/* ====== AUTO CHECK KHI HẾT GIỜ ====== */
+function autoCheck(){
+  const {diff,deltaOn}=snapshotStates();
+  if(diff!==2||deltaOn!==0){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Nhưng hết giờ",true);return;}
+  const parsed=parseExpressionFromDOM();
+  if(!parsed){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Sai",true);return;}
+  const {A,op,B,R}=parsed; let L;
+  switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
+  const ok=Math.abs(L-R)<1e-9;
+  if(ok) toast("Chúc mừng bạn, tiếp nào!");
+  else toast("Rất tiếc! bạn sai rồi!",true);
+}
+
+/* ====== TIMER ====== */
+function startTimer(){
+  clearInterval(timer);
+  timeLeft=parseInt($("#timeInput").value)||0;
+  const btnAns=$("#btnAnswer"); btnAns.style.display="none";
+  $("#countdown").textContent=timeLeft>0?timeLeft+"s":""; $("#countdown").classList.remove("red");
+  if(timeLeft>0){
+    timer=setInterval(()=>{
+      timeLeft--;
+      $("#countdown").textContent=timeLeft+"s";
+      if(timeLeft<=5) $("#countdown").classList.add("red");
+      if(timeLeft<=0){
+        clearInterval(timer);
+        $("#countdown").textContent="Hết giờ!";
+        btnAns.style.display="inline-block";
+        autoCheck(); // ✅ tự động kiểm tra khi hết giờ
+      }
+    },1000);
+  }else{
+    btnAns.style.display="inline-block";
+  }
+}
+
+
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.querySelector('.overlay').classList.remove('show');
+}
+
+/* ====== KHỞI TẠO ====== */
+newPuzzle();
+</script>
+</body>
+</html>
