@@ -41,6 +41,7 @@
   .timerControls{margin:12px 0}
   #countdown{margin-left:10px;font-weight:bold}
   #countdown.red{color:var(--bad);}
+  #timeInput{width:60px;text-align:center;}
   .menu-toggle{display:none;font-size:26px;cursor:pointer;padding:10px 16px;background:#171a21;color:#fff;border:none;}
   @media (max-width: 768px) {
     .sidebar {position: fixed;top: 0; left: -260px; bottom: 0;height: 100%;z-index: 1000;transition: left 0.3s ease;}
@@ -123,7 +124,9 @@
     <div class="puzzle" id="puzzle" aria-live="polite"></div>
 
     <div class="timerControls">
+      <label for="timeInput">Nhập thời gian chơi </label>
       <input type="number" id="timeInput" value="15" />
+      <span>Giây</span>
       <button onclick="startTimer()">Bắt đầu</button>
       <span id="countdown"></span>
     </div>
@@ -141,6 +144,10 @@
   </div>
 
 <script>
+/* ====== ÂM THANH ====== */
+const soundCorrect = new Audio("correct.mp3");
+const soundWrong = new Audio("wrong.mp3");
+
 /* ====== BẢN DỮ LIỆU & TIỆN ÍCH ====== */
 const digitSegments={0:["a","b","c","d","e","f"],1:["b","c"],2:["a","b","g","e","d"],3:["a","b","g","c","d"],
 4:["f","g","b","c"],5:["a","f","g","c","d"],6:["a","f","g","c","d","e"],7:["a","b","c"],8:["a","b","c","d","e","f","g"],9:["a","b","c","d","f","g"]};
@@ -223,7 +230,7 @@ function newPuzzle(){
   renderPuzzle(currentPuzzle.expr);
   toast(""); $("#answerBox").textContent="";
   $("#btnAnswer").style.display="none";
-  $("#inlineAnswer").textContent=""; // ẩn đáp án khi sinh mới
+  $("#inlineAnswer").textContent="";
 }
 
 /* ====== RESET/ĐÁP ÁN ====== */
@@ -231,7 +238,7 @@ function resetPuzzle(){
   const wrap=$("#puzzle"); wrap.innerHTML=initialHTML;
   wrap.querySelectorAll('.segment').forEach(s=>s.addEventListener('click',()=>onToggle(s)));
   updateMoveBadge(); toast(""); $("#answerBox").textContent="";
-  $("#inlineAnswer").textContent=""; // ẩn đáp án khi reset
+  $("#inlineAnswer").textContent="";
 }
 function showAnswer(){ 
   if(currentPuzzle?.correct) {
@@ -291,24 +298,26 @@ function parseExpressionFromDOM(){
 /* ====== KIỂM TRA ====== */
 function check(){
   const {diff,deltaOn}=snapshotStates();
-  if(diff!==2||deltaOn!==0){toast('❌ Bạn phải di chuyển đúng 1 que (tắt 1, bật 1).',true);return;}
-  const parsed=parseExpressionFromDOM(); if(!parsed){toast('Biểu thức không hợp lệ.',true);return;}
+  if(diff!==2||deltaOn!==0){toast('❌ Bạn phải di chuyển đúng 1 que (tắt 1, bật 1).',true);soundWrong.play();return;}
+  const parsed=parseExpressionFromDOM(); if(!parsed){toast('Biểu thức không hợp lệ.',true);soundWrong.play();return;}
   const {A,op,B,R}=parsed; let L;
   switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
-  const ok=Math.abs(L-R)<1e-9; toast(ok?'🎉 Chính xác!':'❌ Sai rồi!',!ok);
+  const ok=Math.abs(L-R)<1e-9; 
+  toast(ok?'🎉 Chính xác!':'❌ Sai rồi!',!ok);
+  if(ok) soundCorrect.play(); else soundWrong.play();
 }
 
 /* ====== AUTO CHECK KHI HẾT GIỜ ====== */
 function autoCheck(){
   const {diff,deltaOn}=snapshotStates();
-  if(diff!==2||deltaOn!==0){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Nhưng hết giờ",true);return;}
+  if(diff!==2||deltaOn!==0){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Nhưng hết giờ",true);soundWrong.play();return;}
   const parsed=parseExpressionFromDOM();
-  if(!parsed){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Sai",true);return;}
+  if(!parsed){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Sai",true);soundWrong.play();return;}
   const {A,op,B,R}=parsed; let L;
   switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
   const ok=Math.abs(L-R)<1e-9;
-  if(ok) toast("Chúc mừng bạn, tiếp nào!");
-  else toast("Rất tiếc! bạn sai rồi!",true);
+  if(ok){toast("Chúc mừng bạn, tiếp nào!");soundCorrect.play();}
+  else {toast("Rất tiếc! bạn sai rồi!",true);soundWrong.play();}
 }
 
 /* ====== TIMER ====== */
@@ -326,7 +335,7 @@ function startTimer(){
         clearInterval(timer);
         $("#countdown").textContent="Hết giờ!";
         btnAns.style.display="inline-block";
-        autoCheck(); // ✅ tự động kiểm tra khi hết giờ
+        autoCheck(); 
       }
     },1000);
   }else{
@@ -443,12 +452,9 @@ newPuzzle();
   <a href="https://mtcedutech.github.io/MTCEduTech/fx-570VN%20Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
   <a href="https://mtcedutech.github.io/MTCEduTech/Caro.html">🎮 Game Caro + Music</a>
   <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
-
 </div>
 
-<script src="menu.js"></script>
-   
+<script src="menu.js"></script>   
 <script src="chao_name.js"></script>
 </body>
 </html>
-
