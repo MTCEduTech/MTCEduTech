@@ -41,7 +41,7 @@
   .timerControls{margin:12px 0}
   #countdown{margin-left:10px;font-weight:bold}
   #countdown.red{color:var(--bad);}
-  #timeInput{width:60px; text-align:center;}
+  #timeInput{width:60px;text-align:center;}
   .menu-toggle{display:none;font-size:26px;cursor:pointer;padding:10px 16px;background:#171a21;color:#fff;border:none;}
   @media (max-width: 768px) {
     .sidebar {position: fixed;top: 0; left: -260px; bottom: 0;height: 100%;z-index: 1000;transition: left 0.3s ease;}
@@ -53,14 +53,13 @@
   .overlay {display:none;position: fixed;top:0; left:0; right:0; bottom:0;background: rgba(0,0,0,0.5);z-index: 900;}
   .overlay.show { display:block; }
 </style>
-  <link rel="stylesheet" href="menu.css">
+<link rel="stylesheet" href="menu.css">
 </head>
 <body>
   <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
   <div class="overlay" onclick="closeSidebar()"></div>
   <div class="sidebar">
     <h2>Chọn dạng bài</h2>
-    <!-- Menu giữ nguyên như bản cũ -->
     <details open>
       <summary>Phép tính + / -</summary>
       <div class="submenu">
@@ -116,7 +115,7 @@
   </div>
 
   <div class="main">
-    <h1>TRÒ CHƠI HS TIỂU HỌC "GIẢI ĐỐ QUE DIÊM"</h1>
+    <h1>TRÒ CHƠI HS TIỂU HỌC \"GIẢI ĐỐ QUE DIÊM\"</h1>
     <div class="status">
       <span class="badge">Yêu cầu: di chuyển đúng <b>1 que</b> (tức là <b>tắt 1</b> và <b>bật 1</b>)</span>
       <span class="badge" id="moveBadge">Đã thay đổi: 0/2</span>
@@ -146,13 +145,13 @@
 
 <script>
 /* ====== ÂM THANH ====== */
-const soundCorrect = new Audio("correct.mp3");
-const soundWrong = new Audio("wrong.mp3");
+const soundCorrect = new Audio(\"correct.mp3\");
+const soundWrong = new Audio(\"wrong.mp3\");
 
 /* ====== DỮ LIỆU SEGMENT ====== */
-const digitSegments={0:["a","b","c","d","e","f"],1:["b","c"],2:["a","b","g","e","d"],3:["a","b","g","c","d"],
-4:["f","g","b","c"],5:["a","f","g","c","d"],6:["a","f","g","c","d","e"],7:["a","b","c"],8:["a","b","c","d","e","f","g"],9:["a","b","c","d","f","g"]};
-let mode="addsub",param=20,currentPuzzle=null,initialHTML=null;
+const digitSegments={0:[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\"],1:[\"b\",\"c\"],2:[\"a\",\"b\",\"g\",\"e\",\"d\"],3:[\"a\",\"b\",\"g\",\"c\",\"d\"],
+4:[\"f\",\"g\",\"b\",\"c\"],5:[\"a\",\"f\",\"g\",\"c\",\"d\"],6:[\"a\",\"f\",\"g\",\"c\",\"d\",\"e\"],7:[\"a\",\"b\",\"c\"],8:[\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\"],9:[\"a\",\"b\",\"c\",\"d\",\"f\",\"g\"]};
+let mode=\"addsub\",param=20,currentPuzzle=null,initialHTML=null;
 let timer=null,timeLeft=0;
 
 const $ = s => document.querySelector(s);
@@ -161,80 +160,147 @@ function randInt(n){return Math.floor(Math.random()*n)}
 
 /* ====== VẼ SỐ ====== */
 function createDigit(num){
-  const digit=el("div","digit");
-  ["a","b","c","d","e","f","g"].forEach(seg=>{
-    const s=el("div","segment "+seg);
-    if(digitSegments[num]?.includes(seg)) s.classList.add("on");
-    s.addEventListener("click",()=>onToggle(s));
+  const digit=el(\"div\",\"digit\");
+  [\"a\",\"b\",\"c\",\"d\",\"e\",\"f\",\"g\"].forEach(seg=>{
+    const s=el(\"div\",\"segment \"+seg);
+    if(digitSegments[num]?.includes(seg)) s.classList.add(\"on\");
+    s.addEventListener(\"click\",()=>onToggle(s));
     digit.appendChild(s);
   });
   return digit;
 }
+function attachListeners(){
+  document.querySelectorAll('#puzzle .segment').forEach(s=>{
+    s.addEventListener('click',()=>onToggle(s));
+  });
+}
 function renderPuzzle(expr){
-  const wrap=$("#puzzle"); wrap.innerHTML="";
+  const wrap=$(\"#puzzle\"); wrap.innerHTML=\"\";
   expr.forEach(ch=>{
     if(!isNaN(ch)) wrap.appendChild(createDigit(parseInt(ch,10)));
-    else wrap.appendChild(el("span","op",ch));
+    else wrap.appendChild(el(\"span\",\"op\",ch));
   });
   initialHTML=wrap.innerHTML;
   updateMoveBadge();
 }
 
 /* ====== MENU ====== */
-function clearActiveButtons(){document.querySelectorAll(".submenu button").forEach(b=>b.classList.remove("active"))}
-function setMode(btn,m,p){clearActiveButtons();btn.classList.add("active");mode=m;param=p;newPuzzle();}
+function clearActiveButtons(){document.querySelectorAll(\".submenu button\").forEach(b=>b.classList.remove(\"active\"))}
+function setMode(btn,m,p){clearActiveButtons();btn.classList.add(\"active\");mode=m;param=p;newPuzzle();}
 
-/* ====== SINH CÂU ĐỐ ====== */
-function newPuzzle(){
-  let a,b,res,newCorrect;
+/* ====== TIỆN ÍCH NHẬN DIỆN SỐ HỢP LỆ ====== */
+function getDigitFromDOM(digitDiv){
+  const active=[...digitDiv.querySelectorAll('.segment.on')].map(s=>s.classList[1]).sort();
+  for(let n=0;n<=9;n++){const target=[...digitSegments[n]].sort();
+    if(active.length===target.length&&active.every((v,i)=>v===target[i])) return n;}
+  return null;
+}
+function isValidDigit(digitDiv){
+  return getDigitFromDOM(digitDiv) !== null;
+}
+function isValidExpression(){
+  return [...document.querySelectorAll('#puzzle .digit')].every(d=>isValidDigit(d));
+}
+function groupNumbers(tokens){
+  const out=[]; let acc=\"\";
+  for(const t of tokens){ if(typeof t===\"number\"){acc+=String(t);} else{ if(acc!==\"\"){out.push(Number(acc));acc=\"\";} out.push(t);} }
+   if(acc!==\"\") out.push(Number(acc)); return out;
+}
+function parseExpressionFromDOM(){
+  const raw=[...$(\"#puzzle\").childNodes].map(node=>{
+    if(node.classList&&node.classList.contains('digit')) return getDigitFromDOM(node);
+    return node.textContent.trim();
+  });
+  if(raw.includes(null)) return null;
+  const eqIndex=raw.indexOf(\"=\"); if(eqIndex===-1) return null;
+  const left=groupNumbers(raw.slice(0,eqIndex)), right=groupNumbers(raw.slice(eqIndex+1));
+  if(left.length!==3||typeof left[0]!==\"number\"||typeof left[2]!==\"number\") return null;
+  if(right.length!==1||typeof right[0]!==\"number\") return null;
+  let [A,op,B]=left, R=right[0]; if(op===\"×\")op=\"*\"; if(op===\"÷\")op=\"/\";
+  return {A,op,B,R};
+}
+
+/* ====== SINH PHÉP TÍNH ĐÚNG ====== */
+function makeCorrectExpr(){
+  let a,b,res,expr;
   while(true){
-    if(mode==="addsub"){
+    if(mode===\"addsub\"){
       a=randInt(param)+1; b=randInt(param)+1;
-      const op=Math.random()>0.5?"+":"-";
-      res=op==="+"?a+b:a-b;
+      const op=Math.random()>0.5?\"+\":\"-\";
+      res=op===\"+\"?a+b:a-b;
       if(res<0||a>param||b>param||res>param) continue;
-      newCorrect=[...String(a),op,...String(b),"=",...String(res)];
-    }else if(mode==="times"){
+      expr=[...String(a),op,...String(b),\"=\",...String(res)];
+    }else if(mode===\"times\"){
       a=param; b=randInt(9)+1; res=a*b;
-      newCorrect=[...String(a),"×",...String(b),"=",...String(res)];
-    }else if(mode==="div"){
+      expr=[...String(a),\"×\",...String(b),\"=\",...String(res)];
+    }else if(mode===\"div\"){
       b=randInt(8)+2; a=b*(randInt(Math.floor(param/b))+1); res=a/b;
       if(a>param||res>param) continue;
-      newCorrect=[...String(a),"÷",...String(b),"=",...String(res)];
-    }else if(mode==="multirange"){
+      expr=[...String(a),\"÷\",...String(b),\"=\",...String(res)];
+    }else if(mode===\"multirange\"){
       a=randInt(param)+1; b=randInt(param)+1; res=a*b;
       if(res>param) continue;
-      newCorrect=[...String(a),"×",...String(b),"=",...String(res)];
+      expr=[...String(a),\"×\",...String(b),\"=\",...String(res)];
     }
     break;
   }
-  currentPuzzle={expr:newCorrect,correct:newCorrect};
-  renderPuzzle(currentPuzzle.expr);
-
-  // Làm sai bằng cách đổi 1 đoạn bất kỳ
-  const allSegs=document.querySelectorAll('#puzzle .segment');
-  const randSeg=allSegs[randInt(allSegs.length)];
-  randSeg.classList.toggle('on'); 
-
-  toast(""); $("#answerBox").textContent="";
-  $("#btnAnswer").style.display="none";
-  $("#inlineAnswer").textContent="";
+  return expr;
 }
 
-/* ====== RESET/ĐÁP ÁN ====== */
-function resetPuzzle(){
-  const wrap=$("#puzzle"); wrap.innerHTML=initialHTML;
-  wrap.querySelectorAll('.segment').forEach(s=>s.addEventListener('click',()=>onToggle(s)));
-  updateMoveBadge(); toast(""); $("#answerBox").textContent="";
-  $("#inlineAnswer").textContent="";
-}
-function showAnswer(){ 
-  if(currentPuzzle?.correct) {
-    $("#inlineAnswer").textContent = "Đáp án: " + currentPuzzle.correct.join('');
+/* ====== TẠO CÂU ĐỐ SAI NHƯNG RÕ RÀNG ====== */
+function newPuzzle(){
+  const correctExpr = makeCorrectExpr();
+  currentPuzzle={expr:correctExpr,correct:correctExpr};
+  // render đúng trước để có DOM
+  renderPuzzle(correctExpr);
+
+  // Tìm tất cả các ứng viên: tắt 1 que (đang on) + bật 1 que (đang off) -> mọi số vẫn hợp lệ & phép tính sai
+  const segs = [...document.querySelectorAll('#puzzle .segment')];
+  const candidates = [];
+  for(let i=0;i<segs.length;i++){
+    const offSeg = segs[i];
+    if(!offSeg.classList.contains('on')) continue;
+    offSeg.classList.remove('on'); // tắt thử
+    for(let j=0;j<segs.length;j++){
+      if(i===j) continue;
+      const onSeg = segs[j];
+      if(onSeg.classList.contains('on')) continue;
+      onSeg.classList.add('on'); // bật thử
+
+      if(isValidExpression()){
+        const parsed = parseExpressionFromDOM();
+        if(parsed){
+          const {A,op,B,R}=parsed; let L;
+          switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
+          const ok=Math.abs(L-R)<1e-9;
+          if(!ok){
+            candidates.push($('#puzzle').innerHTML);
+          }
+        }
+      }
+
+      onSeg.classList.remove('on'); // hoàn lại
+    }
+    offSeg.classList.add('on'); // hoàn lại
   }
+
+  if(candidates.length>0){
+    $('#puzzle').innerHTML = candidates[randInt(candidates.length)];
+    attachListeners(); // gắn lại click cho segment
+    initialHTML = $('#puzzle').innerHTML; // baseline = trạng thái sai rõ ràng
+  }else{
+    // Fallback an toàn: giữ phép tính đúng (hiếm khi xảy ra) và nhắc thử lại
+    renderPuzzle(correctExpr);
+    toast('Không tạo được câu đố sai rõ ràng, hãy ấn Câu đố mới lần nữa.', true);
+  }
+
+  $('#btnAnswer').style.display='none';
+  $('#inlineAnswer').textContent='';
+  toast('');
+  updateMoveBadge();
 }
 
-/* ====== TRẠNG THÁI ====== */
+/* ====== TRẠNG THÁI & ĐẾM QUE ====== */
 function snapshotStates(){
   const temp=document.createElement('div'); temp.innerHTML=initialHTML;
   const init=[...temp.querySelectorAll('.segment')].map(s=>s.classList.contains('on'));
@@ -245,7 +311,7 @@ function snapshotStates(){
 }
 function updateMoveBadge(){
   const {diff,deltaOn}=snapshotStates();
-  $("#moveBadge").textContent=`Đã thay đổi: ${diff}/2`+(deltaOn===0?"":` (lệch ${(deltaOn>0?"+":"")}${deltaOn})`);
+  $('#moveBadge').textContent=`Đã thay đổi: ${diff}/2`+(deltaOn===0?\"\":` (lệch ${(deltaOn>0?\"+\":\"\")}${deltaOn})`);
 }
 function onToggle(seg){
   seg.classList.toggle('on');
@@ -255,32 +321,19 @@ function onToggle(seg){
   if(diff===2 && deltaOn!==0) toast('Đang lệch số que. Hãy tắt 1 và bật 1 để cân bằng.',true);
   else toast('');
 }
-function toast(msg,isBad=false){const t=$("#toast"); if(!msg){t.innerHTML='';return;} t.innerHTML=`<span class="toast ${isBad?'bad':'good'}">${msg}</span>`;}
+function toast(msg,isBad=false){const t=$('#toast'); if(!msg){t.innerHTML='';return;} t.innerHTML=`<span class=\"toast ${isBad?'bad':'good'}\">${msg}</span>`;}
 
-/* ====== PHÂN TÍCH BIỂU THỨC ====== */
-function getDigitFromDOM(digitDiv){
-  const active=[...digitDiv.querySelectorAll('.segment.on')].map(s=>s.classList[1]).sort();
-  for(let n=0;n<=9;n++){const target=[...digitSegments[n]].sort();
-    if(active.length===target.length&&active.every((v,i)=>v===target[i])) return n;}
-  return null;
+/* ====== RESET/ĐÁP ÁN ====== */
+function resetPuzzle(){
+  const wrap=$('#puzzle'); wrap.innerHTML=initialHTML;
+  attachListeners();
+  updateMoveBadge(); toast(''); $('#answerBox').textContent='';
+  $('#inlineAnswer').textContent='';
 }
-function groupNumbers(tokens){
-  const out=[]; let acc="";
-  for(const t of tokens){ if(typeof t==="number"){acc+=String(t);} else{ if(acc!==""){out.push(Number(acc));acc="";} out.push(t);} }
-   if(acc!=="") out.push(Number(acc)); return out;
-}
-function parseExpressionFromDOM(){
-  const raw=[...$("#puzzle").childNodes].map(node=>{
-    if(node.classList&&node.classList.contains('digit')) return getDigitFromDOM(node);
-    return node.textContent.trim();
-  });
-  if(raw.includes(null)) return null;
-  const eqIndex=raw.indexOf("="); if(eqIndex===-1) return null;
-  const left=groupNumbers(raw.slice(0,eqIndex)), right=groupNumbers(raw.slice(eqIndex+1));
-  if(left.length!==3||typeof left[0]!=="number"||typeof left[2]!=="number") return null;
-  if(right.length!==1||typeof right[0]!=="number") return null;
-  let [A,op,B]=left, R=right[0]; if(op==="×")op="*"; if(op==="÷")op="/";
-  return {A,op,B,R};
+function showAnswer(){ 
+  if(currentPuzzle?.correct) {
+    $('#inlineAnswer').textContent = 'Đáp án: ' + currentPuzzle.correct.join('');
+  }
 }
 
 /* ====== KIỂM TRA ====== */
@@ -298,36 +351,36 @@ function check(){
 /* ====== AUTO CHECK ====== */
 function autoCheck(){
   const {diff,deltaOn}=snapshotStates();
-  if(diff!==2||deltaOn!==0){toast("Bạn chưa bật tắt que đủ yêu cầu -> Hết giờ",true);soundWrong.play();return;}
+  if(diff!==2||deltaOn!==0){toast('Bạn chưa bật tắt que đủ yêu cầu -> Hết giờ',true);soundWrong.play();return;}
   const parsed=parseExpressionFromDOM();
-  if(!parsed){toast("Sai biểu thức.",true);soundWrong.play();return;}
+  if(!parsed){toast('Sai biểu thức.',true);soundWrong.play();return;}
   const {A,op,B,R}=parsed; let L;
   switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
   const ok=Math.abs(L-R)<1e-9;
-  if(ok){toast("Chúc mừng bạn!");soundCorrect.play();}
-  else {toast("Rất tiếc! Sai rồi!",true);soundWrong.play();}
+  if(ok){toast('Chúc mừng bạn!');soundCorrect.play();}
+  else {toast('Rất tiếc! Sai rồi!',true);soundWrong.play();}
 }
 
 /* ====== TIMER ====== */
 function startTimer(){
   clearInterval(timer);
-  timeLeft=parseInt($("#timeInput").value)||0;
-  const btnAns=$("#btnAnswer"); btnAns.style.display="none";
-  $("#countdown").textContent=timeLeft>0?timeLeft+"s":""; $("#countdown").classList.remove("red");
+  timeLeft=parseInt($('#timeInput').value)||0;
+  const btnAns=$('#btnAnswer'); btnAns.style.display='none';
+  $('#countdown').textContent=timeLeft>0?timeLeft+'s':''; $('#countdown').classList.remove('red');
   if(timeLeft>0){
     timer=setInterval(()=>{
       timeLeft--;
-      $("#countdown").textContent=timeLeft+"s";
-      if(timeLeft<=5) $("#countdown").classList.add("red");
+      $('#countdown').textContent=timeLeft+'s';
+      if(timeLeft<=5) $('#countdown').classList.add('red');
       if(timeLeft<=0){
         clearInterval(timer);
-        $("#countdown").textContent="Hết giờ!";
-        btnAns.style.display="inline-block";
+        $('#countdown').textContent='Hết giờ!';
+        btnAns.style.display='inline-block';
         autoCheck();
       }
     },1000);
   }else{
-    btnAns.style.display="inline-block";
+    btnAns.style.display='inline-block';
   }
 }
 
@@ -345,7 +398,7 @@ function closeSidebar(){
 newPuzzle();
 </script>
 
-<!-- Giữ nguyên phần fullscreen, nút về trang chủ, menu cố định như file cũ -->
+<!-- Fullscreen controls -->
 <div style="position: fixed;bottom: 20px;left: 20px;z-index: 9999;display: flex;gap: 10px;">
   <button onclick="openFullscreen()" style="padding: 10px 16px;font-size: 14px;background: #00BFFF;border: none;border-radius: 6px;color: white;cursor: pointer;">🔍 Xem Full màn hình</button>
   <button onclick="exitFullscreen()" style="padding: 10px 16px;font-size: 14px;background: #FF6347;border: none;border-radius: 6px;color: white;cursor: pointer;">❌ Thoát Full màn hình</button>
@@ -355,18 +408,18 @@ newPuzzle();
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) {
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
       elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) {
+    } else if (elem.msRequestFullscreen) { /* IE11 */
       elem.msRequestFullscreen();
     }
   }
   function exitFullscreen() {
     if (document.exitFullscreen) {
       document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
+    } else if (document.webkitExitFullscreen) { /* Safari */
       document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
+    } else if (document.msExitFullscreen) { /* IE11 */
       document.msExitFullscreen();
     }
   }
@@ -376,10 +429,11 @@ newPuzzle();
   <button onclick="window.location.href='index.html'" style="background-color: red;color: white;font-weight: bold;border: none;padding: 10px 15px;border-radius: 6px;cursor: pointer;font-size: 16px;width: 220px;">🏠 VỀ TRANG CHỦ</button>
 </div>
 
+<!-- Menu floating (optional external scripts/styles) -->
 <button class="menu-toggle draggable"><img src="TC.png" alt="Menu" class="menu-icon"></button>
 <div id="overlay" class="overlay"></div>
 <div id="sideMenu" class="side-menu">
-<a href="https://mtcedutech.github.io/MTCEduTech/index.html">🏠 Trang chủ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/index.html">🏠 Trang chủ</a>
   <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_so.html">🎯 Vòng quay số</a>
   <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_ten.html">👥 Vòng quay tên</a>
   <a href="https://mtcedutech.github.io/MTCEduTech/Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
