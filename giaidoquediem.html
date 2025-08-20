@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8"/>
+  <script src="auth.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Giải Đố Que Diêm</title>
 <style>
@@ -85,6 +86,7 @@
 .overlay.show { display:block; }
 
 </style>
+  <link rel="stylesheet" href="menu.css">
 </head>
 <body>
   <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
@@ -377,5 +379,108 @@ function closeSidebar(){
 /* ====== KHỞI TẠO ====== */
 newPuzzle();
 </script>
+
+  <!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+<script>
+  function openFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+      elem.msRequestFullscreen();
+    }
+  }
+
+  function exitFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+  }
+</script>
+
+<div style="
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+    <button onclick="window.location.href='index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+  ">
+    🏠 VỀ TRANG CHỦ
+  </button>
+</div>
+
+<!-- Nút cố định có thể kéo -->
+<button class="menu-toggle draggable"><img src="TC.png" alt="Menu" class="menu-icon"></button>
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+<!-- Menu -->
+<div id="sideMenu" class="side-menu">
+<a href="https://mtcedutech.github.io/MTCEduTech/index.html">🏠 Trang chủ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_so.html">🎯 Vòng quay số</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_ten.html">👥 Vòng quay tên</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/O_Chu_bi_mat.html">🧩 Tìm Ô chữ bí mật</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/O_Chu_tron_tim.html">🔍 Tinh mắt tìm từ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/doan_tu.html">🔤 Game suy đoán từ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/soan_cau_hoi.html">📝 Soạn đề TN Tick chọn + chấm điểm</a> 
+  <a href="https://mtcedutech.github.io/MTCEduTech/sukienVN.html">📖 Theo dòng sự kiện - lịch sử VN</a> 
+  <a href="https://mtcedutech.github.io/MTCEduTech/fx-570VN%20Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/Caro.html">🎮 Game Caro + Music</a>
+  <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
+
+</div>
+
+<script src="menu.js"></script>
+   
+<script src="chao_name.js"></script>
 </body>
 </html>
