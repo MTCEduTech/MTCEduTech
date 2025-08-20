@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8"/>
-<script src="auth.js"></script>
+ <script src="auth.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Giải Đố Que Diêm</title>
 <style>
@@ -53,8 +53,67 @@
   .overlay {display:none;position: fixed;top:0; left:0; right:0; bottom:0;background: rgba(0,0,0,0.5);z-index: 900;}
   .overlay.show { display:block; }
 </style>
+  <link rel="stylesheet" href="menu.css">
 </head>
 <body>
+  <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+  <div class="overlay" onclick="closeSidebar()"></div>
+  <div class="sidebar">
+    <h2>Chọn dạng bài</h2>
+    <details open>
+      <summary>Phép tính + / -</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'addsub',10)">≤ 10</button>
+        <button onclick="setMode(this,'addsub',20)">≤ 20</button>
+        <button onclick="setMode(this,'addsub',50)">≤ 50</button>
+        <button onclick="setMode(this,'addsub',100)">≤ 100</button>
+      </div>
+    </details>
+    <details>
+      <summary>Bảng cửu chương</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'times',2)">Cửu chương 2</button>
+        <button onclick="setMode(this,'times',3)">Cửu chương 3</button>
+        <button onclick="setMode(this,'times',4)">Cửu chương 4</button>
+        <button onclick="setMode(this,'times',5)">Cửu chương 5</button>
+        <button onclick="setMode(this,'times',6)">Cửu chương 6</button>
+        <button onclick="setMode(this,'times',7)">Cửu chương 7</button>
+        <button onclick="setMode(this,'times',8)">Cửu chương 8</button>
+        <button onclick="setMode(this,'times',9)">Cửu chương 9</button>
+      </div>
+    </details>
+    <details>
+      <summary>Phép chia hết</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'div',10)">≤ 10</button>
+        <button onclick="setMode(this,'div',20)">≤ 20</button>
+        <button onclick="setMode(this,'div',30)">≤ 30</button>
+        <button onclick="setMode(this,'div',40)">≤ 40</button>
+        <button onclick="setMode(this,'div',50)">≤ 50</button>
+        <button onclick="setMode(this,'div',60)">≤ 60</button>
+        <button onclick="setMode(this,'div',70)">≤ 70</button>
+        <button onclick="setMode(this,'div',80)">≤ 80</button>
+        <button onclick="setMode(this,'div',90)">≤ 90</button>
+        <button onclick="setMode(this,'div',100)">≤ 100</button>
+      </div>
+    </details>
+    <details>
+      <summary>Phép nhân</summary>
+      <div class="submenu">
+        <button onclick="setMode(this,'multirange',10)">≤ 10</button>
+        <button onclick="setMode(this,'multirange',20)">≤ 20</button>
+        <button onclick="setMode(this,'multirange',30)">≤ 30</button>
+        <button onclick="setMode(this,'multirange',40)">≤ 40</button>
+        <button onclick="setMode(this,'multirange',50)">≤ 50</button>
+        <button onclick="setMode(this,'multirange',60)">≤ 60</button>
+        <button onclick="setMode(this,'multirange',70)">≤ 70</button>
+        <button onclick="setMode(this,'multirange',80)">≤ 80</button>
+        <button onclick="setMode(this,'multirange',90)">≤ 90</button>
+        <button onclick="setMode(this,'multirange',100)">≤ 100</button>
+      </div>
+    </details>
+  </div>
+
   <div class="main">
     <h1>TRÒ CHƠI HS TIỂU HỌC "GIẢI ĐỐ QUE DIÊM"</h1>
     <div class="status">
@@ -62,7 +121,7 @@
       <span class="badge" id="moveBadge">Đã thay đổi: 0/2</span>
     </div>
 
-    <div class="puzzle" id="puzzle"></div>
+    <div class="puzzle" id="puzzle" aria-live="polite"></div>
 
     <div class="timerControls">
       <label for="timeInput">Nhập thời gian chơi </label>
@@ -81,22 +140,25 @@
     </div>
 
     <div id="toast" class="status"></div>
+    <div id="answerBox"></div>
   </div>
 
 <script>
+/* ====== ÂM THANH ====== */
 const soundCorrect = new Audio("correct.mp3");
 const soundWrong = new Audio("wrong.mp3");
 
+/* ====== BẢN DỮ LIỆU & TIỆN ÍCH ====== */
 const digitSegments={0:["a","b","c","d","e","f"],1:["b","c"],2:["a","b","g","e","d"],3:["a","b","g","c","d"],
 4:["f","g","b","c"],5:["a","f","g","c","d"],6:["a","f","g","c","d","e"],7:["a","b","c"],8:["a","b","c","d","e","f","g"],9:["a","b","c","d","f","g"]};
-
 let mode="addsub",param=20,currentPuzzle=null,initialHTML=null;
 let timer=null,timeLeft=0;
 
-function $(s){return document.querySelector(s)}
+const $ = s => document.querySelector(s);
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 function randInt(n){return Math.floor(Math.random()*n)}
 
+/* ====== VẼ SỐ & PHÉP TOÁN ====== */
 function createDigit(num){
   const digit=el("div","digit");
   ["a","b","c","d","e","f","g"].forEach(seg=>{
@@ -116,14 +178,109 @@ function renderPuzzle(expr){
   initialHTML=wrap.innerHTML;
   updateMoveBadge();
 }
+
+/* ====== MENU ====== */
+function clearActiveButtons(){document.querySelectorAll(".submenu button").forEach(b=>b.classList.remove("active"))}
+function setMode(btn,m,p){clearActiveButtons();btn.classList.add("active");mode=m;param=p;newPuzzle();}
+
+/* ====== LOGIC “TẮT 1 + BẬT 1” ====== */
+function diffOneMove(fromDigit,toDigit){
+  const from=new Set(digitSegments[fromDigit]||[]), to=new Set(digitSegments[toDigit]||[]); let off=0,on=0;
+  [...new Set([...from,...to])].forEach(seg=>{
+    if(from.has(seg)&&!to.has(seg)) off++;
+    if(!from.has(seg)&&to.has(seg)) on++;
+  });
+  return off===1 && on===1;
+}
+function pickWrongDigit(correctDigit){
+  const choices=[]; for(let n=0;n<=9;n++) if(n!==correctDigit && diffOneMove(n,correctDigit)) choices.push(n);
+  return choices.length?choices[randInt(choices.length)]:null;
+}
+
+/* ====== SINH CÂU ĐỐ ====== */
+function newPuzzle(){
+  let a,b,res,newCorrect,newExpr;
+  while(true){
+    if(mode==="addsub"){
+      a=randInt(param)+1; b=randInt(param)+1;
+      const op=Math.random()>0.5?"+":"-";
+      res=op==="+"?a+b:a-b;
+      if(res<0||a>param||b>param||res>param) continue;
+      newCorrect=[...String(a),op,...String(b),"=",...String(res)];
+    }else if(mode==="times"){
+      a=param; b=randInt(9)+1; res=a*b;
+      newCorrect=[...String(a),"×",...String(b),"=",...String(res)];
+    }else if(mode==="div"){
+      b=randInt(8)+2; a=b*(randInt(Math.floor(param/b))+1); res=a/b;
+      if(a>param||res>param) continue;
+      newCorrect=[...String(a),"÷",...String(b),"=",...String(res)];
+    }else if(mode==="multirange"){
+      a=randInt(param)+1; b=randInt(param)+1; res=a*b;
+      if(res>param) continue;
+      newCorrect=[...String(a),"×",...String(b),"=",...String(res)];
+    }
+    const digitPositions=newCorrect.map((ch,i)=>!isNaN(ch)?i:null).filter(i=>i!=null);
+    const idx=digitPositions[randInt(digitPositions.length)];
+    const correctDigit=parseInt(newCorrect[idx],10);
+    const wrongDigit=pickWrongDigit(correctDigit);
+    if(wrongDigit==null) continue;
+    newExpr=[...newCorrect]; newExpr[idx]=String(wrongDigit); break;
+  }
+  currentPuzzle={expr:newExpr,correct:newCorrect};
+  renderPuzzle(currentPuzzle.expr);
+  toast(""); $("#answerBox").textContent="";
+  $("#btnAnswer").style.display="none";
+  $("#inlineAnswer").textContent="";
+}
+
+/* ====== RESET/ĐÁP ÁN ====== */
+function resetPuzzle(){
+  const wrap=$("#puzzle"); wrap.innerHTML=initialHTML;
+  wrap.querySelectorAll('.segment').forEach(s=>s.addEventListener('click',()=>onToggle(s)));
+  updateMoveBadge(); toast(""); $("#answerBox").textContent="";
+  $("#inlineAnswer").textContent="";
+}
+function showAnswer(){ 
+  if(currentPuzzle?.correct) {
+    $("#inlineAnswer").textContent = "Đáp án: " + currentPuzzle.correct.join('');
+  }
+}
+
+/* ====== TRẠNG THÁI & ĐẾM QUE ====== */
+function snapshotStates(){
+  const temp=document.createElement('div'); temp.innerHTML=initialHTML;
+  const init=[...temp.querySelectorAll('.segment')].map(s=>s.classList.contains('on'));
+  const now =[...document.querySelectorAll('#puzzle .segment')].map(s=>s.classList.contains('on'));
+  const initOn=init.filter(Boolean).length, nowOn=now.filter(Boolean).length;
+  let diff=0; for(let i=0;i<init.length;i++) if(init[i]!==now[i]) diff++;
+  return {diff,deltaOn:nowOn-initOn};
+}
+function updateMoveBadge(){
+  const {diff,deltaOn}=snapshotStates();
+  $("#moveBadge").textContent=`Đã thay đổi: ${diff}/2`+(deltaOn===0?"":` (lệch ${(deltaOn>0?"+":"")}${deltaOn})`);
+}
+function onToggle(seg){
+  seg.classList.toggle('on');
+  const {diff,deltaOn}=snapshotStates();
+  if(diff>2){ seg.classList.toggle('on'); toast('Bạn chỉ được thay đổi 2 đoạn (tắt 1, bật 1).',true); return; }
+  updateMoveBadge();
+  if(diff===2 && deltaOn!==0) toast('Đang lệch số que. Hãy tắt 1 và bật 1 để cân bằng.',true);
+  else toast('');
+}
+function toast(msg,isBad=false){const t=$("#toast"); if(!msg){t.innerHTML='';return;} t.innerHTML=`<span class="toast ${isBad?'bad':'good'}">${msg}</span>`;}
+
+/* ====== ĐỌC SỐ ====== */
 function getDigitFromDOM(digitDiv){
   const active=[...digitDiv.querySelectorAll('.segment.on')].map(s=>s.classList[1]).sort();
   for(let n=0;n<=9;n++){const target=[...digitSegments[n]].sort();
     if(active.length===target.length&&active.every((v,i)=>v===target[i])) return n;}
   return null;
 }
-function isValidDigit(digitDiv){return getDigitFromDOM(digitDiv)!==null;}
-function groupNumbers(tokens){const out=[];let acc="";for(const t of tokens){if(typeof t==="number"){acc+=String(t);} else{if(acc!==""){out.push(Number(acc));acc="";} out.push(t);} }if(acc!=="") out.push(Number(acc));return out;}
+function groupNumbers(tokens){
+  const out=[]; let acc="";
+  for(const t of tokens){ if(typeof t==="number"){acc+=String(t);} else{ if(acc!==""){out.push(Number(acc));acc="";} out.push(t);} }
+   if(acc!=="") out.push(Number(acc)); return out;
+}
 function parseExpressionFromDOM(){
   const raw=[...$("#puzzle").childNodes].map(node=>{
     if(node.classList&&node.classList.contains('digit')) return getDigitFromDOM(node);
@@ -137,67 +294,167 @@ function parseExpressionFromDOM(){
   let [A,op,B]=left, R=right[0]; if(op==="×")op="*"; if(op==="÷")op="/";
   return {A,op,B,R};
 }
-function makeCorrectExpr(){
-  let a,b,res,expr;
-  while(true){
-    a=randInt(param)+1; b=randInt(param)+1;
-    const op=Math.random()>0.5?"+":"-";
-    res=op==="+"?a+b:a-b;
-    if(res<0||res>param) continue;
-    expr=[...String(a),op,...String(b),"=",...String(res)];
-    break;
-  }
-  return expr;
+
+/* ====== KIỂM TRA ====== */
+function check(){
+  const {diff,deltaOn}=snapshotStates();
+  if(diff!==2||deltaOn!==0){toast('❌ Bạn phải di chuyển đúng 1 que (tắt 1, bật 1).',true);soundWrong.play();return;}
+  const parsed=parseExpressionFromDOM(); if(!parsed){toast('Biểu thức không hợp lệ.',true);soundWrong.play();return;}
+  const {A,op,B,R}=parsed; let L;
+  switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
+  const ok=Math.abs(L-R)<1e-9; 
+  toast(ok?'🎉 Chính xác!':'❌ Sai rồi!',!ok);
+  if(ok) soundCorrect.play(); else soundWrong.play();
 }
-function newPuzzle(){
-  const correctExpr = makeCorrectExpr();
-  renderPuzzle(correctExpr);
-  const originalStr = correctExpr.join("");
 
-  const segs = [...document.querySelectorAll('#puzzle .segment')];
-  const candidates = [];
-  for(let i=0;i<segs.length;i++){
-    const offSeg=segs[i];
-    if(!offSeg.classList.contains('on')) continue;
-    offSeg.classList.remove('on');
-    for(let j=0;j<segs.length;j++){
-      if(i===j) continue;
-      const onSeg=segs[j];
-      if(onSeg.classList.contains('on')) continue;
-      onSeg.classList.add('on');
+/* ====== AUTO CHECK KHI HẾT GIỜ ====== */
+function autoCheck(){
+  const {diff,deltaOn}=snapshotStates();
+  if(diff!==2||deltaOn!==0){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Nhưng hết giờ",true);soundWrong.play();return;}
+  const parsed=parseExpressionFromDOM();
+  if(!parsed){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Sai",true);soundWrong.play();return;}
+  const {A,op,B,R}=parsed; let L;
+  switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
+  const ok=Math.abs(L-R)<1e-9;
+  if(ok){toast("Chúc mừng bạn, tiếp nào!");soundCorrect.play();}
+  else {toast("Rất tiếc! bạn sai rồi!",true);soundWrong.play();}
+}
 
-      if([...document.querySelectorAll('#puzzle .digit')].every(isValidDigit)){
-        const parsed=parseExpressionFromDOM();
-        if(parsed){
-          const {A,op,B,R}=parsed;let L;
-          switch(op){case '+':L=A+B;break;case '-':L=A-B;break;}
-          const ok=Math.abs(L-R)<1e-9;
-          const newStr=$("#puzzle").innerText.replace(/\s+/g,'');
-          if(!ok && newStr!==originalStr){
-            candidates.push($("#puzzle").innerHTML);
-          }
-        }
+/* ====== TIMER ====== */
+function startTimer(){
+  clearInterval(timer);
+  timeLeft=parseInt($("#timeInput").value)||0;
+  const btnAns=$("#btnAnswer"); btnAns.style.display="none";
+  $("#countdown").textContent=timeLeft>0?timeLeft+"s":""; $("#countdown").classList.remove("red");
+  if(timeLeft>0){
+    timer=setInterval(()=>{
+      timeLeft--;
+      $("#countdown").textContent=timeLeft+"s";
+      if(timeLeft<=5) $("#countdown").classList.add("red");
+      if(timeLeft<=0){
+        clearInterval(timer);
+        $("#countdown").textContent="Hết giờ!";
+        btnAns.style.display="inline-block";
+        autoCheck(); 
       }
-      onSeg.classList.remove('on');
-    }
-    offSeg.classList.add('on');
-  }
-  if(candidates.length>0){
-    $("#puzzle").innerHTML=candidates[randInt(candidates.length)];
+    },1000);
   }else{
-    renderPuzzle(correctExpr);
+    btnAns.style.display="inline-block";
   }
-  initialHTML=$("#puzzle").innerHTML;
-  updateMoveBadge();
 }
-function snapshotStates(){const temp=document.createElement('div');temp.innerHTML=initialHTML;const init=[...temp.querySelectorAll('.segment')].map(s=>s.classList.contains('on'));const now=[...document.querySelectorAll('#puzzle .segment')].map(s=>s.classList.contains('on'));const initOn=init.filter(Boolean).length, nowOn=now.filter(Boolean).length;let diff=0;for(let i=0;i<init.length;i++) if(init[i]!==now[i]) diff++;return{diff,deltaOn:nowOn-initOn};}
-function updateMoveBadge(){const {diff,deltaOn}=snapshotStates();$("#moveBadge").textContent=`Đã thay đổi: ${diff}/2`+(deltaOn===0?"":` (lệch ${(deltaOn>0?"+":""}${deltaOn})`);}
-function onToggle(seg){seg.classList.toggle('on');const {diff,deltaOn}=snapshotStates();if(diff>2){seg.classList.toggle('on');toast('Bạn chỉ được thay đổi 2 đoạn.',true);return;}updateMoveBadge();}
-function toast(msg,isBad=false){$("#toast").innerHTML=msg?`<span class="toast ${isBad?'bad':'good'}">${msg}</span>`:"";}
-function resetPuzzle(){$("#puzzle").innerHTML=initialHTML;updateMoveBadge();toast('');}
-function check(){const {diff,deltaOn}=snapshotStates();if(diff!==2||deltaOn!==0){toast('❌ Bạn phải tắt 1 và bật 1 que.',true);soundWrong.play();return;}const parsed=parseExpressionFromDOM();if(!parsed){toast('Sai biểu thức.',true);soundWrong.play();return;}const {A,op,B,R}=parsed;let L;switch(op){case '+':L=A+B;break;case '-':L=A-B;break;}const ok=Math.abs(L-R)<1e-9;toast(ok?'🎉 Chính xác!':'❌ Sai rồi!',!ok);if(ok) soundCorrect.play(); else soundWrong.play();}
-function startTimer(){clearInterval(timer);timeLeft=parseInt($("#timeInput").value)||0;$("#countdown").textContent=timeLeft>0?timeLeft+'s':'';if(timeLeft>0){timer=setInterval(()=>{timeLeft--;$("#countdown").textContent=timeLeft+'s';if(timeLeft<=0){clearInterval(timer);$("#countdown").textContent='Hết giờ!';check();}},1000);}}
+
+/* ====== SIDEBAR MOBILE ====== */
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.querySelector('.overlay').classList.remove('show');
+}
+
+/* ====== KHỞI TẠO ====== */
 newPuzzle();
 </script>
+ <!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+<script>
+  function openFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+      elem.msRequestFullscreen();
+    }
+  }
+
+  function exitFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+  }
+</script>
+
+<div style="
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+    <button onclick="window.location.href='index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+  ">
+    🏠 VỀ TRANG CHỦ
+  </button>
+</div>
+
+<!-- Nút cố định có thể kéo -->
+<button class="menu-toggle draggable"><img src="TC.png" alt="Menu" class="menu-icon"></button>
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+<!-- Menu -->
+<div id="sideMenu" class="side-menu">
+<a href="https://mtcedutech.github.io/MTCEduTech/index.html">🏠 Trang chủ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_so.html">🎯 Vòng quay số</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_ten.html">👥 Vòng quay tên</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/O_Chu_bi_mat.html">🧩 Tìm Ô chữ bí mật</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/O_Chu_tron_tim.html">🔍 Tinh mắt tìm từ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/doan_tu.html">🔤 Game suy đoán từ</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/soan_cau_hoi.html">📝 Soạn đề TN Tick chọn + chấm điểm</a> 
+  <a href="https://mtcedutech.github.io/MTCEduTech/sukienVN.html">📖 Theo dòng sự kiện - lịch sử VN</a> 
+  <a href="https://mtcedutech.github.io/MTCEduTech/fx-570VN%20Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
+  <a href="https://mtcedutech.github.io/MTCEduTech/Caro.html">🎮 Game Caro + Music</a>
+  <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
+</div>
+
+<script src="menu.js"></script>   
+<script src="chao_name.js"></script>
 </body>
 </html>
