@@ -41,7 +41,7 @@
   .timerControls{margin:12px 0}
   #countdown{margin-left:10px;font-weight:bold}
   #countdown.red{color:var(--bad);}
-  #timeInput{width:60px;text-align:center;}
+  #timeInput{width:60px; text-align:center;}
   .menu-toggle{display:none;font-size:26px;cursor:pointer;padding:10px 16px;background:#171a21;color:#fff;border:none;}
   @media (max-width: 768px) {
     .sidebar {position: fixed;top: 0; left: -260px; bottom: 0;height: 100%;z-index: 1000;transition: left 0.3s ease;}
@@ -60,6 +60,7 @@
   <div class="overlay" onclick="closeSidebar()"></div>
   <div class="sidebar">
     <h2>Chọn dạng bài</h2>
+    <!-- Menu giữ nguyên như bản cũ -->
     <details open>
       <summary>Phép tính + / -</summary>
       <div class="submenu">
@@ -148,7 +149,7 @@
 const soundCorrect = new Audio("correct.mp3");
 const soundWrong = new Audio("wrong.mp3");
 
-/* ====== BẢN DỮ LIỆU & TIỆN ÍCH ====== */
+/* ====== DỮ LIỆU SEGMENT ====== */
 const digitSegments={0:["a","b","c","d","e","f"],1:["b","c"],2:["a","b","g","e","d"],3:["a","b","g","c","d"],
 4:["f","g","b","c"],5:["a","f","g","c","d"],6:["a","f","g","c","d","e"],7:["a","b","c"],8:["a","b","c","d","e","f","g"],9:["a","b","c","d","f","g"]};
 let mode="addsub",param=20,currentPuzzle=null,initialHTML=null;
@@ -158,7 +159,7 @@ const $ = s => document.querySelector(s);
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 function randInt(n){return Math.floor(Math.random()*n)}
 
-/* ====== VẼ SỐ & PHÉP TOÁN ====== */
+/* ====== VẼ SỐ ====== */
 function createDigit(num){
   const digit=el("div","digit");
   ["a","b","c","d","e","f","g"].forEach(seg=>{
@@ -183,23 +184,9 @@ function renderPuzzle(expr){
 function clearActiveButtons(){document.querySelectorAll(".submenu button").forEach(b=>b.classList.remove("active"))}
 function setMode(btn,m,p){clearActiveButtons();btn.classList.add("active");mode=m;param=p;newPuzzle();}
 
-/* ====== LOGIC “TẮT 1 + BẬT 1” ====== */
-function diffOneMove(fromDigit,toDigit){
-  const from=new Set(digitSegments[fromDigit]||[]), to=new Set(digitSegments[toDigit]||[]); let off=0,on=0;
-  [...new Set([...from,...to])].forEach(seg=>{
-    if(from.has(seg)&&!to.has(seg)) off++;
-    if(!from.has(seg)&&to.has(seg)) on++;
-  });
-  return off===1 && on===1;
-}
-function pickWrongDigit(correctDigit){
-  const choices=[]; for(let n=0;n<=9;n++) if(n!==correctDigit && diffOneMove(n,correctDigit)) choices.push(n);
-  return choices.length?choices[randInt(choices.length)]:null;
-}
-
 /* ====== SINH CÂU ĐỐ ====== */
 function newPuzzle(){
-  let a,b,res,newCorrect,newExpr;
+  let a,b,res,newCorrect;
   while(true){
     if(mode==="addsub"){
       a=randInt(param)+1; b=randInt(param)+1;
@@ -219,15 +206,16 @@ function newPuzzle(){
       if(res>param) continue;
       newCorrect=[...String(a),"×",...String(b),"=",...String(res)];
     }
-    const digitPositions=newCorrect.map((ch,i)=>!isNaN(ch)?i:null).filter(i=>i!=null);
-    const idx=digitPositions[randInt(digitPositions.length)];
-    const correctDigit=parseInt(newCorrect[idx],10);
-    const wrongDigit=pickWrongDigit(correctDigit);
-    if(wrongDigit==null) continue;
-    newExpr=[...newCorrect]; newExpr[idx]=String(wrongDigit); break;
+    break;
   }
-  currentPuzzle={expr:newExpr,correct:newCorrect};
+  currentPuzzle={expr:newCorrect,correct:newCorrect};
   renderPuzzle(currentPuzzle.expr);
+
+  // Làm sai bằng cách đổi 1 đoạn bất kỳ
+  const allSegs=document.querySelectorAll('#puzzle .segment');
+  const randSeg=allSegs[randInt(allSegs.length)];
+  randSeg.classList.toggle('on'); 
+
   toast(""); $("#answerBox").textContent="";
   $("#btnAnswer").style.display="none";
   $("#inlineAnswer").textContent="";
@@ -246,7 +234,7 @@ function showAnswer(){
   }
 }
 
-/* ====== TRẠNG THÁI & ĐẾM QUE ====== */
+/* ====== TRẠNG THÁI ====== */
 function snapshotStates(){
   const temp=document.createElement('div'); temp.innerHTML=initialHTML;
   const init=[...temp.querySelectorAll('.segment')].map(s=>s.classList.contains('on'));
@@ -269,7 +257,7 @@ function onToggle(seg){
 }
 function toast(msg,isBad=false){const t=$("#toast"); if(!msg){t.innerHTML='';return;} t.innerHTML=`<span class="toast ${isBad?'bad':'good'}">${msg}</span>`;}
 
-/* ====== ĐỌC SỐ ====== */
+/* ====== PHÂN TÍCH BIỂU THỨC ====== */
 function getDigitFromDOM(digitDiv){
   const active=[...digitDiv.querySelectorAll('.segment.on')].map(s=>s.classList[1]).sort();
   for(let n=0;n<=9;n++){const target=[...digitSegments[n]].sort();
@@ -298,7 +286,7 @@ function parseExpressionFromDOM(){
 /* ====== KIỂM TRA ====== */
 function check(){
   const {diff,deltaOn}=snapshotStates();
-  if(diff!==2||deltaOn!==0){toast('❌ Bạn phải di chuyển đúng 1 que (tắt 1, bật 1).',true);soundWrong.play();return;}
+  if(diff!==2||deltaOn!==0){toast('❌ Bạn phải tắt 1 và bật 1 que bất kỳ.',true);soundWrong.play();return;}
   const parsed=parseExpressionFromDOM(); if(!parsed){toast('Biểu thức không hợp lệ.',true);soundWrong.play();return;}
   const {A,op,B,R}=parsed; let L;
   switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
@@ -307,17 +295,17 @@ function check(){
   if(ok) soundCorrect.play(); else soundWrong.play();
 }
 
-/* ====== AUTO CHECK KHI HẾT GIỜ ====== */
+/* ====== AUTO CHECK ====== */
 function autoCheck(){
   const {diff,deltaOn}=snapshotStates();
-  if(diff!==2||deltaOn!==0){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Nhưng hết giờ",true);soundWrong.play();return;}
+  if(diff!==2||deltaOn!==0){toast("Bạn chưa bật tắt que đủ yêu cầu -> Hết giờ",true);soundWrong.play();return;}
   const parsed=parseExpressionFromDOM();
-  if(!parsed){toast("Bạn chưa bật tắt que diêm đủ yêu cầu -> Sai",true);soundWrong.play();return;}
+  if(!parsed){toast("Sai biểu thức.",true);soundWrong.play();return;}
   const {A,op,B,R}=parsed; let L;
   switch(op){case '+':L=A+B;break;case '-':L=A-B;break;case '*':L=A*B;break;case '/':L=A/B;break;}
   const ok=Math.abs(L-R)<1e-9;
-  if(ok){toast("Chúc mừng bạn, tiếp nào!");soundCorrect.play();}
-  else {toast("Rất tiếc! bạn sai rồi!",true);soundWrong.play();}
+  if(ok){toast("Chúc mừng bạn!");soundCorrect.play();}
+  else {toast("Rất tiếc! Sai rồi!",true);soundWrong.play();}
 }
 
 /* ====== TIMER ====== */
@@ -335,7 +323,7 @@ function startTimer(){
         clearInterval(timer);
         $("#countdown").textContent="Hết giờ!";
         btnAns.style.display="inline-block";
-        autoCheck(); 
+        autoCheck();
       }
     },1000);
   }else{
@@ -356,89 +344,40 @@ function closeSidebar(){
 /* ====== KHỞI TẠO ====== */
 newPuzzle();
 </script>
- <!-- Nút toàn màn hình cố định -->
-<div style="
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-">
-  <button onclick="openFullscreen()" style="
-    padding: 10px 16px;
-    font-size: 14px;
-    background: #00BFFF;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-  ">🔍 Xem Full màn hình</button>
 
-  <button onclick="exitFullscreen()" style="
-    padding: 10px 16px;
-    font-size: 14px;
-    background: #FF6347;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-  ">❌ Thoát Full màn hình</button>
+<!-- Giữ nguyên phần fullscreen, nút về trang chủ, menu cố định như file cũ -->
+<div style="position: fixed;bottom: 20px;left: 20px;z-index: 9999;display: flex;gap: 10px;">
+  <button onclick="openFullscreen()" style="padding: 10px 16px;font-size: 14px;background: #00BFFF;border: none;border-radius: 6px;color: white;cursor: pointer;">🔍 Xem Full màn hình</button>
+  <button onclick="exitFullscreen()" style="padding: 10px 16px;font-size: 14px;background: #FF6347;border: none;border-radius: 6px;color: white;cursor: pointer;">❌ Thoát Full màn hình</button>
 </div>
 <script>
   function openFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen) { /* Safari */
+    } else if (elem.webkitRequestFullscreen) {
       elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE11 */
+    } else if (elem.msRequestFullscreen) {
       elem.msRequestFullscreen();
     }
   }
-
   function exitFullscreen() {
     if (document.exitFullscreen) {
       document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) { /* Safari */
+    } else if (document.webkitExitFullscreen) {
       document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE11 */
+    } else if (document.msExitFullscreen) {
       document.msExitFullscreen();
     }
   }
 </script>
 
-<div style="
-  position: fixed;
-  bottom: 10px;
-  right: 20px;
-  z-index: 1001;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-end;
-">
-    <button onclick="window.location.href='index.html'" style="
-    background-color: red;
-    color: white;
-    font-weight: bold;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 220px;
-  ">
-    🏠 VỀ TRANG CHỦ
-  </button>
+<div style="position: fixed;bottom: 10px;right: 20px;z-index: 1001;display: flex;flex-direction: column;gap: 10px;align-items: flex-end;">
+  <button onclick="window.location.href='index.html'" style="background-color: red;color: white;font-weight: bold;border: none;padding: 10px 15px;border-radius: 6px;cursor: pointer;font-size: 16px;width: 220px;">🏠 VỀ TRANG CHỦ</button>
 </div>
 
-<!-- Nút cố định có thể kéo -->
 <button class="menu-toggle draggable"><img src="TC.png" alt="Menu" class="menu-icon"></button>
-<!-- Overlay -->
 <div id="overlay" class="overlay"></div>
-<!-- Menu -->
 <div id="sideMenu" class="side-menu">
 <a href="https://mtcedutech.github.io/MTCEduTech/index.html">🏠 Trang chủ</a>
   <a href="https://mtcedutech.github.io/MTCEduTech/vong_quay_so.html">🎯 Vòng quay số</a>
