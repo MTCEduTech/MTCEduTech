@@ -306,8 +306,8 @@ img {
 }
 .menu-item-link {
   text-decoration: none;
-  display: flex; /* Cho phép các nút nằm cạnh nhau */
-  width: auto; /* Cho phép các nút tự điều chỉnh độ rộng */
+  display: inline-block;
+  width: 100%;
 }
 .menu-item {
   display: flex;
@@ -425,210 +425,203 @@ img {
     <h1 id="wave-text" style="font-size: 35px; font-weight: bold; color: yellow; font-family: 'Times New Roman', Times, serif;"> BỘ CÔNG CỤ GIÁO VIÊN - CHUYỂN ĐỔI SỐ</h1>
       </div>
 </div>
-<div style="height: 120px;"></div>
+<div style="height: 120px;"></div> <div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 60px; overflow-x: auto;">
 
-<div style="display: flex; flex-wrap: nowrap; gap: 60px; overflow-x: auto; justify-content: center; width: 100%;">
-
-  <div class="menu-container">
-    <a href="vong_quay_so.html" class="menu-item-link">
-      <div class="menu-item color-1">
-        <div class="menu-icon">
-          <img src="icon_quay_so.png" alt="Vòng quay số">
+        <div class="menu-container">
+      <a href="vong_quay_so.html" class="menu-item-link">
+        <div class="menu-item color-1">
+          <div class="menu-icon">
+            <img src="icon_quay_so.png" alt="Vòng quay số">
+          </div>
+          <div class="menu-text">
+            VÒNG QUAY SỐ M1 & M2
+          </div>
         </div>
-        <div class="menu-text" style="border-radius: 30px 0 0 30px;">
-          VÒNG QUAY SỐ M1
+      </a>
+      <a href="vong_quay_ten.html" class="menu-item-link">
+        <div class="menu-item color-2">
+          <div class="menu-icon">
+            <img src="icon_quay_ten.png" alt="Vòng quay tên">
+          </div>
+          <div class="menu-text">
+            VÒNG QUAY TÊN NGẪU NHIÊN
+          </div>
         </div>
-      </div>
-    </a>
-    <a href="quayso_v2.html" class="menu-item-link">
-      <div class="menu-item color-1" style="margin-left: -20px; border-radius: 0 30px 30px 0;">
-        <div class="menu-text">
-          M2
+      </a>
+      <a href="Ai_la_trieu_phu.html" class="menu-item-link">
+        <div class="menu-item color-3">
+          <div class="menu-icon">
+            <img src="ALTP.png" alt="Ai là triệu phú">
+          </div>
+          <div class="menu-text">
+            AI LÀ TRIỆU PHÚ - GIÁO DỤC
+          </div>
         </div>
-      </div>
-    </a>
-    <a href="vong_quay_ten.html" class="menu-item-link">
-      <div class="menu-item color-2">
-        <div class="menu-icon">
-          <img src="icon_quay_ten.png" alt="Vòng quay tên">
+      </a>
+      <a href="O_Chu_bi_mat.html" class="menu-item-link">
+        <div class="menu-item color-4">
+          <div class="menu-icon">
+            <img src="icon_o_chu_bi_mat.png" alt="Ô chữ bí mật">
+          </div>
+          <div class="menu-text">
+            TRÒ CHƠI TÌM Ô CHỮ BÍ MẬT
+          </div>
         </div>
-        <div class="menu-text">
-          VÒNG QUAY TÊN NGẪU NHIÊN
+      </a>
+      <a href="doan_tu.html" class="menu-item-link">
+        <div class="menu-item color-5">
+          <div class="menu-icon">
+            <img src="doan_tu.png" alt="Suy đoán từ">
+          </div>
+          <div class="menu-text">
+            TRÒ CHƠI ĐOÁN TỪ CÓ NGHĨA
+          </div>
         </div>
-      </div>
-    </a>
-    <a href="Ai_la_trieu_phu.html" class="menu-item-link">
-      <div class="menu-item color-3">
-        <div class="menu-icon">
-          <img src="ALTP.png" alt="Ai là triệu phú">
+      </a>
+      <a href="O_Chu_tron_tim.html" class="menu-item-link">
+        <div class="menu-item color-6">
+          <div class="menu-icon">
+            <img src="icon_O_Chu_tron_tim.png" alt="Ô chữ trốn tìm">
+          </div>
+          <div class="menu-text">
+            TRÒ CHƠI AI TINH MẮT HƠN
+          </div>
         </div>
-        <div class="menu-text">
-          AI LÀ TRIỆU PHÚ - GIÁO DỤC
+      </a>
+      <a href="giaidoquediem.html" class="menu-item-link">
+        <div class="menu-item color-7">
+          <div class="menu-icon">
+            <img src="quediem.png" alt="Giải đố que diêm">
+          </div>
+          <div class="menu-text">
+            TIỂU HỌC GIẢI ĐỐ QUE DIÊM
+          </div>
         </div>
-      </div>
-    </a>
-    <a href="O_Chu_bi_mat.html" class="menu-item-link">
-      <div class="menu-item color-4">
-        <div class="menu-icon">
-          <img src="icon_o_chu_bi_mat.png" alt="Ô chữ bí mật">
-        </div>
-        <div class="menu-text">
-          TRÒ CHƠI TÌM Ô CHỮ BÍ MẬT
-        </div>
-      </div>
-    </a>
-    <a href="doan_tu.html" class="menu-item-link">
-      <div class="menu-item color-5">
-        <div class="menu-icon">
-          <img src="doan_tu.png" alt="Suy đoán từ">
-        </div>
-        <div class="menu-text">
-          TRÒ CHƠI ĐOÁN TỪ CÓ NGHĨA
-        </div>
-      </div>
-    </a>
-    <a href="O_Chu_tron_tim.html" class="menu-item-link">
-      <div class="menu-item color-6">
-        <div class="menu-icon">
-          <img src="icon_O_Chu_tron_tim.png" alt="Ô chữ trốn tìm">
-        </div>
-        <div class="menu-text">
-          TRÒ CHƠI AI TINH MẮT HƠN
-        </div>
-      </div>
-    </a>
-    <a href="giaidoquediem.html" class="menu-item-link">
-      <div class="menu-item color-7">
-        <div class="menu-icon">
-          <img src="quediem.png" alt="Giải đố que diêm">
-        </div>
-        <div class="menu-text">
-          TIỂU HỌC GIẢI ĐỐ QUE DIÊM
-        </div>
-      </div>
-    </a>
-  </div>
-
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <div class="clock" id="clock">
-      <div class="ticks" id="ticks"></div>
-      <div class="numbers" id="numbers"></div>
-      <div class="hand hour" id="hour-hand"></div>
-      <div class="hand minute" id="minute-hand"></div>
-      <div class="hand second" id="second-hand"></div>
-      <div class="center-dot"></div>
+      </a>
     </div>
-    <div class="background-picker">
-      <label for="bgInput" class="custom-button">ĐỔI ẢNH NỀN ĐỒNG HỒ</label>
-      <input type="file" id="bgInput" class="file-input" accept="image/*"/>
-      <button id="resetBg" class="custom-button reset-button">XÓA ẢNH NỀN</button>
-    </div>
-    <div id="dongHoHienTai" style="font-size: 18px; color: green; font-weight: bold; margin-top: 5px;"></div>
-    <script>
-      function capNhatDongHo() {
-        const dongHo = document.getElementById("dongHoHienTai");
-        const now = new Date();
-        const gio = String(now.getHours()).padStart(2, '0');
-        const phut = String(now.getMinutes()).padStart(2, '0');
-        const giay = String(now.getSeconds()).padStart(2, '0');
-        dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
-      }
-      setInterval(capNhatDongHo, 1000);
-      capNhatDongHo();
-    </script>
-    <script type="text/javascript">
-      var mydate = new Date();
-      var year = mydate.getFullYear();
-      var day = mydate.getDay();
-      var month = mydate.getMonth();
-      var daym = mydate.getDate();
-      if (daym < 10) daym = "0" + daym;
-      var dayarray = ["CHỦ NHẬT", "THỨ HAI", "THỨ BA", "THỨ TƯ", "THỨ NĂM", "THỨ SÁU", "THỨ BẢY"];
-      var montharray = ["01","02","03","04","05","06","07","08","09","10","11","12"];
-      document.write("<div style='color: red; font-weight: bold;'>" + dayarray[day] + ", " + daym + "/" + montharray[month] + "/" + year + "</div>");
-    </script>
-    <div style="width: 400px; padding: 5px; background-color: rgba(0, 0, 0, 0.3); border-radius: 10px; text-align: center; margin: 20px auto;">
-      <script>
-        var d = new Date();
-        var hourValue = d.getHours();
-        var greeting = "", greeting1 = "";
-        if (hourValue < 6) { greeting = "Chào ngày mới!"; greeting1 = "Chúc các bạn một ngày mới an lành!"; }
-        else if (hourValue < 9) { greeting = "Chào buổi sáng!"; greeting1 = "Chúc các bạn một buổi sáng tốt lành!"; }
-        else if (hourValue < 11) { greeting = "Sắp trưa rồi!"; greeting1 = "Chúc các bạn có một ngày thành công và hạnh phúc!"; }
-        else if (hourValue < 13) { greeting = "Đã buổi trưa rồi đó!"; greeting1 = "Chúc các bạn có bữa trưa thật ngon miệng!"; }
-        else if (hourValue < 17) { greeting = "Đã buổi chiều!"; greeting1 = "Hãy cố gắng hoàn thành công việc trong ngày!"; }
-        else if (hourValue < 18) { greeting = "Sắp tối rồi!"; greeting1 = "Chúc các bạn có bữa tối thật ngon miệng bên người thân!"; }
-        else if (hourValue <= 21) { greeting = "Chào buổi tối!"; greeting1 = "Chúc các bạn có bữa tối thật vui vẻ và hạnh phúc bên người thân!"; }
-        else { greeting = "Khuya rồi đấy!"; greeting1 = "Hãy đi ngủ thôi! Chúc các bạn có một giấc ngủ thật ngon!"; }
-        document.write("<h3 style='color:yellow; font-weight:bold;'>" + greeting + "</h3><p style='font-size:16px; color:#FFFFFF; font-weight:bold;'>" + greeting1 + "</p>");
-      </script>
-    </div>
-  </div>
+	  
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <div class="clock" id="clock">
+        <div class="ticks" id="ticks"></div>
+        <div class="numbers" id="numbers"></div>
+        <div class="hand hour" id="hour-hand"></div>
+        <div class="hand minute" id="minute-hand"></div>
+        <div class="hand second" id="second-hand"></div>
+        <div class="center-dot"></div>
+      </div>
 
-  <div class="menu-container">
-    <a href="soan_cau_hoi.html" class="menu-item-link">
-      <div class="menu-item color-8">
-        <div class="menu-icon">
-          <img src="icon_soan_cau_hoi.png" alt="Soạn đề">
-        </div>
-        <div class="menu-text">
-          SOẠN - ĐẢO ĐỀ KIỂM TRA TRỰC TIẾP
-        </div>
+      <div class="background-picker">
+        <label for="bgInput" class="custom-button">ĐỔI ẢNH NỀN ĐỒNG HỒ</label>
+        <input type="file" id="bgInput" class="file-input" accept="image/*"/>
+        <button id="resetBg" class="custom-button reset-button">XÓA ẢNH NỀN</button>
       </div>
-    </a>
-    <a href="sukienVN.html" class="menu-item-link">
-      <div class="menu-item color-9">
-        <div class="menu-icon">
-          <img src="ngaynaynamxua.png" alt="Theo dòng lịch sử">
-        </div>
-        <div class="menu-text">
-          THEO DÒNG SỰ KIỆN - LỊCH SỬ VN
-        </div>
-      </div>
-    </a>
-    <a href="fx-570VN Plus.html" class="menu-item-link">
-      <div class="menu-item color-10">
-        <div class="menu-icon">
-          <img src="fx570.png" alt="Máy tính Fx570VN Plus">
-        </div>
-        <div class="menu-text">
-          TRA CỨU BẢNG TUẦN HOÀN NTHH
-        </div>
-      </div>
-    </a>
-    <a href="34 tinh thanh VN.html" class="menu-item-link">
-      <div class="menu-item color-11">
-        <div class="menu-icon">
-          <img src="vn.png" alt="34 tỉnh thành 2025">
-        </div>
-        <div class="menu-text">
-          TRA CỨU 34 TỈNH THÀNH VIỆT NAM
-        </div>
-      </div>
-    </a>
-    <a href="mophong/mophong.html" class="menu-item-link">
-      <div class="menu-item color-12">
-        <div class="menu-icon">
-          <img src="mophong.png" alt="Mô phỏng dạy & học">
-        </div>
-        <div class="menu-text">
-          CÁC MÔ PHỎNG THEO MÔN HỌC
-        </div>
-      </div>
-    </a>
-    <a href="100_cau_lenh_AI.html" class="menu-item-link">
-      <div class="menu-item color-13">
-        <div class="menu-icon">
-          <img src="gpt.png" alt="100 câu lệnh chatGPT">
-        </div>
-        <div class="menu-text">
-          100 CÂU LỆNH CHATGPT CHO GV
-        </div>
-      </div>
-    </a>
-  </div>
+<div id="dongHoHienTai" style="font-size: 18px; color: green; font-weight: bold; margin-top: 5px;"></div>
+<script>
+  function capNhatDongHo() {
+    const dongHo = document.getElementById("dongHoHienTai");
+    const now = new Date();
+    const gio = String(now.getHours()).padStart(2, '0');
+    const phut = String(now.getMinutes()).padStart(2, '0');
+    const giay = String(now.getSeconds()).padStart(2, '0');
+    dongHo.textContent = `⏰ Bây giờ là: ${gio}:${phut}:${giay}`;
+  }
 
+  setInterval(capNhatDongHo, 1000);
+  capNhatDongHo();
+</script>
+
+<script type="text/javascript">
+  var mydate = new Date();
+  var year = mydate.getFullYear();
+  var day = mydate.getDay();
+  var month = mydate.getMonth();
+  var daym = mydate.getDate();
+  if (daym < 10) daym = "0" + daym;
+  var dayarray = ["CHỦ NHẬT", "THỨ HAI", "THỨ BA", "THỨ TƯ", "THỨ NĂM", "THỨ SÁU", "THỨ BẢY"];
+  var montharray = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+  document.write("<div style='color: red; font-weight: bold;'>" + dayarray[day] + ", " + daym + "/" + montharray[month] + "/" + year + "</div>");
+</script>
+	    
+<div style="width: 400px; padding: 5px; background-color: rgba(0, 0, 0, 0.3); border-radius: 10px; text-align: center; margin: 20px auto;">
+  <script>
+    var d = new Date();
+    var hourValue = d.getHours();
+    var greeting = "", greeting1 = "";
+    if (hourValue < 6) { greeting = "Chào ngày mới!"; greeting1 = "Chúc các bạn một ngày mới an lành!"; }
+    else if (hourValue < 9) { greeting = "Chào buổi sáng!"; greeting1 = "Chúc các bạn một buổi sáng tốt lành!"; }
+    else if (hourValue < 11) { greeting = "Sắp trưa rồi!"; greeting1 = "Chúc các bạn có một ngày thành công và hạnh phúc!"; }
+    else if (hourValue < 13) { greeting = "Đã buổi trưa rồi đó!"; greeting1 = "Chúc các bạn có bữa trưa thật ngon miệng!"; }
+    else if (hourValue < 17) { greeting = "Đã buổi chiều!"; greeting1 = "Hãy cố gắng hoàn thành công việc trong ngày!"; }
+    else if (hourValue < 18) { greeting = "Sắp tối rồi!"; greeting1 = "Chúc các bạn có bữa tối thật ngon miệng bên người thân!"; }
+    else if (hourValue <= 21) { greeting = "Chào buổi tối!"; greeting1 = "Chúc các bạn có bữa tối thật vui vẻ và hạnh phúc bên người thân!"; }
+    else { greeting = "Khuya rồi đấy!"; greeting1 = "Hãy đi ngủ thôi! Chúc các bạn có một giấc ngủ thật ngon!"; }
+    document.write("<h3 style='color:yellow; font-weight:bold;'>" + greeting + "</h3><p style='font-size:16px; color:#FFFFFF; font-weight:bold;'>" + greeting1 + "</p>");
+  </script>
 </div>
+    </div>
+
+    <div class="menu-container">
+      <a href="soan_cau_hoi.html" class="menu-item-link">
+        <div class="menu-item color-8">
+          <div class="menu-icon">
+            <img src="icon_soan_cau_hoi.png" alt="Soạn đề">
+          </div>
+          <div class="menu-text">
+            SOẠN - ĐẢO ĐỀ KIỂM TRA TRỰC TIẾP
+          </div>
+        </div>
+      </a>
+      <a href="sukienVN.html" class="menu-item-link">
+        <div class="menu-item color-9">
+          <div class="menu-icon">
+            <img src="ngaynaynamxua.png" alt="Theo dòng lịch sử">
+          </div>
+          <div class="menu-text">
+            THEO DÒNG SỰ KIỆN - LỊCH SỬ VN
+          </div>
+        </div>
+      </a>
+      <a href="fx-570VN Plus.html" class="menu-item-link">
+        <div class="menu-item color-10">
+          <div class="menu-icon">
+            <img src="fx570.png" alt="Máy tính Fx570VN Plus">
+          </div>
+          <div class="menu-text">
+            TRA CỨU BẢNG TUẦN HOÀN NTHH
+          </div>
+        </div>
+      </a>
+      <a href="34 tinh thanh VN.html" class="menu-item-link">
+        <div class="menu-item color-11">
+          <div class="menu-icon">
+            <img src="vn.png" alt="34 tỉnh thành 2025">
+          </div>
+          <div class="menu-text">
+            TRA CỨU 34 TỈNH THÀNH VIỆT NAM
+          </div>
+        </div>
+      </a>
+      <a href="mophong/mophong.html" class="menu-item-link">
+        <div class="menu-item color-12">
+          <div class="menu-icon">
+            <img src="mophong.png" alt="Mô phỏng dạy & học">
+          </div>
+          <div class="menu-text">
+            CÁC MÔ PHỎNG THEO MÔN HỌC
+          </div>
+        </div>
+      </a>
+      <a href="100_cau_lenh_AI.html" class="menu-item-link">
+        <div class="menu-item color-13">
+          <div class="menu-icon">
+            <img src="gpt.png" alt="100 câu lệnh chatGPT">
+          </div>
+          <div class="menu-text">
+            100 CÂU LỆNH CHATGPT CHO GV
+          </div>
+        </div>
+      </a>
+    </div>
 
     <script>
     const hourHand = document.getElementById('hour-hand');
