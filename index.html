@@ -306,8 +306,8 @@ img {
 }
 .menu-item-link {
   text-decoration: none;
-  display: inline-block;
-  width: 100%;
+  display: flex;
+  width: auto;
 }
 .menu-item {
   display: flex;
@@ -428,16 +428,25 @@ img {
 <div style="height: 120px;"></div> <div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 60px; overflow-x: auto;">
 
         <div class="menu-container">
-      <a href="vong_quay_so.html" class="menu-item-link">
-        <div class="menu-item color-1">
-          <div class="menu-icon">
-            <img src="icon_quay_so.png" alt="Vòng quay số">
-          </div>
-          <div class="menu-text">
-            VÒNG QUAY SỐ M1 & M2
-          </div>
-        </div>
-      </a>
+      <div class="menu-container">
+  <a href="vong_quay_so.html" class="menu-item-link">
+    <div class="menu-item color-1">
+      <div class="menu-icon">
+        <img src="icon_quay_so.png" alt="Vòng quay số">
+      </div>
+      <div class="menu-text" style="border-radius: 30px 0 0 30px;">
+        VÒNG QUAY SỐ M1
+      </div>
+    </div>
+  </a>
+  <a href="quayso_v2.html" class="menu-item-link">
+    <div class="menu-item color-1" style="margin-left: -20px; border-radius: 0 30px 30px 0;">
+      <div class="menu-text">
+        M2
+      </div>
+    </div>
+  </a>
+</div>
       <a href="vong_quay_ten.html" class="menu-item-link">
         <div class="menu-item color-2">
           <div class="menu-icon">
