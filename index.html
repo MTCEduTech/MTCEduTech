@@ -35,7 +35,7 @@
   overflow: hidden;
   box-shadow: 0 0 30px rgba(0,0,0,0.5);
   background-color: #222;
-  background-image: url('bg_clock.jpg'); /* ← thêm dòng này */
+  background-image: url('bg_clock.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -137,7 +137,7 @@
       transition: background 0.3s;
       margin: 5px 0;
       display: inline-block;
-	text-decoration: none; /* ← Thêm dòng này để bỏ gạch chân chữ của nút*/
+	text-decoration: none;
     }
 
     .custom-button:hover {
@@ -145,7 +145,6 @@
     }
 
 
-/* Hiệu ứng mờ – sáng khi hover vào icon */
 img:hover {
   filter: brightness(1.4) drop-shadow(0 0 5px #00ffff);
   transform: scale(1.05);
@@ -197,29 +196,29 @@ html, body {
 
 .author-container {
   display: flex;
-   flex-direction: column; /* xếp dọc: ảnh trên, chữ dưới */
-  align-items: center;    /* căn giữa ngang */
+   flex-direction: column;
+  align-items: center;
   margin-top: 4px;
 margin-bottom: 4px;
 }
 
 .author-img {
-  width: 140px;                 /* Kích thước ảnh */
+  width: 140px;
   height: 140px;
-  border-radius: 50%;           /* Bo tròn thành hình tròn */
-  object-fit: cover;            /* Cắt ảnh vừa khít mà không méo */
-  border: 6px solid #fff;       /* Viền trắng đẹp */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Đổ bóng nhẹ */
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   margin: 6px 0;
-margin-bottom: 2px; /* sát chữ nhất có thể */
+margin-bottom: 2px;
 }
 .popup {
   display: flex;
-  justify-content: center;  /* Canh giữa ngang */
-  align-items: center;      /* Canh giữa dọc nếu popup có chiều cao xác định */
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   padding: 10px;
-margin-top: 1px;   /* hoặc 0 nếu muốn sát */
+margin-top: 1px;
   margin-bottom: 1px;
 }
 
@@ -253,7 +252,7 @@ margin-top: 1px;   /* hoặc 0 nếu muốn sát */
   font-size: 16px;
   font-weight: bold;
   z-index: 9999;
-font-family: Times New roman, sans-serif; /* Hạn chế lỗi tiếng Việt */
+font-family: Times New roman, sans-serif;
 box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -298,23 +297,23 @@ img {
     background-color: #f0f0f0;
   }
 	  
-/* CSS Mới cho menu */
+/* CSS Mới cho menu (đã điều chỉnh) */
 .menu-container {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Khoảng cách giữa các nút */
-  min-width: 300px;
+  gap: 10px; /* Giảm khoảng cách giữa các nút */
+  min-width: 280px; /* Giảm một chút để tối ưu không gian */
 }
 .menu-item-link {
-  text-decoration: none; /* Bỏ gạch chân link */
-  display: inline-block; /* Để link ôm sát nội dung */
+  text-decoration: none;
+  display: inline-block;
   width: 100%;
 }
 .menu-item {
   display: flex;
   align-items: center;
-  border-radius: 40px; /* Bo toàn bộ cạnh của nút */
-  padding: 5px;
+  border-radius: 30px; /* Giảm bo góc để phù hợp với chiều cao mới */
+  padding: 4px; /* Giảm padding */
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
@@ -325,35 +324,35 @@ img {
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 .menu-icon {
-  width: 60px;
-  height: 60px;
+  width: 50px; /* Giảm kích thước khung tròn */
+  height: 50px;
   background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 50%; /* Tạo hình tròn */
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Cắt ảnh nếu tràn ra ngoài */
+  overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  flex-shrink: 0; /* Ngăn không cho co lại khi màn hình nhỏ */
+  flex-shrink: 0;
 }
 .menu-icon img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain; /* Giữ tỷ lệ ảnh */
+  width: 42px; /* Giảm kích thước ảnh bên trong */
+  height: 42px;
+  object-fit: contain;
   transition: transform 0.3s ease;
 }
 .menu-item:hover .menu-icon img {
-  transform: scale(1.1); /* Hiệu ứng zoom ảnh khi hover */
+  transform: scale(1.1);
 }
 .menu-text {
-  flex-grow: 1; /* Cho phép chiếm hết không gian còn lại */
+  flex-grow: 1;
   color: white;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 13px; /* Giảm cỡ chữ để vừa vặn */
   text-align: center;
-  padding: 8px 10px;
-  border-radius: 20px;
-  margin-left: 10px;
+  padding: 6px 8px; /* Giảm padding để thu gọn chiều cao */
+  border-radius: 18px; /* Giảm bo góc */
+  margin-left: 8px; /* Giảm khoảng cách */
 }
 /* Các màu nền khác nhau cho từng nút */
 .color-1 { background: linear-gradient(to right, #00BFFF, #1E90FF); }
@@ -783,7 +782,7 @@ img {
 
 <button id="exitApp" style="
   position: fixed;
-  bottom: 10px; /* Tạo khoảng dưới */
+  bottom: 10px;
   right: 20px;
   background-color: red;
   color: white;
@@ -799,8 +798,8 @@ img {
 <script>
 document.getElementById('exitApp').addEventListener('click', () => {
   if (confirm("Cảm ơn bạn đã sử dụng ứng dụng của tác giả Mai Thiện Chánh\n\nBạn muốn thoát hoàn toàn?")) {
-    window.open('', '_self')?.close(); // Cố gắng đóng tab hiện tại
-    location.href = "about:blank"; // Nếu không được, chuyển hướng sang trang trắng
+    window.open('', '_self')?.close();
+    location.href = "about:blank";
   }
 });
 </script>
@@ -1016,8 +1015,7 @@ function exitFullscreen() {
 
 <script>
   const textElement = document.getElementById("wave-text");
-  const originalText = textElement.innerText; // giữ nguyên cả khoảng trắng
-
+  const originalText = textElement.innerText;
   function triggerWaveAnimation() {
     const chars = originalText.split("");
     textElement.innerHTML = chars
@@ -1031,11 +1029,10 @@ function exitFullscreen() {
       })
       .join("");
   }
-
   document.addEventListener("DOMContentLoaded", () => {
-    triggerWaveAnimation(); // lần đầu
+    triggerWaveAnimation();
     setInterval(() => {
-      triggerWaveAnimation(); // mỗi 10 giây
+      triggerWaveAnimation();
     }, 10000);
   });
 </script>
@@ -1043,35 +1040,26 @@ function exitFullscreen() {
 async function handleLogin() {
   const nickname = document.getElementById("nickname").value.trim();
   const password = document.getElementById("password").value.trim();
-
   if (!nickname || !password) {
     alert("Vui lòng nhập đầy đủ nickname và mật khẩu.");
     return;
   }
-
   try {
     const response = await fetch('accounts.json');
     const accountData = await response.json();
-
     const found = accountData.find(acc => acc.username === nickname && acc.password === password);
-
     if (found) {
       alert("✅ Đăng nhập thành công!");
       localStorage.setItem("authenticated", "true");
       localStorage.setItem("nickname", found.username);
       localStorage.setItem("username", found.username);
       localStorage.setItem("loggedInUser", JSON.stringify({ name: found.name }));
-      localStorage.setItem("name", found.name); // để xác định admin
-
-      // ✅ Nếu là tài khoản demo thì đánh dấu đã đăng nhập lại
+      localStorage.setItem("name", found.name);
       if (found.username === "demo") {
         localStorage.setItem("demo_relogin", "true");
       }
-
-      updateAdminButton();  // Hiển thị nút admin nếu cần
+      updateAdminButton();
       closeIntroPopup();
-
-      // 👉 Hiển thị lời chào
       const greetingBox = document.getElementById('greeting-box');
       const greetingEl = document.getElementById('greeting');
       greetingEl.textContent = '👋 Xin chào ' + found.name;
@@ -1079,11 +1067,9 @@ async function handleLogin() {
         greetingBox.style.opacity = '1';
         greetingBox.style.transform = 'translateY(0)';
       }, 100);
-
     } else {
       alert("❌ Sai nickname hoặc mật khẩu. Vui lòng thử lại.");
     }
-
   } catch (err) {
     console.error("Lỗi khi tải danh sách tài khoản:", err);
     alert("⚠️ Không thể kiểm tra tài khoản. Vui lòng thử lại sau.");
@@ -1094,7 +1080,7 @@ async function handleLogin() {
 <script>
   function logout() {
     localStorage.removeItem("authenticated");
-    localStorage.removeItem("nickname"); // nếu có lưu tên người dùng
+    localStorage.removeItem("nickname");
     window.location.href = "index.html";
   }
 </script>
@@ -1109,15 +1095,14 @@ const greetingEl = document.getElementById('greeting');
 
 greetingEl.textContent = '👋 Xin chào ' + user.name;
 
-// Hiện toàn bộ greeting-box (không chỉ riêng nội dung p)
 setTimeout(() => {
   greetingBox.style.opacity = '1';
   greetingBox.style.transform = 'translateY(0)';
-}, 100); // delay nhẹ để hiệu ứng chạy mượt
+}, 100);
 
 	    function logout() {
     localStorage.clear();
-    window.location.href = "index.html"; // ← về trang đăng nhập
+    window.location.href = "index.html";
   }
     }
 </script>
@@ -1131,7 +1116,6 @@ setTimeout(() => {
     }
   }
 
-  // Gọi hàm lúc tải trang (trường hợp user đã đăng nhập từ trước)
   document.addEventListener("DOMContentLoaded", updateAdminButton);
 </script>
 	  
@@ -1148,7 +1132,6 @@ setTimeout(() => {
   function togglePassword() {
     const input = document.getElementById("password");
     const eyeIcon = document.getElementById("eye-icon");
-
     if (input.type === "password") {
       input.type = "text";
       eyeIcon.innerHTML = '<path d="M12 6a9.77 9.77 0 0 0-9.5 6 9.77 9.77 0 0 0 19 0A9.77 9.77 0 0 0 12 6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/><path d="M12 10a2 2 0 1 1-2 2 2 2 0 0 1 2-2z"/>';
@@ -1171,7 +1154,6 @@ setTimeout(() => {
     }
   }
 
-  // Click ngoài để đóng
   window.addEventListener('click', function(event) {
     const dropdown = document.getElementById("dropdown");
     const button = event.target.closest('button');
@@ -1233,7 +1215,6 @@ setTimeout(() => {
 
 <script>
   console.log("👉 Đang tải Firebase...");
-
   const firebaseConfig = {
     apiKey: "AIzaSyA-82b1D1t7uMNLj7JPKou9zCbozzBntMoI",
     authDomain: "mtcedutech-27414.firebaseapp.com",
@@ -1243,65 +1224,48 @@ setTimeout(() => {
     messagingSenderId: "1059485201084",
     appId: "1:1059485201084:web:4b9c59c1df144f6ac056b9"
   };
-
-  // Đảm bảo Firebase đã tải
   if (typeof firebase === 'undefined') {
     console.error("❌ Firebase chưa được tải!");
   } else {
     console.log("✅ Firebase đã khởi tạo");
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
     function getTodayKey() {
       const d = new Date();
       return d.toISOString().split('T')[0];
     }
-
     async function updateStats() {
       try {
-        // ✅ Chỉ đếm 1 lần trong 1 phiên (session)
         if (sessionStorage.getItem("visited_this_session")) {
           console.log("📌 Đã ghi trong session rồi – bỏ qua thống kê.");
         } else {
           console.log("⏳ Đang ghi thống kê truy cập...");
-
           const totalRef = db.ref("stats/total");
           const todayRef = db.ref("stats/daily/" + getTodayKey());
-
           await totalRef.transaction(n => (n || 0) + 1)
             .then(() => console.log("✅ Ghi total thành công"))
             .catch(err => console.error("❌ Ghi total lỗi:", err));
-
           await todayRef.transaction(n => (n || 0) + 1)
             .then(() => console.log("✅ Ghi today thành công"))
             .catch(err => console.error("❌ Ghi today lỗi:", err));
-
           sessionStorage.setItem("visited_this_session", "true");
         }
-
-        // 🟢 Luôn cập nhật hiển thị thống kê từ Firebase
         const totalRef = db.ref("stats/total");
         const todayRef = db.ref("stats/daily/" + getTodayKey());
-
         totalRef.on("value", snap => {
           console.log("📊 totalRef on-value:", snap.val());
           document.getElementById("totalVisits").textContent = snap.val() || 0;
         });
-
         todayRef.on("value", snap => {
           console.log("📊 todayRef on-value:", snap.val());
           document.getElementById("todayVisits").textContent = snap.val() || 0;
         });
-
       } catch (e) {
         console.error("❌ Lỗi cập nhật thống kê:", e);
       }
     }
-
-    // ✅ Gọi hàm thống kê
     updateStats();
   }
 </script>
-
 </body>
 </html>
