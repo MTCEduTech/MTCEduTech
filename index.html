@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Trang chủ - Bộ công cụ hỗ trợ giảng dạy dành cho giáo viên</title>
 	
-<!-- Firebase SDK compat version -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
@@ -298,6 +297,78 @@ img {
   #dropdown a:hover {
     background-color: #f0f0f0;
   }
+	  
+/* CSS Mới cho menu */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Khoảng cách giữa các nút */
+  min-width: 300px;
+}
+.menu-item-link {
+  text-decoration: none; /* Bỏ gạch chân link */
+  display: inline-block; /* Để link ôm sát nội dung */
+  width: 100%;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  border-radius: 40px; /* Bo toàn bộ cạnh của nút */
+  padding: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  min-width: 250px;
+}
+.menu-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+.menu-icon {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%; /* Tạo hình tròn */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Cắt ảnh nếu tràn ra ngoài */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0; /* Ngăn không cho co lại khi màn hình nhỏ */
+}
+.menu-icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain; /* Giữ tỷ lệ ảnh */
+  transition: transform 0.3s ease;
+}
+.menu-item:hover .menu-icon img {
+  transform: scale(1.1); /* Hiệu ứng zoom ảnh khi hover */
+}
+.menu-text {
+  flex-grow: 1; /* Cho phép chiếm hết không gian còn lại */
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px 10px;
+  border-radius: 20px;
+  margin-left: 10px;
+}
+/* Các màu nền khác nhau cho từng nút */
+.color-1 { background: linear-gradient(to right, #00BFFF, #1E90FF); }
+.color-2 { background: linear-gradient(to right, #FFD700, #FFA500); }
+.color-3 { background: linear-gradient(to right, #FF4500, #FF6347); }
+.color-4 { background: linear-gradient(to right, #32CD32, #228B22); }
+.color-5 { background: linear-gradient(to right, #8A2BE2, #9400D3); }
+.color-6 { background: linear-gradient(to right, #4682B4, #6495ED); }
+.color-7 { background: linear-gradient(to right, #FF1493, #FF69B4); }
+.color-8 { background: linear-gradient(to right, #20B2AA, #008080); }
+.color-9 { background: linear-gradient(to right, #F08080, #CD5C5C); }
+.color-10 { background: linear-gradient(to right, #DAA520, #B8860B); }
+.color-11 { background: linear-gradient(to right, #40E0D0, #20B2AA); }
+.color-12 { background: linear-gradient(to right, #BDB76B, #808000); }
+.color-13 { background: linear-gradient(to right, #00C853, #64DD17); }
 
    </style>
 </head>
@@ -336,8 +407,7 @@ img {
       line-height: 1.2;
     ">🚪 Thoát</button>
   </div>
-	<!-- ✅ NÚT QUẢN LÝ NGƯỜI DÙNG - CĂN GIỮA -->
-<div style="width: 100%; display: flex; justify-content: center; margin-top: 8px;">
+	<div style="width: 100%; display: flex; justify-content: center; margin-top: 8px;">
   <a href="quanly_nguoidung.html" 
      id="admin-btn" 
      class="custom-button" 
@@ -356,55 +426,81 @@ img {
     <h1 id="wave-text" style="font-size: 35px; font-weight: bold; color: yellow; font-family: 'Times New Roman', Times, serif;"> BỘ CÔNG CỤ GIÁO VIÊN - CHUYỂN ĐỔI SỐ</h1>
       </div>
 </div>
-<div style="height: 120px;"></div> <!-- Khoảng đệm để tránh bị che -->
+<div style="height: 120px;"></div> <div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 60px; overflow-x: auto;">
 
-
-
-  <!-- Bố cục 3 cột -->
-  <div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 60px; overflow-x: auto;">
-
-        <!-- Cột trái -->
-    <div style="text-align: center; min-width: 300px;">
-      <a href="vong_quay_so.html">
-  <img src="icon_quay_so.png" alt="Vòng quay số" width="30">
-</a>
-<br>
-<a href="vong_quay_so.html" class="custom-button">VÒNG QUAY SỐ M1</a>&nbsp;<a href="quayso_v2.html" class="custom-button">M2</a>
-<br>
-
-<a href="vong_quay_ten.html">
-  <img src="icon_quay_ten.png" alt="Vòng quay tên" width="30">
-</a><br>
-<a href="vong_quay_ten.html" class="custom-button">VÒNG QUAY TÊN NGẪU NHIÊN</a>
-<br>
-<a href="Ai_la_trieu_phu.html">
-  <img src="ALTP.png" alt="Ai là triệu phú" width="30">
-</a><br>
-<a href="Ai_la_trieu_phu.html" class="custom-button">AI LÀ TRIỆU PHÚ - GIÁO DỤC</a>
-<br>
-<a href="O_Chu_bi_mat.html">
-  <img src="icon_o_chu_bi_mat.png" alt="Ô chữ bí mật" width="30">
-</a><br>
-<a href="O_Chu_bi_mat.html" class="custom-button">TRÒ CHƠI TÌM Ô CHỮ BÍ MẬT</a>
-<br>
-<a href="doan_tu.html">
-  <img src="doan_tu.png" alt="Suy đoán từ" width="30">
-</a><br>
-<a href="doan_tu.html" class="custom-button">TRÒ CHƠI ĐOÁN TỪ CÓ NGHĨA</a>
-	    <br>
-	    <a href="O_Chu_tron_tim.html">
-  <img src="icon_O_Chu_tron_tim.png" alt="Ô chữ trốn tìm" width="30">
-</a><br>
-<a href="O_Chu_tron_tim.html" class="custom-button">TRÒ CHƠI AI TINH MẮT HƠN</a>
-		<br>
-	    <a href="giaidoquediem.html">
-  <img src="quediem.png" alt="Giải đố que diêm" width="30">
-</a><br>
-<a href="giaidoquediem.html" class="custom-button">TIỂU HỌC GIẢI ĐỐ QUE DIÊM</a>
+        <div class="menu-container">
+      <a href="vong_quay_so.html" class="menu-item-link">
+        <div class="menu-item color-1">
+          <div class="menu-icon">
+            <img src="icon_quay_so.png" alt="Vòng quay số">
+          </div>
+          <div class="menu-text">
+            VÒNG QUAY SỐ M1 & M2
+          </div>
+        </div>
+      </a>
+      <a href="vong_quay_ten.html" class="menu-item-link">
+        <div class="menu-item color-2">
+          <div class="menu-icon">
+            <img src="icon_quay_ten.png" alt="Vòng quay tên">
+          </div>
+          <div class="menu-text">
+            VÒNG QUAY TÊN NGẪU NHIÊN
+          </div>
+        </div>
+      </a>
+      <a href="Ai_la_trieu_phu.html" class="menu-item-link">
+        <div class="menu-item color-3">
+          <div class="menu-icon">
+            <img src="ALTP.png" alt="Ai là triệu phú">
+          </div>
+          <div class="menu-text">
+            AI LÀ TRIỆU PHÚ - GIÁO DỤC
+          </div>
+        </div>
+      </a>
+      <a href="O_Chu_bi_mat.html" class="menu-item-link">
+        <div class="menu-item color-4">
+          <div class="menu-icon">
+            <img src="icon_o_chu_bi_mat.png" alt="Ô chữ bí mật">
+          </div>
+          <div class="menu-text">
+            TRÒ CHƠI TÌM Ô CHỮ BÍ MẬT
+          </div>
+        </div>
+      </a>
+      <a href="doan_tu.html" class="menu-item-link">
+        <div class="menu-item color-5">
+          <div class="menu-icon">
+            <img src="doan_tu.png" alt="Suy đoán từ">
+          </div>
+          <div class="menu-text">
+            TRÒ CHƠI ĐOÁN TỪ CÓ NGHĨA
+          </div>
+        </div>
+      </a>
+      <a href="O_Chu_tron_tim.html" class="menu-item-link">
+        <div class="menu-item color-6">
+          <div class="menu-icon">
+            <img src="icon_O_Chu_tron_tim.png" alt="Ô chữ trốn tìm">
+          </div>
+          <div class="menu-text">
+            TRÒ CHƠI AI TINH MẮT HƠN
+          </div>
+        </div>
+      </a>
+      <a href="giaidoquediem.html" class="menu-item-link">
+        <div class="menu-item color-7">
+          <div class="menu-icon">
+            <img src="quediem.png" alt="Giải đố que diêm">
+          </div>
+          <div class="menu-text">
+            TIỂU HỌC GIẢI ĐỐ QUE DIÊM
+          </div>
+        </div>
+      </a>
     </div>
-
 	  
-    <!-- Cột giữa: Đồng hồ và nút ảnh nền -->
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div class="clock" id="clock">
         <div class="ticks" id="ticks"></div>
@@ -465,32 +561,67 @@ img {
 </div>
     </div>
 
-    <!-- Cột phải -->
-    <div style="text-align: center; min-width: 300px;">
-      <a href="soan_cau_hoi.html">
-  <img src="icon_soan_cau_hoi.png" alt="Soạn đề" width="30">
-</a><br>
-<a href="soan_cau_hoi.html" class="custom-button">SOẠN - ĐẢO ĐỀ KIỂM TRA TRỰC TIẾP</a>
-<br>
-<a href="sukienVN.html">
-  <img src="ngaynaynamxua.png" alt="Theo dòng lịch sử" width="30"></a><br>
-<a href="sukienVN.html" class="custom-button">THEO DÒNG SỰ KIỆN - LỊCH SỬ VN </a><br>
-<a href="fx-570VN Plus.html">
-  <img src="fx570.png" alt="Máy tính Fx570VN Plus" width="30">
-</a><br>
-<a href="fx-570VN Plus.html" class="custom-button">TRA CỨU BẢNG TUẦN HOÀN NTHH</a>
-<br>
-	    <a href="34 tinh thanh VN.html">
-  <img src="vn.png" alt="34 tỉnh thành 2025" width="30">
-</a><br>
-<a href="34 tinh thanh VN.html" class="custom-button">TRA CỨU 34 TỈNH THÀNH VIỆT NAM</a>
-<br>
-	    <a href="mophong/mophong.html">
-  <img src="mophong.png" alt="Mô phỏng dạy & học" width="30"></a><br>
-<a href="mophong/mophong.html" class="custom-button">CÁC MÔ PHỎNG THEO MÔN HỌC </a> <br>
-      <a href="100_cau_lenh_AI.html">
-  <img src="gpt.png" alt="100 câu lệnh chatGPT" width="30"></a><br>
-<a href="100_cau_lenh_AI.html" class="custom-button">100 CÂU LỆNH CHATGPT CHO GV</a>
+    <div class="menu-container">
+      <a href="soan_cau_hoi.html" class="menu-item-link">
+        <div class="menu-item color-8">
+          <div class="menu-icon">
+            <img src="icon_soan_cau_hoi.png" alt="Soạn đề">
+          </div>
+          <div class="menu-text">
+            SOẠN - ĐẢO ĐỀ KIỂM TRA TRỰC TIẾP
+          </div>
+        </div>
+      </a>
+      <a href="sukienVN.html" class="menu-item-link">
+        <div class="menu-item color-9">
+          <div class="menu-icon">
+            <img src="ngaynaynamxua.png" alt="Theo dòng lịch sử">
+          </div>
+          <div class="menu-text">
+            THEO DÒNG SỰ KIỆN - LỊCH SỬ VN
+          </div>
+        </div>
+      </a>
+      <a href="fx-570VN Plus.html" class="menu-item-link">
+        <div class="menu-item color-10">
+          <div class="menu-icon">
+            <img src="fx570.png" alt="Máy tính Fx570VN Plus">
+          </div>
+          <div class="menu-text">
+            TRA CỨU BẢNG TUẦN HOÀN NTHH
+          </div>
+        </div>
+      </a>
+      <a href="34 tinh thanh VN.html" class="menu-item-link">
+        <div class="menu-item color-11">
+          <div class="menu-icon">
+            <img src="vn.png" alt="34 tỉnh thành 2025">
+          </div>
+          <div class="menu-text">
+            TRA CỨU 34 TỈNH THÀNH VIỆT NAM
+          </div>
+        </div>
+      </a>
+      <a href="mophong/mophong.html" class="menu-item-link">
+        <div class="menu-item color-12">
+          <div class="menu-icon">
+            <img src="mophong.png" alt="Mô phỏng dạy & học">
+          </div>
+          <div class="menu-text">
+            CÁC MÔ PHỎNG THEO MÔN HỌC
+          </div>
+        </div>
+      </a>
+      <a href="100_cau_lenh_AI.html" class="menu-item-link">
+        <div class="menu-item color-13">
+          <div class="menu-icon">
+            <img src="gpt.png" alt="100 câu lệnh chatGPT">
+          </div>
+          <div class="menu-text">
+            100 CÂU LỆNH CHATGPT CHO GV
+          </div>
+        </div>
+      </a>
     </div>
 
     <script>
@@ -624,7 +755,6 @@ img {
 
   </div>
 </div>
-<!-- Nút Music + Game Caro -->
 <a href="Caro.html"
    style="
      display: inline-block;
@@ -651,7 +781,6 @@ img {
   🎵 Nhạc & Game caro
 </a>
 
-<!-- Nút Thoát Hoàn Toàn -->
 <button id="exitApp" style="
   position: fixed;
   bottom: 10px; /* Tạo khoảng dưới */
@@ -678,7 +807,6 @@ document.getElementById('exitApp').addEventListener('click', () => {
 </button>
 
 
-<!-- Nút toàn màn hình cố định -->
 <div style="
   position: fixed;
   bottom: 20px;
@@ -742,7 +870,6 @@ function exitFullscreen() {
   }, 300);
 </script>
 
-<!-- Popup giới thiệu bộ công cụ -->
 <div id="introPopup" style="
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -764,7 +891,6 @@ function exitFullscreen() {
     gap: 20px;
     flex-wrap: wrap;
   ">
-    <!-- Cột trái: giới thiệu -->
     <div style="flex: 1; min-width: 250px;">
       <h2 style="color: #e91e63; text-align: center;">BỘ CÔNG CỤ HỖ TRỢ GIÁO VIÊN</h2>
       <p><strong>Siêu phẩm hỗ trợ giảng dạy</strong> dành riêng cho giáo viên thời đại số:</p>
@@ -801,7 +927,6 @@ function exitFullscreen() {
       </div>
     </div>
 
-    <!-- Cột phải: Đăng nhập -->
     <div style="flex: 1; min-width: 250px; background: #f0f8ff; padding: 20px; border-radius: 12px;">
       <form onsubmit="handleLogin(); return false;">
   <h3 style="text-align: center; color: #e91e63;">🔐 ĐĂNG NHẬP</h3>
@@ -845,7 +970,6 @@ function exitFullscreen() {
   </div>
 </form>
 
-<!-- Ảnh dưới form đăng nhập -->
 <div style="text-align: center; margin-top: 15px;">
   <img src="GV.png" alt="Giáo viên" style="max-width: 100%; width: 380px; height: auto; display: block; margin: 0 auto;">
 </div>
@@ -870,7 +994,6 @@ function exitFullscreen() {
   </div>
 </div>
 
-<!-- JS để ẩn popup -->
 <script>
   function closeIntroPopup() {
     document.getElementById('introPopup').style.display = 'none';
@@ -1061,7 +1184,6 @@ setTimeout(() => {
   });
 </script>
 
-<!-- Popup thống kê truy cập -->
 <style>
   #visit-popup {
     position: fixed;
@@ -1109,7 +1231,6 @@ setTimeout(() => {
   👉 Hôm nay: <span id="todayVisits">0</span>
 </div>
 
-<!-- Popup thống kê truy cập -->
 <script>
   console.log("👉 Đang tải Firebase...");
 
