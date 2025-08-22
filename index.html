@@ -768,7 +768,7 @@ img {
   text-align: right;
 ">
   <div style="position: relative; display: inline-block;">
-    <button onclick="toggleDropdown()" style="
+    <button onclick="toggleWebsiteDropdown()" style="
   width: 173px;
   background-color: orange;
   color: white;
@@ -1204,7 +1204,7 @@ setTimeout(() => {
 </script>
 
 	 <script>
-  function toggleDropdown() {
+  function toggleWebsiteDropdown() {
     const dropdown = document.getElementById("dropdown");
     if (dropdown.classList.contains("show")) {
       dropdown.classList.remove("show");
@@ -1218,7 +1218,7 @@ setTimeout(() => {
   window.addEventListener('click', function(event) {
     const dropdown = document.getElementById("dropdown");
     const button = event.target.closest('button');
-    if (!dropdown.contains(event.target) && (!button || !button.onclick || !button.onclick.toString().includes('toggleDropdown'))) {
+    if (!dropdown.contains(event.target) && (!button || !button.onclick || !button.onclick.toString().includes('toggleWebsiteDropdown'))) {
       if (dropdown.classList.contains("show")) {
         dropdown.classList.remove("show");
         setTimeout(() => dropdown.style.display = "none", 200);
@@ -1226,6 +1226,7 @@ setTimeout(() => {
     }
   });
 </script>
+
 
 <style>
   #visit-popup {
