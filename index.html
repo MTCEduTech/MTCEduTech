@@ -412,6 +412,12 @@ img {
 .dropdown-container.active .dropdown-arrow {
   transform: translateY(-50%) rotate(180deg);
 }
+#zalo-btn:hover {
+  background-color: #0056d6;   /* xanh đậm hơn */
+  transform: scale(1.05);      /* phóng to nhẹ */
+  filter: brightness(1.1);     /* sáng hơn */
+}
+
 /* Các màu nền khác nhau cho từng nút */
 .color-1 { background: linear-gradient(to right, #00BFFF, #1E90FF); }
 .color-2 { background: linear-gradient(to right, #FFD700, #FFA500); }
@@ -473,16 +479,18 @@ img {
   </a>
 </div>
 </div>	
-  <a href="https://zalo.me/g/..." target="_blank"
-   style="position: fixed; top: 55px; right: 10px;
+  <a href="https://zalo.me/g/..." target="_blank" id="zalo-btn"
+   style="position: fixed; top: 51px; right: 10px;
           display: inline-flex; align-items: center; gap: 6px;
           padding: 6px 10px; background: #0068FF; color: white;
           border-radius: 6px; font-weight: bold; font-size: 13px;
-          text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 9999;">
+          text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 9999;
+          transition: all 0.3s ease;">
   <img src="https://stc-zaloprofile.zdn.vn/pc/v1/images/zalo_sharelogo.png"
        alt="Zalo" style="width:20px; height:20px;">
   Tham gia nhóm chat Zalo trao đổi kinh nghiệm
 </a>
+
 
 <div id="fixed-header">
   <marquee direction="left" scrollamount="8">HƯỞNG ỨNG CHUYỂN ĐỔI SỐ TRONG NGÀNH GIÁO DỤC - MỖI GIÁO VIÊN VÀ MỖI NGƯỜI LÀM TRONG NGÀNH GIÁO DỤC MỘT ĐÓNG GÓP, TÌM KIẾM VÀ PHÁT HUY CÁC CÔNG NGHỆ HỖ TRỢ TRONG CÔNG TÁC DẠY VÀ HỌC HIỆU QUẢ; SẢN PHẨM NÀY LÀ BỘ CÔNG CỤ 📚 ỨNG DỤNG VÀO GIẢNG DẠY, ĐƯỢC VIẾT BỞI THẦY GIÁO "MAI THIỆN CHÁNH"</marquee>
@@ -856,7 +864,7 @@ img {
    onmouseover="this.style.backgroundColor='#483D8B'; this.style.transform='scale(1.05)'; this.style.filter='brightness(1.1)'"
    onmouseout="this.style.backgroundColor='#6A5ACD'; this.style.transform='scale(1)'; this.style.filter='brightness(1)'"
 >
-  🎵 Nhạc & Game caro
+  🎵 Nhạc, Game caro
 </a>
 
 <button id="exitApp" style="
