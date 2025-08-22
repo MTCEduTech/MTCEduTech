@@ -1241,32 +1241,33 @@ setTimeout(() => {
 <style>
   #visit-popup {
     position: fixed;
-    bottom: 70px;
-    left: 20px;
-    background: #fff;
+    bottom: 50px;
+    left: 10px;
+    background: rgba(255,255,255,0.9);
     color: #333;
-    padding: 15px 20px 10px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    padding: 6px 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     font-family: Arial, sans-serif;
-    font-size: 14px;
+    font-size: 11px;   /* Chữ nhỏ hơn */
     z-index: 9999;
-    max-width: 200px;
-  }
+    max-width: 130px;  /* Thu hẹp chiều ngang */
+    line-height: 1.2;  /* Dãn cách chữ vừa phải */
+}
 
   #visit-popup .close-btn {
     position: absolute;
-    top: -12px;
-    right: -12px;
-    width: 24px;
-    height: 24px;
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
     background: #eee;
     border: 1px solid #ccc;
     border-radius: 50%;
-    font-size: 14px;
+    font-size: 11px;
     color: #444;
     cursor: pointer;
-    line-height: 22px;
+    line-height: 16px;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     transition: background 0.3s ease;
