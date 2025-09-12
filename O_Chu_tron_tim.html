@@ -315,7 +315,7 @@ function toggleCell(cell) {
   }
 }
 
-    function getSelectedWord() {
+   function getSelectedWord() {
   const selected = Array.from(document.querySelectorAll(".cell.selected"));
   if (selected.length === 0) return "";
 
@@ -326,20 +326,17 @@ function toggleCell(cell) {
     char: c.textContent
   }));
 
-  // Sắp xếp theo thứ tự dòng trước, cột sau
-  coords.sort((a, b) => {
-    if (a.row === b.row) return a.col - b.col;
-    return a.row - b.row;
-  });
-
-  // Nếu chỉ chọn 1 ô → trả về luôn ký tự
   if (coords.length === 1) return coords[0].char;
 
-  // Xác định hướng di chuyển (deltaRow, deltaCol)
+  // Không sort theo row/col nữa, mà giữ nguyên thứ tự click
+  // để đảm bảo chiều chọn đúng
+  // Nếu muốn hỗ trợ chọn bằng cách bôi "không thứ tự" thì có thể sort sau
+  // Nhưng ở đây mình xử lý theo thứ tự bạn click vào.
+
   const dRow = coords[1].row - coords[0].row;
   const dCol = coords[1].col - coords[0].col;
 
-  // Chuẩn hoá hướng (ngang, dọc hoặc chéo)
+  // Kiểm tra có hợp lệ (ngang, dọc, chéo)
   if (!(
     (dRow === 0 && dCol !== 0) ||         // ngang
     (dCol === 0 && dRow !== 0) ||         // dọc
@@ -348,21 +345,26 @@ function toggleCell(cell) {
     return ""; // không cùng hướng
   }
 
-  // Kiểm tra tất cả các ô tiếp theo có khớp cùng hướng không
+  // Kiểm tra các ô tiếp theo có thẳng hàng theo hướng đó không
   for (let i = 1; i < coords.length; i++) {
     if (
       coords[i].row !== coords[0].row + dRow * i ||
       coords[i].col !== coords[0].col + dCol * i
     ) {
-      return ""; // bị lệch → không hợp lệ
+      return ""; // sai hướng
     }
   }
 
   // Ghép thành từ
-  return coords.map(c => c.char).join("").toUpperCase();
+  let word = coords.map(c => c.char).join("").toUpperCase();
+
+  // Nếu chưa đúng, thử ngược lại (đảo chuỗi)
+  if (!words.includes(word) && words.includes(word.split("").reverse().join(""))) {
+    word = word.split("").reverse().join("");
+  }
+
+  return word;
 }
-
-
 
     function checkResult() {
       if (gameOver) return;
