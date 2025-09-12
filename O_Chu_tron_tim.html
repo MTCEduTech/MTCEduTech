@@ -315,19 +315,53 @@ function toggleCell(cell) {
   }
 }
 
-
-
     function getSelectedWord() {
   const selected = Array.from(document.querySelectorAll(".cell.selected"));
-  const sorted = selected.sort((a, b) => {
-    const r1 = parseInt(a.dataset.row), c1 = parseInt(a.dataset.col);
-    const r2 = parseInt(b.dataset.row), c2 = parseInt(b.dataset.col);
-    if (r1 === r2) return c1 - c2;      // cùng hàng -> so sánh cột
-    if (c1 === c2) return r1 - r2;      // cùng cột -> so sánh hàng
-    return (r1 - r2) || (c1 - c2);      // nếu chéo -> sắp theo dòng trước
+  if (selected.length === 0) return "";
+
+  // Lấy toạ độ các ô đã chọn
+  const coords = selected.map(c => ({
+    row: parseInt(c.dataset.row),
+    col: parseInt(c.dataset.col),
+    char: c.textContent
+  }));
+
+  // Sắp xếp theo thứ tự dòng trước, cột sau
+  coords.sort((a, b) => {
+    if (a.row === b.row) return a.col - b.col;
+    return a.row - b.row;
   });
-  return sorted.map(c => c.textContent).join("").toUpperCase();
+
+  // Nếu chỉ chọn 1 ô → trả về luôn ký tự
+  if (coords.length === 1) return coords[0].char;
+
+  // Xác định hướng di chuyển (deltaRow, deltaCol)
+  const dRow = coords[1].row - coords[0].row;
+  const dCol = coords[1].col - coords[0].col;
+
+  // Chuẩn hoá hướng (ngang, dọc hoặc chéo)
+  if (!(
+    (dRow === 0 && dCol !== 0) ||         // ngang
+    (dCol === 0 && dRow !== 0) ||         // dọc
+    (Math.abs(dRow) === Math.abs(dCol))   // chéo
+  )) {
+    return ""; // không cùng hướng
+  }
+
+  // Kiểm tra tất cả các ô tiếp theo có khớp cùng hướng không
+  for (let i = 1; i < coords.length; i++) {
+    if (
+      coords[i].row !== coords[0].row + dRow * i ||
+      coords[i].col !== coords[0].col + dCol * i
+    ) {
+      return ""; // bị lệch → không hợp lệ
+    }
+  }
+
+  // Ghép thành từ
+  return coords.map(c => c.char).join("").toUpperCase();
 }
+
 
 
     function checkResult() {
