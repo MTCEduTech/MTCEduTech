@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<script src="../auth.js"></script>
+<title>12 thì cơ bản trong Tiếng Anh</title>
+<style>
+  :root{
+    --main-radius:16px;
+    --main-bg:#f1b82d;
+    --main-active:#e87e00;
+    --sub-bg:#ffcc66;
+    --sub-active:#ff9900;
+    --child-bg:#ffe599;
+    --child-active:#e6b800;
+  }
+
+  *{box-sizing:border-box;font-family:"Segoe UI",Roboto,Arial,sans-serif;}
+  body{
+    background:linear-gradient(160deg,#f6f3e7,#fffdf9);
+    margin:0;
+    padding:20px;
+    color:#222;
+    text-align:center;
+  }
+  header{margin-bottom:20px;}
+  h1{
+    font-size:clamp(24px,4vw,36px);
+    color:#1b2b3a;
+    margin:0 0 10px;
+    text-shadow:0 2px 3px rgba(0,0,0,0.1);
+  }
+  p.lead{
+    color:#444;
+    font-size:clamp(14px,2vw,18px);
+    margin:0 0 25px;
+  }
+
+  .wrap{max-width:1200px;margin:0 auto;text-align:center;}
+
+  /* Responsive groups */
+  .group-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
+  .sub-row,.child-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0;}
+  
+  button{
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:600;
+    transition:all .25s ease;
+    user-select:none;
+  }
+
+  /* Main buttons */
+  .main-btn{
+    padding:clamp(10px,2vw,16px) clamp(18px,3vw,28px);
+    background:var(--main-bg);
+    color:white;
+    font-size:clamp(15px,2vw,20px);
+    box-shadow:0 6px 14px rgba(0,0,0,0.08);
+  }
+  .main-btn:hover{transform:translateY(-3px) scale(1.05);filter:brightness(1.1);}
+  .main-btn.active{background:var(--main-active);}
+  
+  /* Sub buttons */
+  .sub-btn{
+    padding:clamp(8px,1.6vw,12px) clamp(14px,2.2vw,20px);
+    background:var(--sub-bg);
+    color:#333;
+    font-size:clamp(14px,1.8vw,18px);
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  }
+  .sub-btn.active{background:var(--sub-active);color:white;}
+
+  /* Child buttons */
+  .child-btn{
+    padding:clamp(8px,1.6vw,12px) clamp(14px,2vw,20px);
+    background:var(--child-bg);
+    color:#222;
+    font-size:clamp(13px,1.6vw,17px);
+    box-shadow:0 3px 8px rgba(0,0,0,0.06);
+  }
+  .child-btn.active{background:var(--child-active);color:white;}
+
+  /* Glow animation */
+  @keyframes pulseGlow {
+    0% { box-shadow:0 0 6px rgba(255,255,255,0.3); transform:scale(1);}
+    50% { box-shadow:0 0 14px rgba(255,255,255,0.8); transform:scale(1.03);}
+    100% { box-shadow:0 0 6px rgba(255,255,255,0.3); transform:scale(1);}
+  }
+  button.active.glow{animation:pulseGlow 1.8s ease-in-out infinite;}
+
+  /* Content area */
+  #content{
+    margin:22px auto 50px;
+    max-width:950px;
+    background:#3d2b00;
+    color:white;
+    border-radius:22px;
+    padding:24px;
+    text-align:left;
+    display:none;
+    box-shadow:0 12px 28px rgba(0,0,0,0.25);
+  }
+  #content h3{
+    margin-top:0;
+    color:#ffd966;
+    font-size:clamp(18px,2.4vw,24px);
+  }
+  #content .row{display:flex;gap:16px;flex-wrap:wrap;}
+  .card{
+    flex:1;
+    min-width:240px;
+    background:rgba(255,255,255,0.08);
+    border-radius:14px;
+    padding:14px 18px;
+  }
+  .card b{color:#ffeaa7;display:block;margin-bottom:6px;font-size:clamp(14px,1.6vw,17px);}
+  .muted{font-size:clamp(13px,1.4vw,16px);color:#f1e7d1;}
+  .card + .card{margin-top:8px;}
+  .hidden{display:none;}
+</style>
+<link rel="stylesheet" href="../menu.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>12 thì cơ bản trong tiếng Anh</h1>
+    <p class="lead">Chọn mốc thời gian → thì → loại câu để xem công thức, ví dụ, dịch và giải thích.</p>
+  </header>
+
+  <div class="group-row">
+    <button class="main-btn" id="btn-past" onclick="showGroup('past', this)">QUÁ KHỨ</button>
+    <button class="main-btn" id="btn-present" onclick="showGroup('present', this)">HIỆN TẠI</button>
+    <button class="main-btn" id="btn-future" onclick="showGroup('future', this)">TƯƠNG LAI</button>
+  </div>
+
+  <!-- Sub groups -->
+  <div id="past" class="sub-row hidden">
+    <button class="sub-btn" onclick="showTense('past1', this)">Quá khứ đơn</button>
+    <button class="sub-btn" onclick="showTense('past2', this)">Quá khứ tiếp diễn</button>
+    <button class="sub-btn" onclick="showTense('past3', this)">Quá khứ hoàn thành</button>
+    <button class="sub-btn" onclick="showTense('past4', this)">Quá khứ hoàn thành tiếp diễn</button>
+  </div>
+
+  <div id="present" class="sub-row hidden">
+    <button class="sub-btn" onclick="showTense('present1', this)">Hiện tại đơn</button>
+    <button class="sub-btn" onclick="showTense('present2', this)">Hiện tại tiếp diễn</button>
+    <button class="sub-btn" onclick="showTense('present3', this)">Hiện tại hoàn thành</button>
+    <button class="sub-btn" onclick="showTense('present4', this)">Hiện tại hoàn thành tiếp diễn</button>
+  </div>
+
+  <div id="future" class="sub-row hidden">
+    <button class="sub-btn" onclick="showTense('future1', this)">Tương lai đơn</button>
+    <button class="sub-btn" onclick="showTense('future2', this)">Tương lai tiếp diễn</button>
+    <button class="sub-btn" onclick="showTense('future3', this)">Tương lai hoàn thành</button>
+    <button class="sub-btn" onclick="showTense('future4', this)">Tương lai hoàn thành tiếp diễn</button>
+  </div>
+
+  <div id="childBtns" class="child-row hidden">
+    <button class="child-btn" onclick="showContent('affirm', this)">Khẳng định</button>
+    <button class="child-btn" onclick="showContent('negative', this)">Phủ định</button>
+    <button class="child-btn" onclick="showContent('question', this)">Nghi vấn</button>
+  </div>
+
+  <div id="content">
+    <h3 id="titleArea"></h3>
+    <div class="row">
+      <div class="card"><b>Công thức</b><div id="formula" class="muted"></div></div>
+      <div class="card"><b>Ví dụ</b><div id="example" class="muted"></div></div>
+      <div class="card"><b>Dịch</b><div id="translation" class="muted"></div></div>
+    </div>
+    <div class="card" style="margin-top:16px;"><b>Giải thích</b><div id="explain" class="muted"></div></div>
+  </div>
+</div>
+
+<script>
+/* dữ liệu */
+const data = {
+  present1:{name:"Hiện tại đơn (Simple Present)",affirm:{formula:"S + V(s/es)",example:"He plays tennis every Sunday.",translation:"Anh ấy chơi tennis mỗi Chủ nhật.",explain:"Diễn tả thói quen hoặc sự thật hiển nhiên."},negative:{formula:"S + do/does + not + V",example:"He does not play tennis every Sunday.",translation:"Anh ấy không chơi tennis mỗi Chủ nhật.",explain:"Dùng do/does + not để phủ định."},question:{formula:"Do/Does + S + V?",example:"Does he play tennis every Sunday?",translation:"Anh ấy có chơi tennis mỗi Chủ nhật không?",explain:"Đặt do/does lên đầu câu để hỏi."}},
+  present2:{name:"Hiện tại tiếp diễn (Present Continuous)",affirm:{formula:"S + am/is/are + V-ing",example:"She is reading a book now.",translation:"Cô ấy đang đọc sách.",explain:"Diễn tả hành động đang xảy ra."},negative:{formula:"S + am/is/are + not + V-ing",example:"She isn't reading a book now.",translation:"Cô ấy không đang đọc sách.",explain:"Thêm not sau am/is/are."},question:{formula:"Am/Is/Are + S + V-ing?",example:"Is she reading a book now?",translation:"Cô ấy đang đọc sách phải không?",explain:"Đưa am/is/are lên đầu câu."}},
+  present3:{name:"Hiện tại hoàn thành (Present Perfect)",affirm:{formula:"S + have/has + V-ed/3",example:"They have finished their homework.",translation:"Họ đã hoàn thành bài tập.",explain:"Hành động đã hoàn thành có kết quả ở hiện tại."},negative:{formula:"S + have/has not + V-ed/3",example:"They haven't finished their homework.",translation:"Họ chưa hoàn thành bài tập.",explain:"Dùng have/has not để phủ định."},question:{formula:"Have/Has + S + V-ed/3?",example:"Have they finished their homework?",translation:"Họ đã hoàn thành bài tập chưa?",explain:"Dùng have/has đầu câu để hỏi."}},
+  present4:{name:"Hiện tại hoàn thành tiếp diễn (Present Perfect Continuous)",affirm:{formula:"S + have/has been + V-ing",example:"I have been studying for two hours.",translation:"Tôi đã học được hai giờ.",explain:"Nhấn mạnh thời lượng hành động kéo dài đến hiện tại."},negative:{formula:"S + have/has not been + V-ing",example:"I haven't been studying for two hours.",translation:"Tôi chưa học được hai giờ.",explain:"Phủ định bằng have/has not been + V-ing."},question:{formula:"Have/Has + S + been + V-ing?",example:"Have you been studying for two hours?",translation:"Bạn đã học hai giờ chưa?",explain:"Dùng để hỏi về thời lượng hành động."}},
+  past1:{name:"Quá khứ đơn (Simple Past)",affirm:{formula:"S + V-ed/2",example:"She visited her grandparents last weekend.",translation:"Cô ấy đã thăm ông bà vào cuối tuần trước.",explain:"Hành động đã xảy ra và kết thúc trong quá khứ."},negative:{formula:"S + did not + V",example:"She didn't visit her grandparents last weekend.",translation:"Cô ấy không thăm ông bà cuối tuần trước.",explain:"Dùng did not + V nguyên mẫu."},question:{formula:"Did + S + V?",example:"Did she visit her grandparents last weekend?",translation:"Cô ấy có thăm ông bà cuối tuần trước không?",explain:"Dùng Did ở đầu câu để hỏi."}},
+  past2:{name:"Quá khứ tiếp diễn (Past Continuous)",affirm:{formula:"S + was/were + V-ing",example:"He was sleeping when I called him.",translation:"Anh ấy đang ngủ khi tôi gọi.",explain:"Hành động đang xảy ra tại thời điểm trong quá khứ."},negative:{formula:"S + was/were not + V-ing",example:"He wasn't sleeping when I called.",translation:"Anh ấy không ngủ khi tôi gọi.",explain:"Thêm not sau was/were."},question:{formula:"Was/Were + S + V-ing?",example:"Was he sleeping when you called?",translation:"Anh ấy có đang ngủ khi bạn gọi không?",explain:"Đưa was/were lên đầu để hỏi."}},
+  past3:{name:"Quá khứ hoàn thành (Past Perfect)",affirm:{formula:"S + had + V-ed/3",example:"By the time we arrived, the film had started.",translation:"Khi chúng tôi đến, phim đã bắt đầu.",explain:"Hành động xảy ra trước một hành động khác trong quá khứ."},negative:{formula:"S + had not + V-ed/3",example:"The film hadn't started when we arrived.",translation:"Phim chưa bắt đầu khi chúng tôi đến.",explain:"Dùng had not để phủ định."},question:{formula:"Had + S + V-ed/3?",example:"Had the film started when you arrived?",translation:"Phim đã bắt đầu khi bạn đến chưa?",explain:"Dùng had đầu câu để hỏi."}},
+  past4:{name:"Quá khứ hoàn thành tiếp diễn (Past Perfect Continuous)",affirm:{formula:"S + had been + V-ing",example:"They had been waiting for an hour before the bus came.",translation:"Họ đã đợi một giờ trước khi xe đến.",explain:"Nhấn mạnh thời lượng hành động trước một thời điểm quá khứ."},negative:{formula:"S + had not been + V-ing",example:"They hadn't been waiting long before the bus came.",translation:"Họ chưa đợi lâu trước khi xe đến.",explain:"Phủ định bằng had not been + V-ing."},question:{formula:"Had + S + been + V-ing?",example:"Had they been waiting long before the bus came?",translation:"Họ đã đợi lâu trước khi xe đến chưa?",explain:"Dùng had đầu câu để hỏi về thời lượng."}},
+  future1:{name:"Tương lai đơn (Simple Future)",affirm:{formula:"S + will + V",example:"I will call you tomorrow.",translation:"Tôi sẽ gọi bạn vào ngày mai.",explain:"Diễn tả quyết định hoặc dự đoán trong tương lai."},negative:{formula:"S + will not + V",example:"I won't call you tomorrow.",translation:"Tôi sẽ không gọi bạn vào ngày mai.",explain:"Dùng will not để phủ định hành động tương lai."},question:{formula:"Will + S + V?",example:"Will you call me tomorrow?",translation:"Bạn sẽ gọi tôi vào ngày mai chứ?",explain:"Dùng will đầu câu để hỏi."}},
+  future2:{name:"Tương lai tiếp diễn (Future Continuous)",affirm:{formula:"S + will be + V-ing",example:"This time next week I will be flying to Tokyo.",translation:"Tuần sau vào lúc này tôi sẽ đang bay tới Tokyo.",explain:"Hành động sẽ đang xảy ra tại một thời điểm trong tương lai."},negative:{formula:"S + will not be + V-ing",example:"I won't be flying to Tokyo next week.",translation:"Tôi sẽ không đang bay tới Tokyo vào tuần sau.",explain:"Phủ định bằng will not be + V-ing."},question:{formula:"Will + S + be + V-ing?",example:"Will you be working at 9 a.m. tomorrow?",translation:"Bạn sẽ đang làm việc lúc 9h sáng mai chứ?",explain:"Dùng để hỏi hành động tiếp diễn trong tương lai."}},
+  future3:{name:"Tương lai hoàn thành (Future Perfect)",affirm:{formula:"S + will have + V-ed/3",example:"By 2025 she will have graduated.",translation:"Đến năm 2025 cô ấy sẽ tốt nghiệp.",explain:"Hành động hoàn thành trước mốc thời gian trong tương lai."},negative:{formula:"S + will not have + V-ed/3",example:"She won't have graduated by 2025.",translation:"Cô ấy sẽ chưa tốt nghiệp vào năm 2025.",explain:"Phủ định việc hoàn thành trước mốc tương lai."},question:{formula:"Will + S + have + V-ed/3?",example:"Will you have finished the report by Friday?",translation:"Bạn có hoàn thành báo cáo trước thứ Sáu không?",explain:"Dùng để hỏi việc hoàn thành trước mốc tương lai."}},
+  future4:{name:"Tương lai hoàn thành tiếp diễn (Future Perfect Continuous)",affirm:{formula:"S + will have been + V-ing",example:"By next month I will have been working here for five years.",translation:"Đến tháng tới tôi sẽ làm việc ở đây được 5 năm.",explain:"Nhấn mạnh thời lượng hành động kéo dài đến một mốc tương lai."},negative:{formula:"S + will not have been + V-ing",example:"I won't have been working here for five years by next month.",translation:"Đến tháng tới tôi sẽ chưa làm ở đây được 5 năm.",explain:"Phủ định thời lượng hành động tới mốc tương lai."},question:{formula:"Will + S + have been + V-ing?",example:"Will you have been studying for three years by next June?",translation:"Bạn sẽ học được ba năm vào tháng Sáu tới chứ?",explain:"Hỏi về thời lượng kéo dài đến mốc tương lai."}}
+};
+
+let currentTense=null;
+function applyTheme(group){
+  const root=document.documentElement;
+  if(group==='past'){
+    root.style.setProperty('--main-bg','#f1b82d');
+    root.style.setProperty('--main-active','#e87e00');
+    root.style.setProperty('--sub-bg','#ffcc66');
+    root.style.setProperty('--sub-active','#ff9900');
+    root.style.setProperty('--child-bg','#ffe599');
+    root.style.setProperty('--child-active','#e6b800');
+  }else if(group==='present'){
+    root.style.setProperty('--main-bg','#d64545');
+    root.style.setProperty('--main-active','#a93232');
+    root.style.setProperty('--sub-bg','#ff7b7b');
+    root.style.setProperty('--sub-active','#e94b4b');
+    root.style.setProperty('--child-bg','#ffbaba');
+    root.style.setProperty('--child-active','#e35d5d');
+  }else{
+    root.style.setProperty('--main-bg','#2e7d32');
+    root.style.setProperty('--main-active','#1b5e20');
+    root.style.setProperty('--sub-bg','#66bb6a');
+    root.style.setProperty('--sub-active','#2e7d32');
+    root.style.setProperty('--child-bg','#b9f6ca');
+    root.style.setProperty('--child-active','#4caf50');
+  }
+}
+function showGroup(id,btn){
+  document.querySelectorAll('.main-btn').forEach(b=>b.classList.remove('active','glow'));
+  btn.classList.add('active','glow');
+  ['past','present','future'].forEach(g=>{
+    const el=document.getElementById(g);
+    el.classList.toggle('hidden',g!==id);
+  });
+  document.getElementById('childBtns').classList.add('hidden');
+  document.getElementById('content').style.display='none';
+  document.querySelectorAll('.sub-btn,.child-btn').forEach(b=>b.classList.remove('active','glow'));
+  currentTense=null;
+  applyTheme(id);
+}
+function showTense(id,btn){
+  currentTense=id;
+  document.querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active','glow'));
+  btn.classList.add('active','glow');
+  document.getElementById('childBtns').classList.remove('hidden');
+  document.getElementById('content').style.display='none';
+  document.querySelectorAll('.child-btn').forEach(b=>b.classList.remove('active','glow'));
+}
+function showContent(type,btn){
+  if(!currentTense||!data[currentTense])return;
+  document.querySelectorAll('.child-btn').forEach(b=>b.classList.remove('active','glow'));
+  btn.classList.add('active','glow');
+  const info=data[currentTense][type];
+  document.getElementById('titleArea').innerText=data[currentTense].name+" — "+btn.innerText;
+  document.getElementById('formula').innerText=info.formula;
+  document.getElementById('example').innerText=info.example;
+  document.getElementById('translation').innerText=info.translation;
+  document.getElementById('explain').innerText=info.explain;
+  document.getElementById('content').style.display='block';
+}
+document.addEventListener('DOMContentLoaded',()=>{showGroup('past',document.getElementById('btn-past'));});
+
+</script>
+<!-- Nút toàn màn hình cố định -->
+<div style="
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+">
+  <button onclick="openFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #00BFFF;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">🔍 Xem Full màn hình</button>
+
+  <button onclick="exitFullscreen()" style="
+    padding: 10px 16px;
+    font-size: 14px;
+    background: #FF6347;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+  ">❌ Thoát Full màn hình</button>
+</div>
+<script>
+  function openFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+      elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+      elem.msRequestFullscreen();
+    }
+  }
+
+  function exitFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+  }
+</script>
+
+<div style="
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+">
+    <button onclick="window.location.href='../index.html'" style="
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 220px;
+  ">
+    🏠 VỀ TRANG CHỦ
+  </button>
+</div>
+
+<!-- Nút cố định có thể kéo -->
+<button class="menu-toggle draggable"><img src="../TC.png" alt="Menu" class="menu-icon"></button>
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+<!-- Menu -->
+<div id="sideMenu" class="side-menu">
+  <a href="../index.html">🏠 Trang chủ</a>
+  <a href="../vong_quay_so.html">🎯 Vòng quay số</a>
+  <a href="../vong_quay_ten.html">👥 Vòng quay tên</a>
+  <a href="../Ai_la_trieu_phu.html">💰 Ai là triệu phú</a>
+  <a href="../O_Chu_bi_mat.html">🧩 Tìm Ô chữ bí mật</a>
+  <a href="../O_Chu_tron_tim.html">🔍 Tinh mắt tìm từ</a>
+  <a href="../doan_tu.html">🔤 Game suy đoán từ</a>
+  <a href="../soan_cau_hoi.html">📝 Soạn đề TN Tick chọn + chấm điểm</a> 
+  <a href="../sukienVN.html">📖 Theo dòng sự kiện - lịch sử VN</a> 
+  <a href="../fx-570VN Plus.html">📟 Giả lập Fx-570 + Bảng tuần hoàn NTHH</a>
+  <a href="../Caro.html">🎮 Game Caro + Music</a>
+  <a href="#" onclick="toggleMenu()">❌ Đóng Menu</a>
+</div>
+
+<script src="../menu.js"></script> 
+<script src="../chao_name.js"></script>
+        <small class="note">Dữ liệu minh họa thuộc bộ công cụ giảng dạy MTCEdutech mang tính tham khảo.</small>
+</body>
+</html>
