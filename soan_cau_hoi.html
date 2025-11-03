@@ -1,292 +1,366 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="auth.js"></script>
-  <title>Soạn Câu Hỏi</title>
-  <style>
-    .sticky-marquee {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: white;
-      z-index: 1000;
-      padding: 5px 0;
-      border-bottom: 1px solid #ccc;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      padding: 50px 20px 0 20px; /* đẩy nội dung xuống dưới chữ chạy */
-      background-color: white;
-      color: black;
-    }
+let questionCount = 0;
 
-.main-area {
-  flex: 1;
-  padding: 30px 40px 30px 40px;
-  min-height: 100vh;
-  box-sizing: border-box;
+function createAnswer() {
+  return `
+    <div class="answer-container">
+      <div class="answer-row">
+        <input type="text" class="answer-text" placeholder="Nhập nội dung câu trả lời">
+        <button type="button" onclick="this.closest('.answer-container').querySelector('input[type=file]').click()"> 🖼️Chèn hình ảnh</button>
+        <input type="checkbox" class="answer-correct">
+        <span class="hint">[Đánh dấu check nếu câu trả lời này đúng]</span>
+      </div>
+      <input type="file" accept="image/*" class="hidden-input" onchange="handleImage(event, this)">
+      <img class="preview-img" style="display:none;" />
+    </div>
+  `;
 }
 
-
-    .question-block { border-bottom: 1px solid #ccc; margin-bottom: 30px; padding-bottom: 20px; }
-    input[type="text"] { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px; }
-    .title-input {
-  text-align: center;
-  font-weight: bold;
-  color: red;
-  font-size: 20px;
-  margin: 0 auto;
-  display: block;
+function addQuestion() {
+  questionCount++;
+  const block = document.createElement('div');
+  block.className = 'question-block';
+  block.innerHTML = `
+    <label>Câu hỏi ${questionCount}</label>
+    <div class="question-row" style="display:flex; gap: 10px; align-items: center;">
+      <input type="text" class="question-text" placeholder="Nhập nội dung câu hỏi" style="flex: 1;">
+      <button type="button" onclick="this.closest('.question-block').querySelector('.question-img-input').click()">🖼️Chèn hình ảnh</button>
+    </div>
+    <input type="file" accept="image/*" class="question-img-input hidden-input" onchange="handleImage(event, this)">
+    <img class="preview-img" style="display:none;" />
+    ${[1,2,3,4].map(() => createAnswer()).join('')}
+  `;
+  document.getElementById('container').appendChild(block);
 }
 
-   
-.question-row,
-.answer-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
- 
-  padding-right: 10px;
-  margin-bottom: 15px;
-}
-.question-text,
-.answer-text {
-  flex: 1; /* dãn hết chiều ngang còn lại */
-  padding: 10px;
-  font-size: 16px;
-}
-    .hint { font-size: 12px; color: black; }
-    .preview-img { max-width: 100%; max-height: 200px; display: block; margin-top: 5px; }
-    .hidden-input { display: none; }
-
-    button {
-  padding: 10px 15px;
-  font-size: 16px;
-  margin-right: 10px;
-  margin-top: 20px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+function handleImage(event, input) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = input.nextElementSibling;
+    img.src = e.target.result;
+    img.style.display = 'block';
+    img.dataset.base64 = e.target.result;
+  };
+  if (file) reader.readAsDataURL(file);
 }
 
+// Hàm exportToHTML đã được sửa để tích hợp MathJax và giữ nguyên các tính năng cũ
+function exportToHTML() {
+  const title = document.querySelector('.title-input')?.value || '';
+  const blocks = document.querySelectorAll('.question-block');
+  const questions = [];
 
-body {
-  display: flex;
-  flex-direction: row;
-gap: 0px; /* đảm bảo không có khoảng hở */
-}
-
-.sidebar-buttons {
-  width: 250px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100vh; /* ← Chiếm toàn bộ chiều cao cửa sổ trình duyệt */
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-left: 4px solid #007BFF; /* Đường kẻ màu */
-  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-  overflow-y: auto; /* Cho phép cuộn nếu nhiều nút */
-}
-
-.answer-container {
-  width: 100%;
-}
-.answer-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.answer-text {
-  flex: 1;
-}
-.main-content {
-  flex: 0.75;
-  padding: 20px;
-}
-
-  </style>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-</head>
-<body>
-
-<div class="sticky-marquee">
-  <marquee behavior="scroll" direction="left" style="color: blue; font-weight: bold;">
-    CHÀO MỪNG BẠN ĐẾN VỚI TRÌNH SOẠN - XUẤT + ĐẢO ĐỀ TRẮC NGHIỆM LỰA CHỌN - ỨNG DỤNG NÀY LÀ SẢN PHẨM VIẾT CODE CỦA THẦY GIÁO MAI THIỆN CHÁNH (GV TRƯỜNG THCS) NHỜ SỰ HỖ TRỢ CỦA AI - CHÚC QUÝ THẦY CÔ TRẢI NGHIỆM THÀNH CÔNG VỚI SẢN PHẨM
-  </marquee>
-
-</div>
-
-<div class="main-content">
-<div id="container">
-  	<div class="question-block">
-    <input type="text" class="title-input" placeholder="Nhập tiêu đề bài kiểm tra - Môn">
-	</div>
-  </div>
-</div>
-
-
-<script src="script.js"></script>
-<script>
-  document.addEventListener('click', function(e) {
-    if (e.target && e.target.classList.contains('insert-question-img')) {
-      const container = e.target.closest('.question-block');
-      const input = container.querySelector('.question-img-input');
-      input.click();
+  blocks.forEach((block) => {
+    const qText = block.querySelector('.question-text')?.value || '';
+    const qImage = block.querySelector('.question-img-input')?.nextElementSibling?.dataset.base64 || '';
+    const answers = Array.from(block.querySelectorAll('.answer-text')).map((input, i) => ({
+      text: input.value,
+      isCorrect: block.querySelectorAll('.answer-correct')[i].checked,
+      image: block.querySelectorAll('.preview-img')[i + 1]?.dataset.base64 || ''
+    }));
+    if (qText) {
+      // Đảo ngẫu nhiên thứ tự đáp án
+      for (let i = answers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [answers[i], answers[j]] = [answers[j], answers[i]];
+      }
+      answers.forEach((a, i) => (a.letter = ['A', 'B', 'C', 'D'][i]));
+      questions.push({ questionText: qText, questionImage: qImage, answers });
     }
   });
 
-  function handleQuestionImage(event, input) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const img = input.nextElementSibling;
-      img.src = e.target.result;
-      img.style.display = 'block';
-      img.dataset.base64 = e.target.result;
-    };
-    if (file) reader.readAsDataURL(file);
+  const totalQuestions = questions.length;
+
+  // tạo nội dung HTML (giữ đầy đủ header, chọn thang điểm, check kết quả)
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><title>${title}</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body{font-family:Arial,sans-serif;max-width:1000px;margin:30px auto;padding:0 20px;background-color:white;color:black;}
+.question{margin-bottom:30px;}.answers label{display:block;margin:5px 0;}
+img{max-width:100%;max-height:200px;display:block;margin-top:5px;}
+.result{font-weight:bold;margin-left:10px;color:lightgreen;}.wrong{color:red;}
+body { font-family: Arial, sans-serif; font-size: 20px; max-width: 1000px; margin: 30px auto; padding: 0 20px; background-color: white; color: black; }
+h2 { color: red; text-align:center; }
+h3 { font-size: 22px; margin-bottom: 10px; }
+.answers label { font-size: 22px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+input[type="radio"] { transform: scale(1.3); margin-right: 8px; }
+.score-select { font-size: 24px; padding: 6px 10px; }
+button { font-size: 20px; padding: 8px 16px; }
+#final-score { font-size: 22px; font-weight: bold; color: green; }
+#fixed-header { position: fixed; top: 0; left: 0; right: 0; background-color: white; padding: 20px; z-index: 1000; border-bottom: 2px solid #ccc; text-align:center; }
+</style>
+</head>
+<body>
+
+<div id="fixed-header">
+  <h2 style="color: red; text-align: center;">${title}</h2>
+  <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+    <label style="color: blue; font-weight: bold; font-size: 30px;">Chọn thang điểm/câu:
+      <select id="score-per-question" class="score-select">
+        <option value="0.25">0.25</option>
+  <option value="0.5">0.5</option>
+  <option value="0.75">0.75</option>
+  <option value="1">1</option>
+  <option value="1.25">1.25</option>
+  <option value="1.5">1.5</option>
+  <option value="1.75">1.75</option>
+  <option value="2">2</option>
+  <option value="2.25">2.25</option>
+  <option value="2.5">2.5</option>
+  <option value="2.75">2.75</option>
+  <option value="3">3</option>
+  <option value="3.25">3.25</option>
+  <option value="3.5">3.5</option>
+  <option value="3.75">3.75</option>
+  <option value="4">4</option>
+  <option value="4.25">4.25</option>
+  <option value="4.5">4.5</option>
+  <option value="4.75">4.75</option>
+  <option value="5">5</option>
+  <option value="5.25">5.25</option>
+  <option value="5.5">5.5</option>
+  <option value="5.75">5.75</option>
+  <option value="6">6</option>
+  <option value="6.25">6.25</option>
+  <option value="6.5">6.5</option>
+  <option value="6.75">6.75</option>
+  <option value="7">7</option>
+  <option value="7.25">7.25</option>
+  <option value="7.5">7.5</option>
+  <option value="7.75">7.75</option>
+  <option value="8">8</option>
+  <option value="8.25">8.25</option>
+  <option value="8.5">8.5</option>
+  <option value="8.75">8.75</option>
+  <option value="9">9</option>
+  <option value="9.25">9.25</option>
+  <option value="9.5">9.5</option>
+  <option value="9.75">9.75</option>
+  <option value="10">10</option>
+      </select>
+    </label>
+    <button onclick="checkAllAnswers()" style="padding:10px 20px;font-size:16px;margin-bottom:20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Kiểm tra kết quả</button>
+    <div id="final-score" style="font-weight: bold; color: green; font-size: 30px;">Kết quả: ...</div>
+  </div>
+</div>
+
+<div style="height: 160px;"></div>
+
+${questions.map((q, i) => `
+  <div class="question">
+    <h3>Câu ${i+1}: ${escapeHtml(convertToMathJax(q.questionText))}</h3>
+    ${q.questionImage ? `<img src="${q.questionImage}">` : ''}
+    <div class="answers">
+      ${q.answers.map((a, j) => `
+        <label>
+          <input type="radio" name="q${i}" data-correct="${a.isCorrect}">
+          ${a.letter}. ${escapeHtml(convertToMathJax(a.text))}
+          ${a.image ? `<img src="${a.image}">` : ''}
+        </label>
+      `).join('')}
+    </div>
+    <span id="result-${i}"></span>
+  </div>
+`).join('')}
+
+<script>
+function checkAllAnswers(){
+  const total = ${totalQuestions};
+  let correctCount = 0;
+
+  for (let i = 0; i < total; i++) {
+    const radios = document.getElementsByName('q'+i);
+    const selected = Array.from(radios).find(r => r.checked);
+    const correct = Array.from(radios).find(r => r.dataset.correct === "true");
+    const correctLetter = correct?.parentElement?.textContent.trim().charAt(0) || '?';
+    const resultSpan = document.getElementById('result-'+i);
+    
+    if (!selected) {
+      resultSpan.textContent = 'Vui lòng chọn đáp án.';
+      resultSpan.className = 'wrong';
+    } else if (selected.dataset.correct === "true") {
+      resultSpan.innerHTML = '<strong style="color:blue;">CHÚC MỪNG BẠN</strong>';
+      correctCount++;
+    } else {
+      resultSpan.innerHTML = '<span style="color:red;">Bạn sai rồi. Đáp án đúng là: ' + correctLetter + '</span>';
+    }
+  }
+
+  // Tính điểm và hiển thị kết quả cuối
+  const scorePerQuestion = parseFloat(document.getElementById('score-per-question').value);
+  const finalScore = correctCount * scorePerQuestion;
+  const percentage = ((correctCount / total) * 100).toFixed(2);
+
+  document.getElementById('final-score').innerHTML = 
+  '<span style="color:blue;">Kết quả:</span> Đúng ' + correctCount + '/' + total + 
+  ' câu (' + percentage + '%) — <span style="color:red;">Điểm: ' + finalScore + ' Điểm</span>';
+}
+</script>
+
+<script>
+  // Đợi MathJax render (nếu có công thức)
+  if (window.MathJax) {
+    MathJax.typesetPromise();
   }
 </script>
 
-<div style="
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-start;
-">
-  <button id="fullscreen-btn" onclick="toggleFullscreen()" style="
-    background-color: #3498db;
-    color: white;
-    font-weight: bold;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 220px;
-    display: block;
-transition: background-color 0.3s ease;
-  ">
-    📱 FULL MÀN HÌNH
-  </button>
-</div>
-<script>
-/* Toggle fullscreen (dựng theo English.html) */
-function toggleFullscreen() {
-    const docElm = document.documentElement;
+</body></html>
+`;
 
-    // Nếu đang fullscreen -> thoát
-    if (document.fullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement) {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { // Firefox
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { // IE/Edge
-            document.msExitFullscreen();
-        }
-    } else {
-        // Vào fullscreen
-        if (docElm.requestFullscreen) {
-            docElm.requestFullscreen();
-        } else if (docElm.mozRequestFullScreen) { // Firefox
-            docElm.mozRequestFullScreen();
-        } else if (docElm.webkitRequestFullscreen) { // Chrome, Safari and Opera
-            docElm.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        } else if (docElm.msRequestFullscreen) { // IE/Edge
-            docElm.msRequestFullscreen();
-        }
-    }
+  // Tải file HTML về máy
+  const blob = new Blob([htmlContent], {type: 'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (title || 'De_kiem_tra') + '.html';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
-/* Cập nhật nhãn nút khi trạng thái fullscreen thay đổi (nhấn ESC) */
-function updateFullscreenButton() {
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    if (!fullscreenBtn) return;
-
-    const isFullscreen = document.fullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
-
-    if (isFullscreen) {
-        fullscreenBtn.innerHTML = '❌ FULL MÀN HÌNH';
-        fullscreenBtn.style.backgroundColor = '#e67e22'; // màu khi đang fullscreen
-    } else {
-        fullscreenBtn.innerHTML = '📱 FULL MÀN HÌNH';
-        fullscreenBtn.style.backgroundColor = '#3498db'; // màu khi chưa fullscreen
-    }
+// Hàm tự động nhận diện và bọc công thức MathJax
+function convertToMathJax(text) {
+  if (!text) return '';
+  // nếu có ^ hoặc _ (hoặc có dấu { } đi kèm) thì bọc inline MathJax
+  if (/[\\^_]/.test(text)) {
+    // Trả về chuỗi chứa ký tự backslash để MathJax hiểu \(...\)
+    return `\\(${text}\\)`;
+  }
+  return text;
 }
 
-/* Lắng nghe sự kiện thay đổi fullscreen (kèm các tiền tố cho trình duyệt) */
-document.addEventListener('fullscreenchange', updateFullscreenButton);
-document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
-document.addEventListener('mozfullscreenchange', updateFullscreenButton);
-document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+// Hàm phụ: escape HTML để tránh lỗi khi chèn nội dung người dùng vào template
+function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
 
-/* Khởi tạo trạng thái nút (nếu trang load mà đang fullscreen) */
-document.addEventListener('DOMContentLoaded', updateFullscreenButton);
-</script>
-<div class="sidebar-buttons">
-  <div id="container">
-<div style="position: absolute; top: 60px; right: 20px; z-index: 1001;">
-<button onclick="addQuestion()">➕Thêm câu hỏi khác</button><br>
-<button onclick="exportToHTML()">💾 Xuất đề trắc nghiệm</button><br>
-<button onclick="saveDraft()">📋 Lưu tạm thời dữ liệu</button>
-<button onclick="resetForm()">📝Tạo mới hoàn toàn</button>
-<input type="file" id="upload-html-file" accept=".html" style="display: none;" onchange="importFromHTML(event)">
-<button onclick="document.getElementById('upload-html-file').click()">📂 Tải vào lại đề đã xuất</button>
-<div style="margin-top:20px; border-top:1px solid #ccc; padding-top:10px;">
-  <b>Chỉ số</b><br>
-  <button type="button" onclick="insertText('^')">X²</button>
-  <button type="button" onclick="insertText('_')">X₂</button>
-  <button type="button" onclick="insertText('^{ }')">^{ }</button>
-  <button type="button" onclick="insertText('_{ }')">_{ }</button>
-  <p style="font-size:11px;color:black;margin-top:5px;">
-    dùng ^ hoặc _ rồi nhập tiếp → khi xuất đề, HTML vẫn hiển thị đúng chỉ số.
-  </p>
-</div>
-
-</div>
-<div style="position: fixed; bottom: 10px; right: 20px; z-index: 1001;">
-  <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
-    🏠 VỀ TRANG CHỦ </button></div>
-</div>
-</div>
-<script>
-let currentFocusInput = null;
-
-document.addEventListener('focusin', function(e){
-  if(e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA"){
-    currentFocusInput = e.target;
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.classList.contains('insert-question-img')) {
+    const container = e.target.closest('.question-block');
+    const input = container.querySelector('.question-img-input');
+    input.click();
   }
 });
 
-function insertText(text){
-  if(!currentFocusInput) return;
-  const start = currentFocusInput.selectionStart;
-  const end   = currentFocusInput.selectionEnd;
-  const val   = currentFocusInput.value;
-  currentFocusInput.value = val.slice(0,start) + text + val.slice(end);
-  currentFocusInput.focus();
-  currentFocusInput.selectionStart = currentFocusInput.selectionEnd = start + text.length;
-}
-</script>
+window.onload = function () {
+  loadDraft();
+  if (!localStorage.getItem('draftData')) addQuestion();
+};
 
-<script src="chao_name.js"></script>
-</body>
-</html>
+function saveDraft() {
+  const title = document.querySelector('.title-input')?.value || '';
+  const blocks = document.querySelectorAll('.question-block');
+  const data = [];
+
+  blocks.forEach(block => {
+    const qText = block.querySelector('.question-text')?.value || '';
+    const qImage = block.querySelector('.question-img-input')?.nextElementSibling?.dataset.base64 || '';
+    const answers = Array.from(block.querySelectorAll('.answer-text')).map((input, i) => ({
+      text: input.value,
+      isCorrect: block.querySelectorAll('.answer-correct')[i].checked,
+      image: block.querySelectorAll('.preview-img')[i + 1]?.dataset.base64 || ''
+    }));
+    if (qText) {
+      data.push({ questionText: qText, questionImage: qImage, answers });
+    }
+  });
+
+  localStorage.setItem('draftData', JSON.stringify({ title, questions: data }));
+  alert('Đã lưu tạm dữ liệu!');
+}
+
+function resetForm() {
+  if (confirm("Bạn có chắc chắn muốn xóa toàn bộ dữ liệu và bắt đầu lại?")) {
+    localStorage.removeItem('draftData');
+    location.reload();
+  }
+}
+
+function loadDraft() {
+  const draft = JSON.parse(localStorage.getItem('draftData') || '{}');
+  if (!draft.questions) return;
+
+  document.querySelector('.title-input').value = draft.title || '';
+  document.getElementById('container').innerHTML = `
+    <div class="question-block">
+      <input type="text" class="title-input" placeholder="Nhập tiêu đề bài kiểm tra - Môn">
+    </div>
+  `;
+
+  questionCount = 0;
+  draft.questions.forEach(q => {
+    questionCount++;
+    const block = document.createElement('div');
+    block.className = 'question-block';
+    block.innerHTML = `
+      <label>Câu hỏi ${questionCount}</label>
+      <div class="question-row" style="display:flex; gap: 10px; align-items: center;">
+        <input type="text" class="question-text" placeholder="Nhập nội dung câu hỏi" style="flex: 1;" value="${q.questionText}">
+        <button type="button" onclick="this.closest('.question-block').querySelector('.question-img-input').click()"> 🖼️Chèn hình ảnh</button>
+      </div>
+      <input type="file" accept="image/*" class="question-img-input hidden-input" onchange="handleImage(event, this)">
+      <img class="preview-img" style="display:${q.questionImage ? 'block' : 'none'};" src="${q.questionImage}" data-base64="${q.questionImage || ''}" />
+      ${q.answers.map((a, i) => `
+        <div class="answer-container">
+          <div class="answer-row">
+            <input type="text" class="answer-text" placeholder="Nhập nội dung câu trả lời" value="${a.text}">
+            <button type="button" onclick="this.closest('.answer-container').querySelector('input[type=file]').click()">🖼️Chèn hình ảnh</button>
+            <input type="checkbox" class="answer-correct" ${a.isCorrect ? 'checked' : ''}>
+            <span class="hint">[Đánh dấu check nếu câu trả lời này đúng]</span>
+          </div>
+          <input type="file" accept="image/*" class="hidden-input" onchange="handleImage(event, this)">
+          <img class="preview-img" style="display:${a.image ? 'block' : 'none'};" src="${a.image}" data-base64="${a.image || ''}" />
+        </div>
+      `).join('')}
+    `;
+    document.getElementById('container').appendChild(block);
+  });
+}
+
+function importFromHTML(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const html = e.target.result;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const title = doc.querySelector('h2')?.textContent || '';
+
+    const questionDivs = doc.querySelectorAll('.question');
+    const questions = [];
+
+    questionDivs.forEach(qDiv => {
+      const qText = qDiv.querySelector('h3')?.textContent.replace(/^Câu \d+:\s*/, '') || '';
+      const qImage = qDiv.querySelector('img')?.src || '';
+      const answerNodes = qDiv.querySelectorAll('.answers label');
+
+      const answers = Array.from(answerNodes).map(label => {
+        const input = label.querySelector('input');
+        const text = label.textContent.trim().replace(/^[A-D]\.\s*/, '');
+        const image = label.querySelector('img')?.src || '';
+        const isCorrect = input?.dataset.correct === "true";
+        return { text, image, isCorrect };
+      });
+
+      questions.push({ questionText: qText, questionImage: qImage, answers });
+    });
+
+    // Lưu vào localStorage và load lại
+    localStorage.setItem('draftData', JSON.stringify({ title, questions }));
+    alert("Đã tải đề thành công, đang nạp lại dữ liệu...");
+    location.reload();
+  };
+
+  reader.readAsText(file);
+}
