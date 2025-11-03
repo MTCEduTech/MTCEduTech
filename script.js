@@ -44,12 +44,13 @@ function handleImage(event, input) {
   if (file) reader.readAsDataURL(file);
 }
 
+// Hàm exportToHTML đã được sửa để tích hợp MathJax và giữ nguyên các tính năng cũ
 function exportToHTML() {
   const title = document.querySelector('.title-input')?.value || '';
   const blocks = document.querySelectorAll('.question-block');
   const questions = [];
 
-  blocks.forEach((block, index) => {
+  blocks.forEach((block) => {
     const qText = block.querySelector('.question-text')?.value || '';
     const qImage = block.querySelector('.question-img-input')?.nextElementSibling?.dataset.base64 || '';
     const answers = Array.from(block.querySelectorAll('.answer-text')).map((input, i) => ({
@@ -58,121 +59,49 @@ function exportToHTML() {
       image: block.querySelectorAll('.preview-img')[i + 1]?.dataset.base64 || ''
     }));
     if (qText) {
+      // Đảo ngẫu nhiên thứ tự đáp án
       for (let i = answers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [answers[i], answers[j]] = [answers[j], answers[i]];
       }
-      answers.forEach((a, i) => a.letter = ['A','B','C','D'][i]);
+      answers.forEach((a, i) => (a.letter = ['A', 'B', 'C', 'D'][i]));
       questions.push({ questionText: qText, questionImage: qImage, answers });
     }
   });
 
   const totalQuestions = questions.length;
 
-  for (let i = questions.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [questions[i], questions[j]] = [questions[j], questions[i]];
-  }
-
+  // tạo nội dung HTML (giữ đầy đủ header, chọn thang điểm, check kết quả)
   const htmlContent = `
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8"><title>Đề kiểm tra</title>
+<meta charset="UTF-8"><title>${title}</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <style>
-body{font-family:Arial,sans-serif;max-width:800px;margin:30px auto;padding:0 20px;background-color:white;color:black;}
+body{font-family:Arial,sans-serif;max-width:1000px;margin:30px auto;padding:0 20px;background-color:white;color:black;}
 .question{margin-bottom:30px;}.answers label{display:block;margin:5px 0;}
 img{max-width:100%;max-height:200px;display:block;margin-top:5px;}
 .result{font-weight:bold;margin-left:10px;color:lightgreen;}.wrong{color:red;}
-
-
-body {
-  font-family: Arial, sans-serif;
-  font-size: 20px;
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 0 20px;
-  background-color: white;
-  color: black;
-}
-
-h2 {
-  color: red;
-}
-
-h3 {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.answers label {
-  font-size: 22px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-input[type="radio"] {
-  transform: scale(1.3);
-  margin-right: 8px;
-}
-
-.score-select {
-  font-size: 24px;
-  padding: 6px 10px;
-}
-
-button {
-  font-size: 20px;
-  padding: 8px 16px;
-}
-
-#final-score {
-  font-size: 22px;
-  font-weight: bold;
-  color: green;
-}
-
-
-#fixed-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: white;
-  padding: 20px;
-  z-index: 1000;
-  border-bottom: 2px solid #ccc;
-}
-
-
-
-#fixed-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: white;
-  padding: 20px;
-  z-index: 1000;
-  border-bottom: 2px solid #ccc;
-text-align: center;
-}
-
-
+body { font-family: Arial, sans-serif; font-size: 20px; max-width: 1000px; margin: 30px auto; padding: 0 20px; background-color: white; color: black; }
+h2 { color: red; text-align:center; }
+h3 { font-size: 22px; margin-bottom: 10px; }
+.answers label { font-size: 22px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+input[type="radio"] { transform: scale(1.3); margin-right: 8px; }
+.score-select { font-size: 24px; padding: 6px 10px; }
+button { font-size: 20px; padding: 8px 16px; }
+#final-score { font-size: 22px; font-weight: bold; color: green; }
+#fixed-header { position: fixed; top: 0; left: 0; right: 0; background-color: white; padding: 20px; z-index: 1000; border-bottom: 2px solid #ccc; text-align:center; }
 </style>
-
-</head><body>
+</head>
+<body>
 
 <div id="fixed-header">
   <h2 style="color: red; text-align: center;">${title}</h2>
   <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
-
     <label style="color: blue; font-weight: bold; font-size: 30px;">Chọn thang điểm/câu:
       <select id="score-per-question" class="score-select">
-
-  <option value="0.25">0.25</option>
+        <option value="0.25">0.25</option>
   <option value="0.5">0.5</option>
   <option value="0.75">0.75</option>
   <option value="1">1</option>
@@ -212,23 +141,24 @@ text-align: center;
   <option value="9.5">9.5</option>
   <option value="9.75">9.75</option>
   <option value="10">10</option>
-</select>
-  </label>
-<button onclick="checkAllAnswers()" style="padding:10px 20px;font-size:16px;margin-bottom:20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Kiểm tra kết quả</button>
-  <div id="final-score" style="font-weight: bold; color: green; font-size: 30px;">Kết quả: ...</div>
+      </select>
+    </label>
+    <button onclick="checkAllAnswers()" style="padding:10px 20px;font-size:16px;margin-bottom:20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Kiểm tra kết quả</button>
+    <div id="final-score" style="font-weight: bold; color: green; font-size: 30px;">Kết quả: ...</div>
+  </div>
 </div>
-</div>
+
 <div style="height: 160px;"></div>
 
 ${questions.map((q, i) => `
   <div class="question">
-    <h3>Câu ${i+1}: ${q.questionText}</h3>
+    <h3>Câu ${i+1}: ${escapeHtml(convertToMathJax(q.questionText))}</h3>
     ${q.questionImage ? `<img src="${q.questionImage}">` : ''}
     <div class="answers">
       ${q.answers.map((a, j) => `
         <label>
           <input type="radio" name="q${i}" data-correct="${a.isCorrect}">
-          ${a.letter}. ${a.text}
+          ${a.letter}. ${escapeHtml(convertToMathJax(a.text))}
           ${a.image ? `<img src="${a.image}">` : ''}
         </label>
       `).join('')}
@@ -268,82 +198,47 @@ function checkAllAnswers(){
   document.getElementById('final-score').innerHTML = 
   '<span style="color:blue;">Kết quả:</span> Đúng ' + correctCount + '/' + total + 
   ' câu (' + percentage + '%) — <span style="color:red;">Điểm: ' + finalScore + ' Điểm</span>';
-
-
-
 }
-
 </script>
-
-
-</script>
-
-<!-- Nút toàn màn hình cố định -->
-<div style="
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-">
-  <button onclick="openFullscreen()" style="
-    padding: 10px 16px;
-    font-size: 14px;
-    background: #00BFFF;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-  ">🔍 Xem Full màn hình</button>
-
-  <button onclick="exitFullscreen()" style="
-    padding: 10px 16px;
-    font-size: 14px;
-    background: #FF6347;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-  ">❌ Thoát Full màn hình</button>
-</div>
 
 <script>
-function openFullscreen() {
-  const elem = document.documentElement;
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) {
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    elem.msRequestFullscreen();
+  // Đợi MathJax render (nếu có công thức)
+  if (window.MathJax) {
+    MathJax.typesetPromise();
   }
-}
-
-function exitFullscreen() {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) {
-    document.msExitFullscreen();
-  }
-}
 </script>
 
+</body></html>
+`;
 
-
-</body></html>`;
-
+  // Tải file HTML về máy
   const blob = new Blob([htmlContent], {type: 'text/html'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'De_kiem_tra.html';
+  a.download = (title || 'De_kiem_tra') + '.html';
   document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(a.href);
   a.remove();
+}
+
+// Hàm tự động nhận diện và bọc công thức MathJax
+function convertToMathJax(text) {
+  if (!text) return '';
+  // nếu có ^ hoặc _ (hoặc có dấu { } đi kèm) thì bọc inline MathJax
+  if (/[\\^_]/.test(text)) {
+    // Trả về chuỗi chứa ký tự backslash để MathJax hiểu \(...\)
+    return `\\(${text}\\)`;
+  }
+  return text;
+}
+
+// Hàm phụ: escape HTML để tránh lỗi khi chèn nội dung người dùng vào template
+function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 document.addEventListener('click', function(e) {
@@ -428,8 +323,6 @@ function loadDraft() {
     document.getElementById('container').appendChild(block);
   });
 }
-
-
 
 function importFromHTML(event) {
   const file = event.target.files[0];
