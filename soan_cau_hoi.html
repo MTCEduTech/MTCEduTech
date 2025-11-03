@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
- <script src="auth.js"></script>
+<script src="auth.js"></script>
   <title>Soạn Câu Hỏi</title>
   <style>
     .sticky-marquee {
@@ -159,60 +158,86 @@ gap: 0px; /* đảm bảo không có khoảng hở */
   }
 </script>
 
-
-<!-- Nút toàn màn hình cố định -->
 <div style="
   position: fixed;
   bottom: 20px;
   left: 20px;
   z-index: 9999;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
+  align-items: flex-start;
 ">
-  <button onclick="openFullscreen()" style="
-    padding: 10px 16px;
-    font-size: 14px;
-    background: #00BFFF;
-    border: none;
-    border-radius: 6px;
+  <button id="fullscreen-btn" onclick="toggleFullscreen()" style="
+    background-color: #3498db;
     color: white;
-    cursor: pointer;
-  ">🔍 Xem Full màn hình</button>
-
-  <button onclick="exitFullscreen()" style="
-    padding: 10px 16px;
-    font-size: 14px;
-    background: #FF6347;
+    font-weight: bold;
     border: none;
+    padding: 10px 15px;
     border-radius: 6px;
-    color: white;
     cursor: pointer;
-  ">❌ Thoát Full màn hình</button>
+    font-size: 16px;
+    width: 220px;
+    display: block;
+transition: background-color 0.3s ease;
+  ">
+    📱 FULL MÀN HÌNH
+  </button>
 </div>
-
-
 <script>
-function openFullscreen() {
-  const elem = document.documentElement;
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) {
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    elem.msRequestFullscreen();
-  }
+/* Toggle fullscreen (dựng theo English.html) */
+function toggleFullscreen() {
+    const docElm = document.documentElement;
+
+    // Nếu đang fullscreen -> thoát
+    if (document.fullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { // Firefox
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen();
+        }
+    } else {
+        // Vào fullscreen
+        if (docElm.requestFullscreen) {
+            docElm.requestFullscreen();
+        } else if (docElm.mozRequestFullScreen) { // Firefox
+            docElm.mozRequestFullScreen();
+        } else if (docElm.webkitRequestFullscreen) { // Chrome, Safari and Opera
+            docElm.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (docElm.msRequestFullscreen) { // IE/Edge
+            docElm.msRequestFullscreen();
+        }
+    }
 }
 
-function exitFullscreen() {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) {
-    document.msExitFullscreen();
-  }
+/* Cập nhật nhãn nút khi trạng thái fullscreen thay đổi (nhấn ESC) */
+function updateFullscreenButton() {
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    if (!fullscreenBtn) return;
+
+    const isFullscreen = document.fullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement;
+
+    if (isFullscreen) {
+        fullscreenBtn.innerHTML = '❌ FULL MÀN HÌNH';
+        fullscreenBtn.style.backgroundColor = '#e67e22'; // màu khi đang fullscreen
+    } else {
+        fullscreenBtn.innerHTML = '📱 FULL MÀN HÌNH';
+        fullscreenBtn.style.backgroundColor = '#3498db'; // màu khi chưa fullscreen
+    }
 }
+
+/* Lắng nghe sự kiện thay đổi fullscreen (kèm các tiền tố cho trình duyệt) */
+document.addEventListener('fullscreenchange', updateFullscreenButton);
+document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+
+/* Khởi tạo trạng thái nút (nếu trang load mà đang fullscreen) */
+document.addEventListener('DOMContentLoaded', updateFullscreenButton);
 </script>
 <div class="sidebar-buttons">
   <div id="container">
@@ -223,12 +248,42 @@ function exitFullscreen() {
 <button onclick="resetForm()">📝Tạo mới hoàn toàn</button>
 <input type="file" id="upload-html-file" accept=".html" style="display: none;" onchange="importFromHTML(event)">
 <button onclick="document.getElementById('upload-html-file').click()">📂 Tải vào lại đề đã xuất</button>
+<div style="margin-top:20px; border-top:1px solid #ccc; padding-top:10px;">
+  <b>Chỉ số</b><br>
+  <button type="button" onclick="insertText('^')">X²</button>
+  <button type="button" onclick="insertText('_')">X₂</button>
+  <button type="button" onclick="insertText('^{ }')">^{ }</button>
+  <button type="button" onclick="insertText('_{ }')">_{ }</button>
+  <p style="font-size:11px;color:black;margin-top:5px;">
+    dùng ^ hoặc _ rồi nhập tiếp → khi xuất đề, HTML vẫn hiển thị đúng chỉ số.
+  </p>
+</div>
+
 </div>
 <div style="position: fixed; bottom: 10px; right: 20px; z-index: 1001;">
   <button onclick="window.location.href='index.html'" style="background-color: red; color: white; font-weight: bold; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
     🏠 VỀ TRANG CHỦ </button></div>
 </div>
 </div>
+<script>
+let currentFocusInput = null;
+
+document.addEventListener('focusin', function(e){
+  if(e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA"){
+    currentFocusInput = e.target;
+  }
+});
+
+function insertText(text){
+  if(!currentFocusInput) return;
+  const start = currentFocusInput.selectionStart;
+  const end   = currentFocusInput.selectionEnd;
+  const val   = currentFocusInput.value;
+  currentFocusInput.value = val.slice(0,start) + text + val.slice(end);
+  currentFocusInput.focus();
+  currentFocusInput.selectionStart = currentFocusInput.selectionEnd = start + text.length;
+}
+</script>
 
 <script src="chao_name.js"></script>
 </body>
