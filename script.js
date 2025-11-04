@@ -224,13 +224,17 @@ function checkAllAnswers(){
 // Hàm tự động nhận diện và bọc công thức MathJax
 function convertToMathJax(text) {
   if (!text) return '';
-  // nếu có ^ hoặc _ (hoặc có dấu { } đi kèm) thì bọc inline MathJax
-  if (/[\\^_]/.test(text)) {
-    // Trả về chuỗi chứa ký tự backslash để MathJax hiểu \(...\)
+
+  // Nếu có dấu LaTeX hoặc chỉ số, xem đây là công thức
+  const hasMathSyntax = /\\|[A-Za-z]\^|[A-Za-z]_/.test(text);
+  if (hasMathSyntax) {
+    // KHÔNG escape ký tự "\" nữa, mà để nguyên để MathJax hiểu
+    // Chỉ cần bọc toàn bộ công thức trong \( ... \)
     return `\\(${text}\\)`;
   }
   return text;
 }
+
 
 // Hàm phụ: escape HTML để tránh lỗi khi chèn nội dung người dùng vào template
 function escapeHtml(str) {
