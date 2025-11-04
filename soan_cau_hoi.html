@@ -115,12 +115,45 @@ gap: 0px; /* đảm bảo không có khoảng hở */
   padding: 20px;
 }
 
-.sidebar-buttons button {
-  min-width: 60px;
-  font-weight: bold;
+/* ======= Tùy chỉnh nhóm nút “Chỉ số” ======= */
+.index-buttons {
+  display: flex;
+  flex-wrap: wrap;        /* Tự động xuống hàng */
+  gap: 6px;               /* Khoảng cách giữa các nút */
+  margin-top: 6px;
 }
+
+.index-buttons button {
+  flex: 1 1 75px;         /* Mỗi nút rộng tối thiểu 75px */
+  font-weight: bold;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.index-buttons button:hover {
+  background-color: #0056b3;
+}
+
   </style>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- MathJax cấu hình đầy đủ (có gói ams để hiển thị mũi tên, phân số, v.v.) -->
+<script>
+window.MathJax = {
+  tex: {
+    packages: {'[+]': ['ams']}, // nạp thêm gói ams
+    inlineMath: [['\\(','\\)']],
+    displayMath: [['$$','$$']]
+  },
+  svg: {fontCache: 'global'}
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
 
 </head>
 <body>
@@ -255,21 +288,22 @@ document.addEventListener('DOMContentLoaded', updateFullscreenButton);
 <input type="file" id="upload-html-file" accept=".html" style="display: none;" onchange="importFromHTML(event)">
 <button onclick="document.getElementById('upload-html-file').click()">📂 Tải vào lại đề đã xuất</button>
 <div style="margin-top:20px; border-top:1px solid #ccc; padding-top:10px;">
-  <b>Chỉ số</b><br>
+  <b>Chèn chỉ số hặc CTHH</b><br>
 
-<!-- Các nút chỉ số cơ bản -->
-<button type="button" onclick="insertText('^')">X²</button>
-<button type="button" onclick="insertText('_')">X₂</button>
-<button type="button" onclick="insertText('^{ }')">^{ }</button>
-<button type="button" onclick="insertText('_{ }')">_{ }</button>
+<div class="index-buttons">
+  <button type="button" onclick="insertText('^')">X²</button>
+  <button type="button" onclick="insertText('_')">X₂</button>
+  <button type="button" onclick="insertText('^{ }')">^{ }</button>
+  <button type="button" onclick="insertText('_{ }')">_{ }</button>
+  <button type="button" onclick="insertText('\\frac{a}{b}')">a/b</button>
+  <button type="button" onclick="insertText('\\sqrt{x}')">√x</button>
+  <button type="button" onclick="insertText('\\sum x')">Σx</button>
+  <button type="button" onclick="insertText('M_{Fe_2(SO_4)_3}')">M Fe₂(SO₄)₃</button>
+  <button type="button" onclick="insertText('\\xrightarrow{\\text{điều kiện}}')">→ điều kiện</button>
+</div>
 
-<!-- Các nút công thức nâng cao -->
-<button type="button" onclick="insertText('\\frac{a}{b}')">a/b</button>
-<button type="button" onclick="insertText('\\sqrt{x}')">√x</button>
-<button type="button" onclick="insertText('\\sum x')">Σx</button>
-
-<p style="font-size:11px;color:black;margin-top:5px;">
-  dùng ^ hoặc _ rồi nhập tiếp → khi xuất đề, HTML sẽ hiển thị đúng chỉ số, phân số, căn bậc hai và tổng.
+<p style="font-size:11px;color:blue;margin-top:5px;">
+  Dùng các mẫu này rồi chỉnh sửa → Khi xuất đề, HTML sẽ hiển thị đúng chỉ số, phân số, căn bậc hai, tổng, CTHH hoặc điều kiện phản ứng.
 </p>
 
 </div>
